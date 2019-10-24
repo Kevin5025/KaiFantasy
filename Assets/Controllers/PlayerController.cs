@@ -20,7 +20,7 @@ public class PlayerController : AgentController {
 	
 	protected override void Start() {
 		base.Start();
-		//MainCamera.mainCamera.playerTransform = transform;
+		MainCamera.mainCamera.playerTransform = transform;
 	}
 
 	protected override void FixedUpdate() {
@@ -33,21 +33,21 @@ public class PlayerController : AgentController {
 	/**
      * Character rotates to face wherever the mouse is. 
      */
-	protected virtual void Rotate() {
+	protected override void Rotate() {
 		agent.Rotate(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 	}
 
 	/**
      * WASD controls. 
      */
-	protected virtual void Move() {
+	protected override void Move() {
 		agent.Move(Input.GetKey(KeyCode.W), Input.GetKey(KeyCode.S), Input.GetKey(KeyCode.D), Input.GetKey(KeyCode.A));
 	}
 
 	/**
      * Activation of abilities. 
      */
-	protected virtual void Fire() {
+	protected override void Fire() {
 		if (Input.GetMouseButton(0)) {
 			if (agent.equipmentEquipableArray[0] != null) {
 				agent.equipmentEquipableArray[0].Activate(agent);

@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /**
- * This is anything that can fight. 
+ * This is anything that can be controlled and fight. 
  */
 public class CircleAgent : CircleEntity {
 
+	protected AgentController agentController;
+
 	protected float fadeTime;
 	protected float fadeTimeConstant;
-	
+
 	public Equipable[] equipmentEquipableArray;
 
-	protected override void Start () {
+	protected override void Start() {
 		base.Start();
-		//gameObject.layer = LayersManager.layersManager.getTeamAgentLayer(team);\
+		//gameObject.layer = LayersManager.layersManager.getTeamAgentLayer(team);
+
+		agentController = GetComponent<AgentController>();
 
 		fadeTime = 6f;
 		fadeTimeConstant = 0.25f / fadeTime;
@@ -38,7 +42,7 @@ public class CircleAgent : CircleEntity {
 	/**
      * Overrides entity fade for a gradual disappearance, since these agents are more important than any entity. 
      */
-	protected override IEnumerator Fade () {
+	protected override IEnumerator Fade() {
 		for (float f = 0.25f; f > 0; f -= Time.deltaTime * fadeTimeConstant) {
 			spriteRenderer.color = new Color(r, g, b, f);
 			//yield return new WaitForSeconds(1f);//3f? //is this consistent? 
@@ -50,4 +54,22 @@ public class CircleAgent : CircleEntity {
 	//protected override void EliminateSelf () {
 	//	base.EliminateSelf();
 	//}
+	
+	protected virtual void OnTriggerEnter2D(Collider2D collider) {
+		CircleAgent colliderCircleAgent = collider.GetComponent<CircleAgent>();
+		if (colliderCircleAgent != null && colliderCircleAgent.affinity != affinity) {
+			if (agentController != null) {
+				agentController.AlertEnter();
+			}
+		}
+	}
+
+	protected virtual void OnTriggerExit2D(Collider2D collider) {
+		CircleAgent colliderCircleAgent = collider.GetComponent<CircleAgent>();
+		if (colliderCircleAgent != null && colliderCircleAgent.affinity != affinity) {
+			if (agentController != null) {
+				agentController.AlertExit();
+			}
+		}
+	}
 }

@@ -24,9 +24,7 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 	
 	protected override void Start() {
 		base.Start();
-
-		Vector3 forwardDirection = transform.TransformDirection(new Vector2(0, 1f));
-		GetComponent<Rigidbody2D>().velocity = forwardDirection * 20f;
+		//GetComponent<Rigidbody2D>().velocity = transform.TransformDirection(new Vector2(0, initialVelocity));//too slow to go and causes inaccurate shooting; moved to gun as opposed to bullet
 	}
 
 	/**
@@ -38,7 +36,7 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 		if (timeout <= 0) {
 			Expire();
 		}
-		Debug.Log(GetComponent<Rigidbody2D>().velocity.magnitude);
+		//Debug.Log(GetComponent<Rigidbody2D>().velocity.magnitude);
 	}
 
 	protected override int GetTeamLayer() {
@@ -64,44 +62,36 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 	//}
 
 	protected virtual void OnTriggerEnter2D(Collider2D collider) {
-		//TODO: is there a more elegant way? 
 		if (collider.name == "Body" || collider.name == "Head") {
 			Entity collisionGameObjectEntity = collider.GetComponentInParent<Entity>();
-			Debug.Log("trigger enter " + collisionGameObjectEntity + " " + collider.name + " velocity ");
-
+			//Debug.Log("trigger enter " + collisionGameObjectEntity + " " + collider.name + " velocity ");
 			if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
-				float newVelocityMagnitude = Math.Max(0, GetComponent<Rigidbody2D>().velocity.magnitude - collisionGameObjectEntity.viscosity);
-				GetComponent<Rigidbody2D>().velocity = transform.TransformDirection(new Vector2(0, newVelocityMagnitude));
-			}
-
-			if (collisionGameObjectEntity.affinity != casterAgent.affinity) {
-				float damage = baseDamage * GetComponent<Rigidbody2D>().velocity.magnitude / initialVelocity;
-				collisionGameObjectEntity.takeDamage(casterAgent, damage);
-				Debug.Log(damage);
+				GetComponent<Rigidbody2D>().drag += collisionGameObjectEntity.viscosity;
 			}
 		}
 	}
 
-	//protected virtual void OnTriggerStay2D(Collider2D collider) {
-	//	if (collider.name == "Body" || collider.name == "Head") {
-	//		Entity collisionGameObjectEntity = collider.GetComponentInParent<Entity>();
-	//		//Debug.Log("trigger exit " + collisionGameObjectEntity + " " + collider.name);
+	protected virtual void OnTriggerStay2D(Collider2D collider) {
+		if (collider.name == "Body" || collider.name == "Head") {
+			Entity collisionGameObjectEntity = collider.GetComponentInParent<Entity>();
+			// Debug.Log("trigger stay " + collisionGameObjectEntity + " " + collider.name + " velocity ");
 
-	//		if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
-	//			float newVelocityMagnitude = Math.Max(0, GetComponent<Rigidbody2D>().velocity.magnitude - collisionGameObjectEntity.viscosity);
-	//			GetComponent<Rigidbody2D>().velocity = transform.TransformDirection(new Vector2(0, newVelocityMagnitude));
-	//		}
-	//	}
-	//}
+			if (collisionGameObjectEntity.affinity != casterAgent.affinity) {
+				float speedFactor = Mathf.Pow((GetComponent<Rigidbody2D>().velocity - collisionGameObjectEntity.GetComponent<Rigidbody2D>().velocity).magnitude / initialVelocity, 2);
+				float damage = baseDamage * speedFactor;
+				collisionGameObjectEntity.takeDamage(casterAgent, damage);
+				//Debug.Log(speedFactor);
+				//Debug.Log(damage);
+			}
+		}
+	}
 
 	protected virtual void OnTriggerExit2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
 			Entity collisionGameObjectEntity = collider.GetComponentInParent<Entity>();
 			//Debug.Log("trigger exit " + collisionGameObjectEntity + " " + collider.name);
-
 			if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
-				float newVelocityMagnitude = Math.Max(0, GetComponent<Rigidbody2D>().velocity.magnitude - collisionGameObjectEntity.viscosity);
-				GetComponent<Rigidbody2D>().velocity = transform.TransformDirection(new Vector2(0, newVelocityMagnitude));
+				GetComponent<Rigidbody2D>().drag -= collisionGameObjectEntity.viscosity;
 			}
 		}
 	}

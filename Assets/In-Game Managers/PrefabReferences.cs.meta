@@ -3,7 +3,17 @@ guid: f398f11b9dab89e41b882fee1aa55d93
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - block: {fileID: 135584, guid: 2b0e223799575a54b8e5ed44997ee1fb, type: 3}
+  - circleSmall: {fileID: 5166512332142098606, guid: c7c49327dcbe33d44ab29f59e6fff411,
+      type: 3}
+  - circleMedium: {instanceID: 0}
+  - circleLarge: {instanceID: 0}
+  - circleSmall2: {fileID: 158216, guid: 734bcd304e6422744be1f1dc35217504, type: 3}
+  - circleMedium2: {instanceID: 0}
+  - circleLarge2: {instanceID: 0}
+  - bullet: {fileID: 6751215688927150264, guid: 40c9e5deb79480f48a9b4e5845f2a1bc,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

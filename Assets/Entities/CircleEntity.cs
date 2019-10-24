@@ -28,7 +28,7 @@ public class CircleEntity : Entity {
 		maxHealth = area * 300f;
 		health = maxHealth;
 		healthRegenerationRate = 0.01f;
-		viscosity = 2.5f * (float) Math.PI * radius;//5 * area / diameter
+		viscosity = 5f;
 	}
 
 	protected override void FixedUpdate () {
