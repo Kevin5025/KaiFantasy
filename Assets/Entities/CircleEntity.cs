@@ -38,11 +38,17 @@ public class CircleEntity : Entity {
 	/**
      * Smart rotation based. Uses current angular momentum for predicted rotation and compares to desired rotation. 
      */
-	public virtual void Rotate (Vector2 targetPosition, float power = 1f) {
+	public virtual void RotateTargetPosition (Vector2 targetPosition) {
 		if (!defunct) {
 			float currentRotation = transform.eulerAngles.z;
 			float targetRotation = Mathf.Atan2(targetPosition.x - transform.position.x, targetPosition.y - transform.position.y) * -Mathf.Rad2Deg;//0 to 180, then -180 to 0 counterclockwise
 			float offsetRotation = targetRotation - currentRotation;
+			transform.Rotate(0, 0, offsetRotation);
+		}
+	}
+
+	public virtual void RotateOffsetRotation (float offsetRotation) {
+		if (!defunct) {
 			transform.Rotate(0, 0, offsetRotation);
 		}
 	}

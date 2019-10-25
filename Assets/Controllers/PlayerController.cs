@@ -34,7 +34,7 @@ public class PlayerController : AgentController {
      * Character rotates to face wherever the mouse is. 
      */
 	protected override void Rotate() {
-		agent.Rotate(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+		agent.RotateTargetPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 	}
 
 	/**

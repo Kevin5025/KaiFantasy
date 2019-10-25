@@ -69,6 +69,7 @@ public abstract class Entity : Spirit {
 	}
 
 	protected virtual void EliminateSelf () {
+		transform.position = new Vector3(transform.position.x, transform.position.y, 10f);  // for OnTriggerExit2D  // TODO: test
 		Destroy(gameObject);
 	}
 }

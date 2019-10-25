@@ -11,12 +11,18 @@ public abstract class AgentController : MonoBehaviour {
 	public GameObject primeAdversary;
 	protected int alertCount;
 
+	public float[] personalityUniform;
+	public float[] personalityGaussian;
+
 	protected virtual void Awake() { }
 
 	protected virtual void Start() {
 		agent = GetComponent<CircleAgent>();
 		primeAdversary = null;
 		alertCount = 0;
+
+		personalityUniform = MyStaticLibrary.NextRandomUniformArray(5, -1f, 1f);
+		personalityGaussian = MyStaticLibrary.NextRandomGaussianArray(5);
 	}
 
 	protected virtual void Update() { }
