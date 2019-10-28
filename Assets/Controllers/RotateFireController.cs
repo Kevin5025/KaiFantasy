@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicController : AgentController {
+public class RotateFireController : AgentController {
 
 	public float rotateFactor;
 
@@ -19,6 +19,10 @@ public class BasicController : AgentController {
 
 	protected override void Rotate() {
 		base.Rotate();
+		Spin();
+	}
+
+	protected virtual void Spin() {
 		agent.RotateOffsetRotation(rotateFactor * 60f * Time.deltaTime);
 	}
 

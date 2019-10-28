@@ -25,9 +25,21 @@ public class PlayerController : AgentController {
 
 	protected override void FixedUpdate() {
 		base.FixedUpdate();
+		// ManualDebug();
 		Rotate();
 		Move();
 		Fire();
+	}
+
+	/**
+	 * For Debugging In Game
+	 */
+	protected virtual void ManualDebug() {
+		if (Input.GetKeyDown(KeyCode.BackQuote)) {
+			Debug.Log("ManualDebug");
+			Collider2D collider = GetComponent<Collider2D>();
+			collider.enabled = !collider.enabled;
+		}
 	}
 
 	/**

@@ -54,22 +54,4 @@ public class CircleAgent : CircleEntity {
 	//protected override void EliminateSelf () {
 	//	base.EliminateSelf();
 	//}
-	
-	protected virtual void OnTriggerEnter2D(Collider2D collider) {
-		CircleAgent colliderCircleAgent = collider.GetComponent<CircleAgent>();
-		if (colliderCircleAgent != null && colliderCircleAgent.affinity != affinity) {
-			if (agentController != null) {
-				agentController.AlertEnter();
-			}
-		}
-	}
-
-	protected virtual void OnTriggerExit2D(Collider2D collider) {
-		CircleAgent colliderCircleAgent = collider.GetComponent<CircleAgent>();
-		if (colliderCircleAgent != null && colliderCircleAgent.affinity != affinity) {
-			if (agentController != null) {
-				agentController.AlertExit();
-			}
-		}
-	}
 }

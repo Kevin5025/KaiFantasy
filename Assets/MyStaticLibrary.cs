@@ -13,23 +13,26 @@ public static class MyStaticLibrary {
 		random = new System.Random();
 	}
 
+	/**
+	 * https://stackoverflow.com/questions/218060/random-gaussian-variables
+	 */
+	public static float[] NextRandomGaussianArray(int n = 1, float mean = 0, float standardDeviation = 1) {
+		float[] randomUniformArray1 = NextRandomUniformArray(n);
+		float[] randomUniformArray2 = NextRandomUniformArray(n);
+
+		float[] randomNextGaussianArray = new float[n];
+		for (int i = 0; i < n; i++) {
+			randomNextGaussianArray[i] = mean + standardDeviation * Mathf.Sqrt(-2f * Mathf.Log(randomUniformArray1[i])) * Mathf.Sin(2f * Mathf.PI * randomUniformArray2[i]);
+		}
+		return randomNextGaussianArray;
+	}
+
 	public static float[] NextRandomUniformArray(int n=1, float min=0, float max=1) {
 		float[] randomNextUniformArray = new float[n];
 		for (int i=0; i<n; i++) {
 			randomNextUniformArray[i] = min + (max - min) * (float)random.NextDouble();
 		}
 		return randomNextUniformArray;
-	}
-
-	public static float[] NextRandomGaussianArray(int n=1, float mean=0, float standardDeviation=1) {
-		float[] randomUniformArray1 = NextRandomUniformArray(n);
-		float[] randomUniformArray2 = NextRandomUniformArray(n);
-
-		float[] randomNextGaussianArray = new float[n];
-		for (int i=0; i<n; i++) {
-			randomNextGaussianArray[i] = mean + standardDeviation * Mathf.Sqrt(-2f * Mathf.Log(randomUniformArray1[i])) * Mathf.Sin(2f * Mathf.PI * randomUniformArray2[i]);
-		}
-		return randomNextGaussianArray;
 	}
 
 	/**
@@ -45,12 +48,15 @@ public static class MyStaticLibrary {
 	}
 
 	public static float GetDistance(GameObject gameObject1, GameObject gameObject2) {
-		Vector3 direction_1_2 = gameObject2.transform.position - gameObject1.transform.position;
-		return direction_1_2.magnitude;
+		return GetDistance(gameObject1.transform.position, gameObject2.transform.position);
 	}
 
-	public static float GetDistance(Vector2 vector2_1, Vector2 vector2_2) {
-		Vector3 direction_1_2 = vector2_2 - vector2_1;
+	public static float GetDistance(Transform transform1, Transform transform2) {
+		return GetDistance(transform1.position, transform2.position);
+	}
+
+	public static float GetDistance(Vector3 position1, Vector3 position2) {
+		Vector3 direction_1_2 = position2 - position1;
 		return direction_1_2.magnitude;
 	}
 

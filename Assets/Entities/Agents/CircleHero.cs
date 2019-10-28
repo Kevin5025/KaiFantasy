@@ -7,7 +7,7 @@ using UnityEngine;
  */
 public class CircleHero : CircleAgent {
 
-	protected bool eliminated;
+	protected bool eliminated;  // eliminated means no longer able to be revived
 	protected float respawnTime;
 
 	protected override void Start() {

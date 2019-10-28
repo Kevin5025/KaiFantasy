@@ -54,7 +54,7 @@ public abstract class Entity : Spirit {
 		defunct = true;
 		Collider2D collider2D = GetComponent<Collider2D>();
 		if (collider2D != null) {
-			collider2D.enabled = false;
+			collider2D.enabled = false;  // TODO: test if OnTriggerExit2D
 		}
 		StartCoroutine(Fade());
 	}
@@ -69,7 +69,6 @@ public abstract class Entity : Spirit {
 	}
 
 	protected virtual void EliminateSelf () {
-		transform.position = new Vector3(transform.position.x, transform.position.y, 10f);  // for OnTriggerExit2D  // TODO: test
 		Destroy(gameObject);
 	}
 }
