@@ -30,13 +30,13 @@ TagManager:
   - 
   - 
   - 
+  - newProjectileLayer
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - wallProjectileLayer
+  - wallEntityLayer
+  - wallLayer
   m_SortingLayers:
   - name: Default
     uniqueID: 0

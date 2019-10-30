@@ -20,7 +20,6 @@ public abstract class Spirit : MonoBehaviour {
      */
 	protected virtual void Start () {
 		gameObject.layer = GetTeamLayer();
-		GetComponent<Collider2D>().enabled = true;
 
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		spriteRenderer.color = GetTeamColor(spriteRenderer.color, affinity);

@@ -5,13 +5,9 @@ using UnityEngine;
 
 /**
  * TODO: Bullet expires from losing speed
- * TODO: Bullet loses speed as a function of drag and piercings. 
  * TODO: Bullet extends projectile
- * TODO: Contacting body causes bullet to deal damage and lose speed
- * TODO: Contacting head causes bullet to deal more damage
- * TODO: Bullet damage depends on mass and speed loss? 
+ * TODO: Bullet damage depends on mass? 
  * TODO: Bullet mass depends on prefab for different ammunition types
- * TODO: Color trail behind bullet based on bullet speed and team color? 
  * 
  * TODO: Energy/elemental martial arts bending, in contrast to bullets
  */
@@ -81,7 +77,7 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 				float damage = baseDamage * speedFactor;
 				collisionGameObjectEntity.takeDamage(casterAgent, damage);
 				//Debug.Log(speedFactor);
-				//Debug.Log(damage);
+				Debug.Log(damage);
 			}
 		}
 	}

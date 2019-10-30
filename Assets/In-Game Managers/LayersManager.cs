@@ -15,6 +15,10 @@ public class LayersManager : MonoBehaviour {
 	public int redProjectileLayer;
 	public int brownEntityLayer;
 	public int brownProjectileLayer;
+	public int newProjectileLayer;
+	public int wallProjectileLayer;
+	public int wallEntityLayer;
+	public int wallLayer;
 	public int[] entityLayerArray;
 	public int[] projectileLayerArray;
 	public int[] layerArray;
@@ -35,9 +39,17 @@ public class LayersManager : MonoBehaviour {
 		redProjectileLayer = 11;
 		brownEntityLayer = 12;
 		brownProjectileLayer = 13;
-		entityLayerArray = new int[] { blueEntityLayer, redEntityLayer, brownEntityLayer };
-		projectileLayerArray = new int[] { blueProjectileLayer, redProjectileLayer, brownProjectileLayer };
 
+		newProjectileLayer = 25;
+
+		wallProjectileLayer = 29;
+		wallEntityLayer = 30;
+		wallLayer = 31;
+
+		entityLayerArray = new int[] { blueEntityLayer, redEntityLayer, brownEntityLayer };
+		projectileLayerArray = new int[] { blueProjectileLayer, redProjectileLayer, brownProjectileLayer, newProjectileLayer };
+
+		// projectiles go through projectiles and entities
 		for (int p=0; p<projectileLayerArray.Length; p++) {
 			for (int e=0; e<entityLayerArray.Length; e++) {
 				Physics2D.IgnoreLayerCollision(projectileLayerArray[p], entityLayerArray[e]);
