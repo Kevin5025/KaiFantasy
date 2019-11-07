@@ -42,9 +42,9 @@ public class LayersManager : MonoBehaviour {
 
 		newProjectileLayer = 25;
 
-		wallProjectileLayer = 29;
-		wallEntityLayer = 30;
-		wallLayer = 31;
+		wallProjectileLayer = 29;  // projectile can go through
+		wallEntityLayer = 30;  // entity can go through
+		wallLayer = 31; // none can go through
 
 		entityLayerArray = new int[] { blueEntityLayer, redEntityLayer, brownEntityLayer };
 		projectileLayerArray = new int[] { blueProjectileLayer, redProjectileLayer, brownProjectileLayer, newProjectileLayer };
