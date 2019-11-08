@@ -63,6 +63,7 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 			//Debug.Log("trigger enter " + collisionGameObjectEntity + " " + collider.name + " velocity ");
 			if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
 				GetComponent<Rigidbody2D>().drag += collisionGameObjectEntity.viscosity;
+				GetComponent<Rigidbody2D>().angularDrag += collisionGameObjectEntity.viscosity;
 			}
 		}
 	}
@@ -88,6 +89,7 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 			//Debug.Log("trigger exit " + collisionGameObjectEntity + " " + collider.name);
 			if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
 				GetComponent<Rigidbody2D>().drag -= collisionGameObjectEntity.viscosity;
+				GetComponent<Rigidbody2D>().angularDrag -= collisionGameObjectEntity.viscosity;
 			}
 		}
 	}

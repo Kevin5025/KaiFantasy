@@ -5,13 +5,6 @@ using UnityEngine;
 public class EnvironmentManager : MonoBehaviour {
 
 	public static EnvironmentManager environmentManager;
-	
-	public Vector2 unitVectorNorthEast;
-	public Vector2 unitVectorSouthEast;
-	public Vector2 unitVectorSouthWest;
-	public Vector2 unitVectorNorthWest;
-	public Vector2[] unitVectorDirections;
-	public float[] unitVectorMagnitudes;
 
 	protected int wallEntityLayerMask;
 	protected int wallLayerMask;
@@ -22,12 +15,22 @@ public class EnvironmentManager : MonoBehaviour {
 	public GameObject boundarySS;
 	public GameObject boundaryWW;
 
+	public Vector2 unitVectorNorthEast;
+	public Vector2 unitVectorSouthEast;
+	public Vector2 unitVectorSouthWest;
+	public Vector2 unitVectorNorthWest;
+	public Vector2[] unitVectorDirections;
+	public float[] unitVectorMagnitudes;
+
 	public int minPositionX;
 	public int maxPositionX;
 	public int minPositionY;
 	public int maxPositionY;
+	public int maxIndexX;
+	public int maxIndexY;
 
 	public bool[,,] environmentGraph;  // returns whether (X, Y, V) is a valid vector direction
+	private GameObject[,] circleSmallArray;
 
 	void Awake() {
 		if (environmentManager == null) {
@@ -38,18 +41,20 @@ public class EnvironmentManager : MonoBehaviour {
 	}
 
 	void Start() {
-		InitializeUnitVectors();
-
 		wallEntityLayerMask = 1 << LayersManager.layersManager.wallEntityLayer;
 		wallLayerMask = 1 << LayersManager.layersManager.wallLayer;
 		raycastLayerMask = wallEntityLayerMask | wallLayerMask;
+		
+		minPositionX = Mathf.RoundToInt(boundaryWW.transform.position.x);  // ASSUMPTION: will never round out of bounds
+		maxPositionX = Mathf.RoundToInt(boundaryEE.transform.position.x);
+		minPositionY = Mathf.RoundToInt(boundarySS.transform.position.y);
+		maxPositionY = Mathf.RoundToInt(boundaryNN.transform.position.y);
+		maxIndexX = maxPositionX - minPositionX;
+		maxIndexY = maxPositionY - minPositionY;
 
-		minPositionX = (int) Mathf.Ceil(boundaryWW.transform.position.x);  // inscribed
-		maxPositionX = (int) Mathf.Floor(boundaryEE.transform.position.x);
-		minPositionY = (int) Mathf.Ceil(boundarySS.transform.position.y);
-		maxPositionY = (int) Mathf.Floor(boundaryNN.transform.position.y);
-
+		InitializeUnitVectors();
 		InitializeEnvironmentGraph();
+		circleSmallArray = new GameObject[maxIndexX + 1, maxIndexY + 1];
 	}
 
 	protected void InitializeUnitVectors() {
@@ -70,7 +75,7 @@ public class EnvironmentManager : MonoBehaviour {
 	}
 
 	protected void InitializeEnvironmentGraph() {
-		environmentGraph = new bool[maxPositionX - minPositionX, maxPositionY - minPositionY, unitVectorDirections.Length];
+		environmentGraph = new bool[maxIndexX + 1, maxIndexY + 1, unitVectorDirections.Length];
 		for (int indexX = 0; indexX < environmentGraph.GetLength(0); indexX++) {
 			for (int indexY = 0; indexY < environmentGraph.GetLength(1); indexY++) {
 				Vector2 position = new Vector2(indexX + minPositionX, indexY + minPositionY);
@@ -86,27 +91,55 @@ public class EnvironmentManager : MonoBehaviour {
      * Prints environmentGrid on keypress P
      */
 	void Update() {
-		if (Input.GetKey(KeyCode.P)) {
-			for (float positionX = minPositionX; positionX <= maxPositionX; positionX++) {
-				for (float positionY = minPositionY; positionY <= maxPositionY; positionY++) {
-					Vector2 position = new Vector2(positionX, positionY);
-					GameObject circleSmall = Instantiate(PrefabReferences.prefabReferences.circleSmall2, position, Quaternion.identity);
+		if (Input.GetKeyDown(KeyCode.P)) {
+			if (circleSmallArray[0,0] == null) {
+				spawnCircleGrid();
+			} else {
+				despawnCircleGrid();
+			}
+		}
+	}
 
-					//float r = 0;
-					//float g = 0;
-					//float b = 0;
-					//for (int v = 0; v<unitVectorDirections.Length; v++) {
-					//	RaycastHit2D raycastHitDirection = Physics2D.Raycast(position, unitVectorDirections[v], unitVectorMagnitudes[v], raycastLayerMask, 0f, 0f);
-					//	if (raycastHitDirection.collider != null) {
-					//		r += 0.1111f;
-					//		g += 0.1111f;
-					//		b += 0.1111f;
-					//	}
-					//}
-					//circleSmall.GetComponent<SpriteRenderer>().color = new Color(r, g, b);
+	private void spawnCircleGrid() {
+		//for (float positionX = minPositionX; positionX <= maxPositionX; positionX++) {
+		//	for (float positionY = minPositionY; positionY <= maxPositionY; positionY++) {
+		//		Vector2 position = new Vector2(positionX, positionY);
+		for (int indexX = 0; indexX < environmentGraph.GetLength(0); indexX++) {
+			for (int indexY = 0; indexY < environmentGraph.GetLength(1); indexY++) {
+				Vector2 position = new Vector2(indexX + minPositionX, indexY + minPositionY);
+				circleSmallArray[indexX, indexY] = Instantiate(PrefabReferences.prefabReferences.circleSmall2, position, Quaternion.identity);
+				if (environmentGraph[indexX, indexY, 0]) {
+					circleSmallArray[indexX, indexY].GetComponent<SpriteRenderer>().color = new Color(0, 0, 0);
 				}
 			}
 		}
 	}
 
+	private void despawnCircleGrid() {
+		for (int indexX = 0; indexX < environmentGraph.GetLength(0); indexX++) {
+			for (int indexY = 0; indexY < environmentGraph.GetLength(1); indexY++) {
+				Destroy(circleSmallArray[indexX, indexY]);
+			}
+		}
+	}
+
+	public float getPositionX(int indexX) {
+		float positionX = indexX + minPositionX;
+		return positionX;
+	}
+
+	public float getPositionY(int indexY) {
+		float positionY = indexY + minPositionY;
+		return positionY;
+	}
+
+	public int getIndexX(float positionX) {
+		int indexX = Mathf.RoundToInt(positionX) - minPositionX;
+		return indexX;
+	}
+
+	public int getIndexY(float positionY) {
+		int indexY = Mathf.RoundToInt(positionY) - minPositionY;
+		return indexY;
+	}
 }

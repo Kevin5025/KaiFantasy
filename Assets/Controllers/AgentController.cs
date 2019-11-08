@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Priority_Queue;
 
 /**
  * Abstracted behaviors for easy access later. 
@@ -130,4 +131,12 @@ public abstract class AgentController : MonoBehaviour {
 	//		}
 	//	}
 	//}
+
+	protected virtual void FindPathAStarSearch(Vector2 targetPosition) {
+		bool[,,] environmentGraph = EnvironmentManager.environmentManager.environmentGraph;
+		bool[,] nodeIsVisitedArray = new bool[environmentGraph.GetLength(0), environmentGraph.GetLength(1)];
+
+		int targetIndexX = EnvironmentManager.environmentManager.getIndexX(targetPosition.x);
+		int targetIndexY = EnvironmentManager.environmentManager.getIndexY(targetPosition.y);
+	}
 }
