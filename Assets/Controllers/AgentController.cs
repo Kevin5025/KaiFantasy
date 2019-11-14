@@ -132,11 +132,52 @@ public abstract class AgentController : MonoBehaviour {
 	//	}
 	//}
 
-	protected virtual void FindPathAStarSearch(Vector2 targetPosition) {
+	protected virtual IEnumerator FindPathAStarSearch(Vector2 targetPosition) {
 		bool[,,] environmentGraph = EnvironmentManager.environmentManager.environmentGraph;
-		bool[,] nodeIsVisitedArray = new bool[environmentGraph.GetLength(0), environmentGraph.GetLength(1)];
+		int XN = environmentGraph.GetLength(0);
+		int YM = environmentGraph.GetLength(1);
+		int[,] parentIndexXGrid = new int[XN, YM];
+		int[,] parentIndexYGrid = new int[XN, YM];
+		int frontierSize = XN + YM;  // ASSUMPTION: frontierSize > 0
+		FastPriorityQueue<AStarPriorityQueueNode> frontier = new FastPriorityQueue<AStarPriorityQueueNode>(frontierSize);  // TODO: logic to resize when necessary
+		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[XN, YM];  // null if not visited
 
+		/**
+		 * source node and target node
+		 */
+		int sourceIndexX = EnvironmentManager.environmentManager.getIndexX(transform.position.x);
+		int sourceIndexY = EnvironmentManager.environmentManager.getIndexY(transform.position.y);
 		int targetIndexX = EnvironmentManager.environmentManager.getIndexX(targetPosition.x);
 		int targetIndexY = EnvironmentManager.environmentManager.getIndexY(targetPosition.y);
+		float startPathCost = 0f;
+
+		if (!environmentGraph[sourceIndexX, sourceIndexY, 0] || !environmentGraph[targetIndexX, targetIndexY, 0]) {
+			Debug.Log("astar source or target in entity wall");  // occurs if target corpse slides through wall
+			yield break;
+		}
+
+		/**
+		 * Explore frontier from source node to target node
+		 */
+		nodeGrid[sourceIndexX, sourceIndexY] = new AStarPriorityQueueNode(sourceIndexX, sourceIndexY, startPathCost);
+		float sourceNodePriority = nodeGrid[sourceIndexX, sourceIndexY].pastPathCost + futureDistanceHeuristic(sourceIndexX, sourceIndexY, targetIndexX, targetIndexX);
+		frontier.Enqueue(nodeGrid[sourceIndexX, sourceIndexY], sourceNodePriority);
+		parentIndexXGrid[sourceIndexX, sourceIndexY] = -1;
+		parentIndexYGrid[sourceIndexX, sourceIndexY] = -1;
+		while (frontier.Count > 0) {
+			AStarPriorityQueueNode node = frontier.Dequeue();
+			if (node.indexX == targetIndexX && node.indexY == targetIndexY) {  // if path found
+				break;
+			}
+
+			/**
+			 * Expand the node by adding its neighbors to the frontier
+			 */
+			// 
+		}
+	}
+
+	private float futureDistanceHeuristic(int indexX, int indexY, int targetIndexX, int targetIndexY) {
+		return EnvironmentManager.manhattanDiagonalDistance(indexX, indexY, targetIndexX, targetIndexY);
 	}
 }

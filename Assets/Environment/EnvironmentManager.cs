@@ -29,7 +29,7 @@ public class EnvironmentManager : MonoBehaviour {
 	public int maxIndexX;
 	public int maxIndexY;
 
-	public bool[,,] environmentGraph;  // returns whether (X, Y, V) is a valid vector direction
+	public bool[,,] environmentGraph;  // returns whether (X, Y, V) is a valid vector direction, the V=0 direction tells us whether the position is clear
 	private GameObject[,] circleSmallArray;
 
 	void Awake() {
@@ -86,6 +86,8 @@ public class EnvironmentManager : MonoBehaviour {
 			}
 		}
 	}
+
+	// TODO get neighbors function? 
 	
 	/**
      * Prints environmentGrid on keypress P
@@ -141,5 +143,24 @@ public class EnvironmentManager : MonoBehaviour {
 	public int getIndexY(float positionY) {
 		int indexY = Mathf.RoundToInt(positionY) - minPositionY;
 		return indexY;
+	}
+
+	public static float euclideanDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
+		return Mathf.Sqrt((targetIndexX - indexX) * (targetIndexX - indexX) + (targetIndexY - indexY) * (targetIndexY - indexY));
+	}
+
+	/**
+     * min 8 directional distance weighting 1 on axis-parallel directions and sqrt(2) on diagonal directions
+     */
+	public static float manhattanDiagonalDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
+		int deltaXIndex = Mathf.Abs(targetIndexX - indexX);
+		int deltaYIndex = Mathf.Abs(targetIndexY - indexY);
+		int deltaDiagonalIndex = Mathf.Min(deltaXIndex, deltaYIndex);
+		int deltaAxisParallelIndex = Mathf.Abs(deltaXIndex - deltaYIndex);
+		return deltaAxisParallelIndex + Mathf.Sqrt(2) * deltaDiagonalIndex;
+	}
+
+	public static float manhattanDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
+		return Mathf.Abs(targetIndexX - indexX) + Mathf.Abs(targetIndexY - indexY);
 	}
 }
