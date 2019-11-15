@@ -23,27 +23,19 @@ public class PlayerController : AgentController {
 		MainCamera.mainCamera.playerTransform = transform;
 	}
 
-	protected override void FixedUpdate() {
-		base.FixedUpdate();
-		ManualDebug();
-		Rotate();
-		Move();
-		Fire();
-	}
-
 	/**
 	 * For Debugging In Game
 	 */
-	protected virtual void ManualDebug() {
+	protected override void ManualDebug() {
 		if (Input.GetKeyDown(KeyCode.BackQuote)) {
 			Debug.Log("ManualDebug");
 			Collider2D collider = GetComponent<Collider2D>();
 			collider.enabled = !collider.enabled;
 		}
-		if (Input.GetKeyDown(KeyCode.O) && primeAdversary != null) {
+		if (Input.GetKeyDown(KeyCode.Alpha9) && primeAdversary != null) {
 			StartCoroutine(FindPathAStarSearch(primeAdversary.transform.position));
 		}
-		if (Input.GetKeyDown(KeyCode.I)) {
+		if (Input.GetKeyDown(KeyCode.Alpha0)) {
 			StartCoroutine(ErasePathNodes());
 		}
 	}

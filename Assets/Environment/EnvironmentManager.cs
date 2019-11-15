@@ -34,6 +34,10 @@ public class EnvironmentManager : MonoBehaviour {
 	public bool[,,] environmentGraph;  // returns whether (X, Y, V) is a valid vector direction, the V=0 direction tells us whether the position is clear
 	private GameObject[,] circleSmallArray;
 
+	static EnvironmentManager() {
+		InitializeUnitVectors();
+	}
+
 	void Awake() {
 		if (environmentManager == null) {
 			environmentManager = this;
@@ -54,12 +58,11 @@ public class EnvironmentManager : MonoBehaviour {
 		maxIndexX = maxPositionX - minPositionX;
 		maxIndexY = maxPositionY - minPositionY;
 
-		InitializeUnitVectors();
 		InitializeEnvironmentGraph();
 		circleSmallArray = new GameObject[maxIndexX + 1, maxIndexY + 1];
 	}
 
-	protected void InitializeUnitVectors() {  // TODO: should be in a static constructor
+	protected static void InitializeUnitVectors() {  // TODO: should be in a static constructor
 		unitVectorNorthEast = new Vector2(1f, 1f);  // technically not unit length
 		unitVectorSouthEast = new Vector2(1f, -1f);
 		unitVectorSouthWest = new Vector2(-1f, -1f);
@@ -93,13 +96,13 @@ public class EnvironmentManager : MonoBehaviour {
 	}
 
 	public int[][] GetValidNeighborIndicesXY(int indexX, int indexY) {
-		int[][] neighborIndicesXY = new int[unitVectorDirections.Length-1][];
+		int[][] validNeighborIndicesXY = new int[unitVectorDirections.Length-1][];
 		for (int v = 1; v < unitVectorDirections.Length; v++) {  // ignore v = 0
 			if (environmentGraph[indexX, indexY, v]) {
-				neighborIndicesXY[v-1] = new int[] { indexX + unitVectorDirectionsX[v], indexY + unitVectorDirectionsY[v] };  // ASSUMPTION: there are walls preventing index out of bounds
+				validNeighborIndicesXY[v-1] = new int[] { indexX + unitVectorDirectionsX[v], indexY + unitVectorDirectionsY[v] };  // ASSUMPTION: there are walls preventing index out of bounds
 			}  // else null
 		}
-		return neighborIndicesXY;
+		return validNeighborIndicesXY;
 	}
 	
 	/**

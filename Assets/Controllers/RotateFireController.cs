@@ -11,12 +11,6 @@ public class RotateFireController : AgentController {
 		rotateFactor = MyStaticLibrary.maxMagnitudeFloat(personalityUniform);
 	}
 
-	protected override void FixedUpdate() {
-		base.FixedUpdate();
-		Rotate();
-		Fire();
-	}
-
 	protected override void Rotate() {
 		base.Rotate();
 		Spin();

@@ -16,15 +16,19 @@ public abstract class AgentController : MonoBehaviour {
 	public CircleAgent primeAlly;  // TODO: antagonist / protagonist? 
 	public CircleAgent primeAdversary;
 
-	bool[,,] environmentGraph;  // this stuff doesn't belong to this object but is copied here for convenience and legibility
-	int XN;
-	int YM;
-	// protected Stack<int[]> path;
+	static float epsilon;
+	static bool[,,] environmentGraph;  // this stuff doesn't belong to this object but is copied here for convenience and legibility
+	static int XN;
+	static int YM;
+	protected static GameObject[,] circleSmallGrid;  // for debugging purposes
 	protected Stack<AStarPriorityQueueNode> path;
-	GameObject[,] circleSmallGrid;  // for debugging purposes
 
 	public float[] personalityUniform;
 	public float[] personalityGaussian;
+
+	static AgentController() {
+		epsilon = 0.0001f;
+	}
 
 	protected virtual void Awake() { }
 
@@ -34,22 +38,35 @@ public abstract class AgentController : MonoBehaviour {
 		presentAdversaryList = new List<CircleAgent>();
 		primeAlly = null;
 		primeAdversary = null;
-
+		
 		environmentGraph = EnvironmentManager.environmentManager.environmentGraph;
 		XN = environmentGraph.GetLength(0);
 		YM = environmentGraph.GetLength(1);
-		path = new Stack<AStarPriorityQueueNode>();
 		circleSmallGrid = new GameObject[XN, YM];
+		path = new Stack<AStarPriorityQueueNode>();
 
 		personalityUniform = MyStaticLibrary.NextRandomUniformArray(5, -1f, 1f);
 		personalityGaussian = MyStaticLibrary.NextRandomGaussianArray(5);
 	}
 
-	protected virtual void Update() { }
+	protected virtual void Update() {
+		ManualDebug();
+		Rotate();
+		Move();
+		Fire();
+	}
 
 	protected virtual void FixedUpdate() {
 		// alertCooldownTime -= Time.deltaTime;  // float.MinValue ~ -3.4E38 seconds
 	}
+
+	protected virtual void ManualDebug() { }
+
+	protected virtual void Rotate() { }
+
+	protected virtual void Move() { }
+
+	protected virtual void Fire() { }
 
 	protected virtual void OnTriggerEnter2D(Collider2D collider) {
 		CircleAgent colliderCircleAgent = collider.GetComponent<CircleAgent>();
@@ -88,12 +105,6 @@ public abstract class AgentController : MonoBehaviour {
 			}
 		}
 	}
-
-	protected virtual void Rotate() { }
-
-	protected virtual void Move() { }
-
-	protected virtual void Fire() { }
 
 	/**
      * Returns prime present ally circle agent or null if none. 
@@ -148,7 +159,7 @@ public abstract class AgentController : MonoBehaviour {
 	protected virtual IEnumerator FindPathAStarSearch(Vector2 targetPosition) {
 		int frontierSize = XN + YM;  // ASSUMPTION: frontierSize > 0
 		FastPriorityQueue<AStarPriorityQueueNode> frontier = new FastPriorityQueue<AStarPriorityQueueNode>(frontierSize);
-		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[XN, YM];  // element is null if not visited
+		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[XN, YM];  // element is null if never in frontier before
 
 		/**
 		 * source node and target node
@@ -184,23 +195,30 @@ public abstract class AgentController : MonoBehaviour {
 			 * Expand the node by adding its neighbors to the frontier
 			 */
 			int[][] validNeighborIndicesXY = EnvironmentManager.environmentManager.GetValidNeighborIndicesXY(node.indexX, node.indexY);
-			for (int v = 0; v < validNeighborIndicesXY.Length; v++) {
-				if (validNeighborIndicesXY[v] != null) {
-					int neighborNodeIndexX = validNeighborIndicesXY[v][0];
-					int neighborNodeIndexY = validNeighborIndicesXY[v][1];
-					if (nodeGrid[neighborNodeIndexX, neighborNodeIndexY] == null) {
+			for (int vv = 0; vv < validNeighborIndicesXY.Length; vv++) {
+				if (validNeighborIndicesXY[vv] != null) {
+					int neighborNodeIndexX = validNeighborIndicesXY[vv][0];
+					int neighborNodeIndexY = validNeighborIndicesXY[vv][1];
+
+					float neighborNodePathCost = node.pastPathCost + EnvironmentManager.unitVectorMagnitudes[vv + 1];
+					if (nodeGrid[neighborNodeIndexX, neighborNodeIndexY] == null) {  // node has no parent
 						if (frontier.Count == frontierSize) {
 							frontierSize *= 2;
 							frontier.Resize(frontierSize);
 						}
-
-						float neighborNodePathCost = node.pastPathCost + EnvironmentManager.unitVectorMagnitudes[v];
 						nodeGrid[neighborNodeIndexX, neighborNodeIndexY] = new AStarPriorityQueueNode(neighborNodePathCost, neighborNodeIndexX, neighborNodeIndexY, node.indexX, node.indexY);
+
 						float neighborNodePriority = nodeGrid[neighborNodeIndexX, neighborNodeIndexY].pastPathCost + futurePathCostHeuristic(neighborNodeIndexX, neighborNodeIndexY, targetIndexX, targetIndexY);
 						frontier.Enqueue(nodeGrid[neighborNodeIndexX, neighborNodeIndexY], neighborNodePriority);
+					} else if (nodeGrid[neighborNodeIndexX, neighborNodeIndexY].pastPathCost - neighborNodePathCost > epsilon) {  // node has a worse parent
+						nodeGrid[neighborNodeIndexX, neighborNodeIndexY].pastPathCost = neighborNodePathCost;
+						nodeGrid[neighborNodeIndexX, neighborNodeIndexY].parentIndexX = node.indexX;
+						nodeGrid[neighborNodeIndexX, neighborNodeIndexY].parentIndexY = node.indexY;
+
+						float neighborNodePriority = nodeGrid[neighborNodeIndexX, neighborNodeIndexY].pastPathCost + futurePathCostHeuristic(neighborNodeIndexX, neighborNodeIndexY, targetIndexX, targetIndexY);
+						frontier.UpdatePriority(nodeGrid[neighborNodeIndexX, neighborNodeIndexY], neighborNodePriority);
 					} 
-					//else if (neighborNodePathCost < nodeGrid[neighborNodeIndexX, neighborNodeIndexY].pastPathCost) { } // this is only needed for admissable but not consistent heuristics
-					// else { }  // this is if the neighbor already has a better parent
+					// else { }  // this is if the neighbor already has a better parent; note that if a neighbor has already been dequeued from the frontier, then it will have a better parent because its best parent has already been found
 				}
 			}
 		}
@@ -229,7 +247,7 @@ public abstract class AgentController : MonoBehaviour {
 	 */
 	private IEnumerator InstantiateNodeAStarSearch(AStarPriorityQueueNode node, float waitTime, Color color) {
 		yield return new WaitForSeconds(waitTime);
-		node.Print();
+		// node.Print();
 		Vector2 position = new Vector2(EnvironmentManager.environmentManager.GetPositionX(node.indexX), EnvironmentManager.environmentManager.GetPositionY(node.indexY));  // TODO
 		GameObject nodeGameObject = Instantiate(PrefabReferences.prefabReferences.circleSmall2, position, Quaternion.identity);
 		nodeGameObject.GetComponent<SpriteRenderer>().color = color;

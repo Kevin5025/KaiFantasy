@@ -528,6 +528,12 @@ MonoBehaviour:
   boundaryEE: {fileID: 310785857}
   boundarySS: {fileID: 1494074518}
   boundaryWW: {fileID: 1326738747}
+  minPositionX: 0
+  maxPositionX: 0
+  minPositionY: 0
+  maxPositionY: 0
+  maxIndexX: 0
+  maxIndexY: 0
 --- !u!1001 &308758860
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1081,7 +1087,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1291496774}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52ab4beafe5b1542862d0885a6d4bb4, type: 3}
+  m_Script: {fileID: 11500000, guid: ba7610eefe88e3b4e98b05aee4b75522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   primeAlly: {fileID: 0}
