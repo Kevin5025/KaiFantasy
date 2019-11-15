@@ -15,12 +15,14 @@ public class EnvironmentManager : MonoBehaviour {
 	public GameObject boundarySS;
 	public GameObject boundaryWW;
 
-	public Vector2 unitVectorNorthEast;
-	public Vector2 unitVectorSouthEast;
-	public Vector2 unitVectorSouthWest;
-	public Vector2 unitVectorNorthWest;
-	public Vector2[] unitVectorDirections;
-	public float[] unitVectorMagnitudes;
+	public static Vector2 unitVectorNorthEast;
+	public static Vector2 unitVectorSouthEast;
+	public static Vector2 unitVectorSouthWest;
+	public static Vector2 unitVectorNorthWest;
+	public static Vector2[] unitVectorDirections;
+	public static float[] unitVectorMagnitudes;
+	public static int[] unitVectorDirectionsX;
+	public static int[] unitVectorDirectionsY;
 
 	public int minPositionX;
 	public int maxPositionX;
@@ -57,7 +59,7 @@ public class EnvironmentManager : MonoBehaviour {
 		circleSmallArray = new GameObject[maxIndexX + 1, maxIndexY + 1];
 	}
 
-	protected void InitializeUnitVectors() {
+	protected void InitializeUnitVectors() {  // TODO: should be in a static constructor
 		unitVectorNorthEast = new Vector2(1f, 1f);  // technically not unit length
 		unitVectorSouthEast = new Vector2(1f, -1f);
 		unitVectorSouthWest = new Vector2(-1f, -1f);
@@ -72,6 +74,9 @@ public class EnvironmentManager : MonoBehaviour {
 		for (int v = 0; v<unitVectorMagnitudes.Length; v++) {
 			unitVectorMagnitudes[v] = unitVectorDirections[v].magnitude;
 		}
+
+		unitVectorDirectionsX = new int[] { 0, 0, 1, 0, -1, 1, 1, -1, -1 };
+		unitVectorDirectionsY = new int[] { 0, 1, 0, -1, 0, 1, -1, -1, 1 };
 	}
 
 	protected void InitializeEnvironmentGraph() {
@@ -81,13 +86,21 @@ public class EnvironmentManager : MonoBehaviour {
 				Vector2 position = new Vector2(indexX + minPositionX, indexY + minPositionY);
 				for (int v = 0; v < environmentGraph.GetLength(2); v++) {
 					RaycastHit2D raycastHitDirection = Physics2D.Raycast(position, unitVectorDirections[v], unitVectorMagnitudes[v], raycastLayerMask, 0f, 0f);
-					environmentGraph[indexX, indexY, v] = raycastHitDirection.collider != null;
+					environmentGraph[indexX, indexY, v] = raycastHitDirection.collider == null;
 				}
 			}
 		}
 	}
 
-	// TODO get neighbors function? 
+	public int[][] GetValidNeighborIndicesXY(int indexX, int indexY) {
+		int[][] neighborIndicesXY = new int[unitVectorDirections.Length-1][];
+		for (int v = 1; v < unitVectorDirections.Length; v++) {  // ignore v = 0
+			if (environmentGraph[indexX, indexY, v]) {
+				neighborIndicesXY[v-1] = new int[] { indexX + unitVectorDirectionsX[v], indexY + unitVectorDirectionsY[v] };  // ASSUMPTION: there are walls preventing index out of bounds
+			}  // else null
+		}
+		return neighborIndicesXY;
+	}
 	
 	/**
      * Prints environmentGrid on keypress P
@@ -95,14 +108,14 @@ public class EnvironmentManager : MonoBehaviour {
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.P)) {
 			if (circleSmallArray[0,0] == null) {
-				spawnCircleGrid();
+				SpawnCircleGrid();
 			} else {
-				despawnCircleGrid();
+				DespawnCircleGrid();
 			}
 		}
 	}
 
-	private void spawnCircleGrid() {
+	private void SpawnCircleGrid() {
 		//for (float positionX = minPositionX; positionX <= maxPositionX; positionX++) {
 		//	for (float positionY = minPositionY; positionY <= maxPositionY; positionY++) {
 		//		Vector2 position = new Vector2(positionX, positionY);
@@ -110,14 +123,14 @@ public class EnvironmentManager : MonoBehaviour {
 			for (int indexY = 0; indexY < environmentGraph.GetLength(1); indexY++) {
 				Vector2 position = new Vector2(indexX + minPositionX, indexY + minPositionY);
 				circleSmallArray[indexX, indexY] = Instantiate(PrefabReferences.prefabReferences.circleSmall2, position, Quaternion.identity);
-				if (environmentGraph[indexX, indexY, 0]) {
+				if (!environmentGraph[indexX, indexY, 0]) {
 					circleSmallArray[indexX, indexY].GetComponent<SpriteRenderer>().color = new Color(0, 0, 0);
 				}
 			}
 		}
 	}
 
-	private void despawnCircleGrid() {
+	private void DespawnCircleGrid() {
 		for (int indexX = 0; indexX < environmentGraph.GetLength(0); indexX++) {
 			for (int indexY = 0; indexY < environmentGraph.GetLength(1); indexY++) {
 				Destroy(circleSmallArray[indexX, indexY]);
@@ -125,34 +138,34 @@ public class EnvironmentManager : MonoBehaviour {
 		}
 	}
 
-	public float getPositionX(int indexX) {
+	public float GetPositionX(int indexX) {
 		float positionX = indexX + minPositionX;
 		return positionX;
 	}
 
-	public float getPositionY(int indexY) {
+	public float GetPositionY(int indexY) {
 		float positionY = indexY + minPositionY;
 		return positionY;
 	}
 
-	public int getIndexX(float positionX) {
+	public int GetIndexX(float positionX) {
 		int indexX = Mathf.RoundToInt(positionX) - minPositionX;
 		return indexX;
 	}
 
-	public int getIndexY(float positionY) {
+	public int GetIndexY(float positionY) {
 		int indexY = Mathf.RoundToInt(positionY) - minPositionY;
 		return indexY;
 	}
 
-	public static float euclideanDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
+	public static float EuclideanDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
 		return Mathf.Sqrt((targetIndexX - indexX) * (targetIndexX - indexX) + (targetIndexY - indexY) * (targetIndexY - indexY));
 	}
 
 	/**
      * min 8 directional distance weighting 1 on axis-parallel directions and sqrt(2) on diagonal directions
      */
-	public static float manhattanDiagonalDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
+	public static float ManhattanDiagonalDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
 		int deltaXIndex = Mathf.Abs(targetIndexX - indexX);
 		int deltaYIndex = Mathf.Abs(targetIndexY - indexY);
 		int deltaDiagonalIndex = Mathf.Min(deltaXIndex, deltaYIndex);
@@ -160,7 +173,7 @@ public class EnvironmentManager : MonoBehaviour {
 		return deltaAxisParallelIndex + Mathf.Sqrt(2) * deltaDiagonalIndex;
 	}
 
-	public static float manhattanDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
+	public static float ManhattanDistance(int indexX, int indexY, int targetIndexX, int targetIndexY) {
 		return Mathf.Abs(targetIndexX - indexX) + Mathf.Abs(targetIndexY - indexY);
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 
 namespace Priority_Queue {
 	public class AStarPriorityQueueNode : FastPriorityQueueNode {
@@ -6,12 +7,19 @@ namespace Priority_Queue {
 		public int indexX;
 		public int indexY;
 		public float pastPathCost;
+		public int parentIndexX;
+		public int parentIndexY;
 
-		public AStarPriorityQueueNode(int indexX, int indexY, float pathCost) {
+		public AStarPriorityQueueNode(float pastPathCost, int indexX, int indexY, int parentIndexX, int parentIndexY) {
+			this.pastPathCost = pastPathCost;
 			this.indexX = indexX;
 			this.indexY = indexY;
-			this.pastPathCost = pathCost;
+			this.parentIndexX = parentIndexX;
+			this.parentIndexY = parentIndexY;
 		}
 
+		public void Print() {
+			Debug.Log("frontier node: " + this.indexX + ", " + this.indexY + ", " + this.pastPathCost + ", " + this.Priority);
+		}
 	}
 }

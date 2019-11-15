@@ -25,7 +25,7 @@ public class PlayerController : AgentController {
 
 	protected override void FixedUpdate() {
 		base.FixedUpdate();
-		// ManualDebug();
+		ManualDebug();
 		Rotate();
 		Move();
 		Fire();
@@ -39,6 +39,12 @@ public class PlayerController : AgentController {
 			Debug.Log("ManualDebug");
 			Collider2D collider = GetComponent<Collider2D>();
 			collider.enabled = !collider.enabled;
+		}
+		if (Input.GetKeyDown(KeyCode.O) && primeAdversary != null) {
+			StartCoroutine(FindPathAStarSearch(primeAdversary.transform.position));
+		}
+		if (Input.GetKeyDown(KeyCode.I)) {
+			StartCoroutine(ErasePathNodes());
 		}
 	}
 

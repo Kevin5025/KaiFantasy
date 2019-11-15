@@ -16,6 +16,13 @@ public abstract class AgentController : MonoBehaviour {
 	public CircleAgent primeAlly;  // TODO: antagonist / protagonist? 
 	public CircleAgent primeAdversary;
 
+	bool[,,] environmentGraph;  // this stuff doesn't belong to this object but is copied here for convenience and legibility
+	int XN;
+	int YM;
+	// protected Stack<int[]> path;
+	protected Stack<AStarPriorityQueueNode> path;
+	GameObject[,] circleSmallGrid;  // for debugging purposes
+
 	public float[] personalityUniform;
 	public float[] personalityGaussian;
 
@@ -27,6 +34,12 @@ public abstract class AgentController : MonoBehaviour {
 		presentAdversaryList = new List<CircleAgent>();
 		primeAlly = null;
 		primeAdversary = null;
+
+		environmentGraph = EnvironmentManager.environmentManager.environmentGraph;
+		XN = environmentGraph.GetLength(0);
+		YM = environmentGraph.GetLength(1);
+		path = new Stack<AStarPriorityQueueNode>();
+		circleSmallGrid = new GameObject[XN, YM];
 
 		personalityUniform = MyStaticLibrary.NextRandomUniformArray(5, -1f, 1f);
 		personalityGaussian = MyStaticLibrary.NextRandomGaussianArray(5);
@@ -133,23 +146,17 @@ public abstract class AgentController : MonoBehaviour {
 	//}
 
 	protected virtual IEnumerator FindPathAStarSearch(Vector2 targetPosition) {
-		bool[,,] environmentGraph = EnvironmentManager.environmentManager.environmentGraph;
-		int XN = environmentGraph.GetLength(0);
-		int YM = environmentGraph.GetLength(1);
-		int[,] parentIndexXGrid = new int[XN, YM];
-		int[,] parentIndexYGrid = new int[XN, YM];
 		int frontierSize = XN + YM;  // ASSUMPTION: frontierSize > 0
-		FastPriorityQueue<AStarPriorityQueueNode> frontier = new FastPriorityQueue<AStarPriorityQueueNode>(frontierSize);  // TODO: logic to resize when necessary
-		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[XN, YM];  // null if not visited
+		FastPriorityQueue<AStarPriorityQueueNode> frontier = new FastPriorityQueue<AStarPriorityQueueNode>(frontierSize);
+		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[XN, YM];  // element is null if not visited
 
 		/**
 		 * source node and target node
 		 */
-		int sourceIndexX = EnvironmentManager.environmentManager.getIndexX(transform.position.x);
-		int sourceIndexY = EnvironmentManager.environmentManager.getIndexY(transform.position.y);
-		int targetIndexX = EnvironmentManager.environmentManager.getIndexX(targetPosition.x);
-		int targetIndexY = EnvironmentManager.environmentManager.getIndexY(targetPosition.y);
-		float startPathCost = 0f;
+		int sourceIndexX = EnvironmentManager.environmentManager.GetIndexX(transform.position.x);
+		int sourceIndexY = EnvironmentManager.environmentManager.GetIndexY(transform.position.y);
+		int targetIndexX = EnvironmentManager.environmentManager.GetIndexX(targetPosition.x);
+		int targetIndexY = EnvironmentManager.environmentManager.GetIndexY(targetPosition.y);
 
 		if (!environmentGraph[sourceIndexX, sourceIndexY, 0] || !environmentGraph[targetIndexX, targetIndexY, 0]) {
 			Debug.Log("astar source or target in entity wall");  // occurs if target corpse slides through wall
@@ -159,25 +166,92 @@ public abstract class AgentController : MonoBehaviour {
 		/**
 		 * Explore frontier from source node to target node
 		 */
-		nodeGrid[sourceIndexX, sourceIndexY] = new AStarPriorityQueueNode(sourceIndexX, sourceIndexY, startPathCost);
-		float sourceNodePriority = nodeGrid[sourceIndexX, sourceIndexY].pastPathCost + futureDistanceHeuristic(sourceIndexX, sourceIndexY, targetIndexX, targetIndexX);
+		AStarPriorityQueueNode expandedTargetNode = null;
+		float sourceNodePathCost = 0f;
+		nodeGrid[sourceIndexX, sourceIndexY] = new AStarPriorityQueueNode(sourceNodePathCost, sourceIndexX, sourceIndexY, -1, -1);
+		float sourceNodePriority = nodeGrid[sourceIndexX, sourceIndexY].pastPathCost + futurePathCostHeuristic(sourceIndexX, sourceIndexY, targetIndexX, targetIndexY);
 		frontier.Enqueue(nodeGrid[sourceIndexX, sourceIndexY], sourceNodePriority);
-		parentIndexXGrid[sourceIndexX, sourceIndexY] = -1;
-		parentIndexYGrid[sourceIndexX, sourceIndexY] = -1;
 		while (frontier.Count > 0) {
 			AStarPriorityQueueNode node = frontier.Dequeue();
-			if (node.indexX == targetIndexX && node.indexY == targetIndexY) {  // if path found
+			yield return InstantiateNodeAStarSearch(node, 0.01f, new Color(1, 1, 1));  // for debugging purposes
+
+			if (node.indexX == targetIndexX && node.indexY == targetIndexY) {  // if path found, then break
+				expandedTargetNode = node;
 				break;
 			}
 
 			/**
 			 * Expand the node by adding its neighbors to the frontier
 			 */
-			// 
+			int[][] validNeighborIndicesXY = EnvironmentManager.environmentManager.GetValidNeighborIndicesXY(node.indexX, node.indexY);
+			for (int v = 0; v < validNeighborIndicesXY.Length; v++) {
+				if (validNeighborIndicesXY[v] != null) {
+					int neighborNodeIndexX = validNeighborIndicesXY[v][0];
+					int neighborNodeIndexY = validNeighborIndicesXY[v][1];
+					if (nodeGrid[neighborNodeIndexX, neighborNodeIndexY] == null) {
+						if (frontier.Count == frontierSize) {
+							frontierSize *= 2;
+							frontier.Resize(frontierSize);
+						}
+
+						float neighborNodePathCost = node.pastPathCost + EnvironmentManager.unitVectorMagnitudes[v];
+						nodeGrid[neighborNodeIndexX, neighborNodeIndexY] = new AStarPriorityQueueNode(neighborNodePathCost, neighborNodeIndexX, neighborNodeIndexY, node.indexX, node.indexY);
+						float neighborNodePriority = nodeGrid[neighborNodeIndexX, neighborNodeIndexY].pastPathCost + futurePathCostHeuristic(neighborNodeIndexX, neighborNodeIndexY, targetIndexX, targetIndexY);
+						frontier.Enqueue(nodeGrid[neighborNodeIndexX, neighborNodeIndexY], neighborNodePriority);
+					} 
+					//else if (neighborNodePathCost < nodeGrid[neighborNodeIndexX, neighborNodeIndexY].pastPathCost) { } // this is only needed for admissable but not consistent heuristics
+					// else { }  // this is if the neighbor already has a better parent
+				}
+			}
 		}
+
+		yield return tracePath(nodeGrid, expandedTargetNode);
 	}
 
-	private float futureDistanceHeuristic(int indexX, int indexY, int targetIndexX, int targetIndexY) {
-		return EnvironmentManager.manhattanDiagonalDistance(indexX, indexY, targetIndexX, targetIndexY);
+	private IEnumerator tracePath(AStarPriorityQueueNode[,] nodeGrid, AStarPriorityQueueNode expandedTargetNode) {
+		Stack<AStarPriorityQueueNode> path = new Stack<AStarPriorityQueueNode>();
+		if (expandedTargetNode != null) {
+			AStarPriorityQueueNode nextExpandedNode = expandedTargetNode;
+			path.Push(nextExpandedNode);
+			yield return InstantiateNodeAStarSearch(nextExpandedNode, 0.1f, new Color(0, 0, 0));  // for debugging purposes
+			while (nextExpandedNode.parentIndexX != -1) {
+				nextExpandedNode = nodeGrid[nextExpandedNode.parentIndexX, nextExpandedNode.parentIndexY];
+				path.Push(nextExpandedNode);
+				yield return InstantiateNodeAStarSearch(nextExpandedNode, 0.1f, new Color(0, 0, 0));  // for debugging purposes
+			}
+		}
+		this.path = path;
+		yield return null;
+	}
+
+	/**
+	 * Places a circle node at index location mostly for demo purposes
+	 */
+	private IEnumerator InstantiateNodeAStarSearch(AStarPriorityQueueNode node, float waitTime, Color color) {
+		yield return new WaitForSeconds(waitTime);
+		node.Print();
+		Vector2 position = new Vector2(EnvironmentManager.environmentManager.GetPositionX(node.indexX), EnvironmentManager.environmentManager.GetPositionY(node.indexY));  // TODO
+		GameObject nodeGameObject = Instantiate(PrefabReferences.prefabReferences.circleSmall2, position, Quaternion.identity);
+		nodeGameObject.GetComponent<SpriteRenderer>().color = color;
+
+		if (circleSmallGrid[node.indexX, node.indexY] != null) {
+			Destroy(circleSmallGrid[node.indexX, node.indexY]);
+		}
+		circleSmallGrid[node.indexX, node.indexY] = nodeGameObject;
+	}
+
+	protected IEnumerator ErasePathNodes() {
+		for (int indexX = 0; indexX < XN; indexX++) {
+			for (int indexY = 0; indexY < YM; indexY++) {
+				if (circleSmallGrid[indexX, indexY] != null) {
+					Destroy(circleSmallGrid[indexX, indexY]);
+				}
+			}
+		}
+		yield return null;
+	}
+
+	private static float futurePathCostHeuristic(int indexX, int indexY, int targetIndexX, int targetIndexY) {
+		return EnvironmentManager.ManhattanDiagonalDistance(indexX, indexY, targetIndexX, targetIndexY);
 	}
 }
