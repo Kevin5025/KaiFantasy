@@ -8,11 +8,13 @@ using UnityEngine;
 public static class MyStaticLibrary {
 
 	public static float _sqrt2;
+	public static float _sqrt0_5;
 
 	public static System.Random random;
 
 	static MyStaticLibrary() {
 		_sqrt2 = Mathf.Sqrt(2f);
+		_sqrt0_5 = Mathf.Sqrt(0.5f);
 		random = new System.Random();
 	}
 

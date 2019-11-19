@@ -51,7 +51,7 @@ public class PlayerController : AgentController {
      * WASD controls. 
      */
 	protected override void Move() {
-		agent.Move(Input.GetKey(KeyCode.W), Input.GetKey(KeyCode.S), Input.GetKey(KeyCode.D), Input.GetKey(KeyCode.A));
+		agent.MoveWASD(Input.GetKey(KeyCode.W), Input.GetKey(KeyCode.S), Input.GetKey(KeyCode.D), Input.GetKey(KeyCode.A));
 	}
 
 	/**

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Priority_Queue;
 
@@ -22,6 +23,8 @@ public abstract class AgentController : MonoBehaviour {
 	static int YM;
 	protected static GameObject[,] circleSmallGrid;  // for debugging purposes
 	protected Stack<AStarPriorityQueueNode> path;
+	protected AStarPriorityQueueNode nextNode;
+	protected Vector2 nextNodePosition;  // redundant given this.nextNode
 
 	public float[] personalityUniform;
 	public float[] personalityGaussian;
@@ -44,6 +47,8 @@ public abstract class AgentController : MonoBehaviour {
 		YM = environmentGraph.GetLength(1);
 		circleSmallGrid = new GameObject[XN, YM];
 		path = new Stack<AStarPriorityQueueNode>();
+		nextNodePosition = transform.position;
+		nextNode = new AStarPriorityQueueNode(0f, EnvironmentManager.environmentManager.GetIndexX(this.nextNodePosition.x), EnvironmentManager.environmentManager.GetIndexY(this.nextNodePosition.y), -1, -1);
 
 		personalityUniform = MyStaticLibrary.NextRandomUniformArray(5, -1f, 1f);
 		personalityGaussian = MyStaticLibrary.NextRandomGaussianArray(5);
@@ -67,6 +72,22 @@ public abstract class AgentController : MonoBehaviour {
 	protected virtual void Move() { }
 
 	protected virtual void Fire() { }
+
+	/**
+	 * After updating, we rotate and move towards the nextNodeToTargetPosition
+	 */
+	protected void UpdateNextNodePosition() {
+		while (IsAtNextNodePosition() && this.path.Count > 0) {
+			this.nextNode = this.path.Pop();
+			this.nextNodePosition.x = EnvironmentManager.environmentManager.GetPositionX(nextNode.indexX);
+			this.nextNodePosition.y = EnvironmentManager.environmentManager.GetPositionY(nextNode.indexY);
+		}
+	}
+
+	protected bool IsAtNextNodePosition() {
+		bool isAtNextNodePosition = MyStaticLibrary.GetDistance(transform.position, nextNodePosition) < MyStaticLibrary._sqrt0_5;
+		return isAtNextNodePosition;
+	}
 
 	protected virtual void OnTriggerEnter2D(Collider2D collider) {
 		CircleAgent colliderCircleAgent = collider.GetComponent<CircleAgent>();
@@ -164,8 +185,18 @@ public abstract class AgentController : MonoBehaviour {
 		/**
 		 * source node and target node
 		 */
-		int sourceIndexX = EnvironmentManager.environmentManager.GetIndexX(transform.position.x);
-		int sourceIndexY = EnvironmentManager.environmentManager.GetIndexY(transform.position.y);
+		AStarPriorityQueueNode sourceNode = this.path.Skip(1).FirstOrDefault();  // HACK: assume AStarSearch will finish by the time agent reaches next next node
+		int sourceIndexX;
+		int sourceIndexY;
+		if (sourceNode != null) {
+			sourceIndexX = sourceNode.indexX;
+			sourceIndexY = sourceNode.indexY;
+		} else {
+			//sourceIndexX = EnvironmentManager.environmentManager.GetIndexX(transform.position.x);
+			//sourceIndexY = EnvironmentManager.environmentManager.GetIndexY(transform.position.y);
+			sourceIndexX = nextNode.indexX;
+			sourceIndexY = nextNode.indexY;
+		}
 		int targetIndexX = EnvironmentManager.environmentManager.GetIndexX(targetPosition.x);
 		int targetIndexY = EnvironmentManager.environmentManager.GetIndexY(targetPosition.y);
 

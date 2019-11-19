@@ -56,7 +56,7 @@ public class CircleEntity : Entity {
 	/**
      * Decides which of the 8 WASD directions (including diagonals) to move, in order to reach target position. 
      */
-	public virtual void Move (Vector2 targetPosition) {
+	public virtual void MoveTargetPosition (Vector2 targetPosition) {
 		Vector2 currentPosition = transform.position;
 		Vector2 offsetPosition = targetPosition - currentPosition;
 
@@ -64,14 +64,14 @@ public class CircleEntity : Entity {
 		bool S = Math.Atan2(offsetPosition.y, offsetPosition.x) > -7 * Math.PI / 8 && Math.Atan2(offsetPosition.y, offsetPosition.x) < -1 * Math.PI / 8;//offsetPosition.y < 0;
 		bool D = Math.Atan2(offsetPosition.y, offsetPosition.x) > -3 * Math.PI / 8 && Math.Atan2(offsetPosition.y, offsetPosition.x) < 3 * Math.PI / 8;//offsetPosition.x > 0;
 		bool A = Math.Atan2(offsetPosition.y, offsetPosition.x) > 5 * Math.PI / 8 || Math.Atan2(offsetPosition.y, offsetPosition.x) < -5 * Math.PI / 8;//offsetPosition.x < 0;
-		Move(W, S, D, A);
+		MoveWASD(W, S, D, A);
 	}
 
 	/**
      * Moves up for W, down for S, right for D, and left for A. 
      * Diagonal movement for orthogonal combinations of WASD. 
      */
-	public virtual void Move (bool W, bool S, bool D, bool A) {
+	public virtual void MoveWASD (bool W, bool S, bool D, bool A) {
 		if (!defunct) {
 			float verticalDirection = 0;
 			verticalDirection += W ? 1 : 0;
