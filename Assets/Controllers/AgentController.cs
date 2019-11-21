@@ -56,13 +56,13 @@ public abstract class AgentController : MonoBehaviour {
 
 	protected virtual void Update() {
 		ManualDebug();
-		Rotate();
-		Move();
-		Fire();
 	}
 
 	protected virtual void FixedUpdate() {
 		// alertCooldownTime -= Time.deltaTime;  // float.MinValue ~ -3.4E38 seconds
+		Rotate();
+		Move();
+		Fire();
 	}
 
 	protected virtual void ManualDebug() { }
@@ -79,8 +79,8 @@ public abstract class AgentController : MonoBehaviour {
 	protected void UpdateNextNodePosition() {
 		while (IsAtNextNodePosition() && this.path.Count > 0) {
 			this.nextNode = this.path.Pop();
-			this.nextNodePosition.x = EnvironmentManager.environmentManager.GetPositionX(nextNode.indexX);
-			this.nextNodePosition.y = EnvironmentManager.environmentManager.GetPositionY(nextNode.indexY);
+			this.nextNodePosition.x = EnvironmentManager.environmentManager.GetPositionX(this.nextNode.indexX);
+			this.nextNodePosition.y = EnvironmentManager.environmentManager.GetPositionY(this.nextNode.indexY);
 		}
 	}
 
@@ -185,18 +185,9 @@ public abstract class AgentController : MonoBehaviour {
 		/**
 		 * source node and target node
 		 */
-		AStarPriorityQueueNode sourceNode = this.path.Skip(1).FirstOrDefault();  // HACK: assume AStarSearch will finish by the time agent reaches next next node
-		int sourceIndexX;
-		int sourceIndexY;
-		if (sourceNode != null) {
-			sourceIndexX = sourceNode.indexX;
-			sourceIndexY = sourceNode.indexY;
-		} else {
-			//sourceIndexX = EnvironmentManager.environmentManager.GetIndexX(transform.position.x);
-			//sourceIndexY = EnvironmentManager.environmentManager.GetIndexY(transform.position.y);
-			sourceIndexX = nextNode.indexX;
-			sourceIndexY = nextNode.indexY;
-		}
+		// AStarPriorityQueueNode sourceNode = this.path.Skip(1).FirstOrDefault();  // HACK: assume AStarSearch will finish by the time agent reaches next next node
+		int sourceIndexX = EnvironmentManager.environmentManager.GetIndexX(transform.position.x);
+		int sourceIndexY = EnvironmentManager.environmentManager.GetIndexY(transform.position.y);
 		int targetIndexX = EnvironmentManager.environmentManager.GetIndexX(targetPosition.x);
 		int targetIndexY = EnvironmentManager.environmentManager.GetIndexY(targetPosition.y);
 

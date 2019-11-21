@@ -10,7 +10,8 @@ MonoImporter:
   - circleMedium: {instanceID: 0}
   - circleLarge: {instanceID: 0}
   - circleSmall2: {fileID: 158216, guid: 734bcd304e6422744be1f1dc35217504, type: 3}
-  - circleMedium2: {instanceID: 0}
+  - circleMedium2: {fileID: 8693251050651066266, guid: 70f24252fb486714a8227b10be7595a6,
+      type: 3}
   - circleLarge2: {instanceID: 0}
   - bullet: {fileID: 6751215688927150264, guid: 40c9e5deb79480f48a9b4e5845f2a1bc,
       type: 3}

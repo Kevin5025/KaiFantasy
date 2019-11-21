@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class AStarSearchDemoController : AimFireController {
 
-	protected override void Update() {
-		base.Update();
+	protected override void FixedUpdate() {
+		base.FixedUpdate();
 		UpdateNextNodePosition();
 	}
 
