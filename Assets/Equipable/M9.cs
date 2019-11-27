@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class M9 : ActivatableEquipable {
+public class M9 : Item {
 
 	public M9(EquipableClass equipableClass) : base(equipableClass, 0.4f) {
 		

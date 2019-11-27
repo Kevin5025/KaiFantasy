@@ -25,10 +25,10 @@ TagManager:
   - 
   - 
   - 
+  - itemLayer
   - 
-  - 
-  - 
-  - 
+  - entityTriggerLayer
+  - projectileTriggerLayer
   - 
   - newProjectileLayer
   - 

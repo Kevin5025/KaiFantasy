@@ -8,6 +8,7 @@ using UnityEngine;
 public class LayersManager : MonoBehaviour {
 
 	public static LayersManager layersManager;
+	public static int numLayers;
 
 	public int blueEntityLayer;
 	public int blueProjectileLayer;
@@ -15,13 +16,27 @@ public class LayersManager : MonoBehaviour {
 	public int redProjectileLayer;
 	public int brownEntityLayer;
 	public int brownProjectileLayer;
+
+	public int itemLayer;
+
+	public int entityTriggerLayer;
+	public int projectileTriggerLayer;
+
 	public int newProjectileLayer;
+
 	public int wallProjectileLayer;
 	public int wallEntityLayer;
 	public int wallLayer;
+
 	public int[] entityLayerArray;
 	public int[] projectileLayerArray;
-	public int[] layerArray;
+
+	public int[] allLayerArray;
+	private int[] allLayerMaskArray;
+
+	static LayersManager() {
+		numLayers = 32;
+	}
 
 	void Awake() {
 		if (layersManager == null) {//like a singleton
@@ -40,6 +55,11 @@ public class LayersManager : MonoBehaviour {
 		brownEntityLayer = 12;
 		brownProjectileLayer = 13;
 
+		itemLayer = 20;
+
+		entityTriggerLayer = 22;
+		projectileTriggerLayer = 23;
+
 		newProjectileLayer = 25;
 
 		wallProjectileLayer = 29;  // projectile can go through
@@ -48,25 +68,60 @@ public class LayersManager : MonoBehaviour {
 
 		entityLayerArray = new int[] { blueEntityLayer, redEntityLayer, brownEntityLayer };
 		projectileLayerArray = new int[] { blueProjectileLayer, redProjectileLayer, brownProjectileLayer, newProjectileLayer };
+		allLayerArray = new int[] {
+			blueEntityLayer, blueProjectileLayer, redEntityLayer, redProjectileLayer, brownEntityLayer, brownProjectileLayer, 
+			itemLayer, entityTriggerLayer, projectileTriggerLayer, newProjectileLayer,
+			wallProjectileLayer, wallEntityLayer, wallLayer
+		};
 
-		// projectiles go through projectiles and entities
-		for (int p=0; p<projectileLayerArray.Length; p++) {
-			for (int e=0; e<entityLayerArray.Length; e++) {
-				Physics2D.IgnoreLayerCollision(projectileLayerArray[p], entityLayerArray[e]);
-			}
-			for (int p2=0; p2<=p; p2++) {
-				Physics2D.IgnoreLayerCollision(projectileLayerArray[p], projectileLayerArray[p2]);
-			}
+		allLayerMaskArray = new int[numLayers];
+		for (int li=0; li<allLayerMaskArray.Length; li++) {
+			allLayerMaskArray[li] = 1 << li;
 		}
 
-		//blue
-		//Physics2D.IgnoreLayerCollision(blueProjectileLayer, blueProjectileLayer, true);
+		int entityLayerMask = GetLayerMask(entityLayerArray);
+		int projectileLayerMask = GetLayerMask(projectileLayerArray);
+		int allLayerMask = GetLayerMask(allLayerArray);
+		
+		SetLayerCollisionMask(entityTriggerLayer, entityLayerMask);  // entityTriggers only collide with entities
+		SetLayerCollisionMask(projectileTriggerLayer, projectileLayerMask);  // projectileTriggers only collide with projectiles
 
-		//red
-		//Physics2D.IgnoreLayerCollision(redProjectileLayer, redProjectileLayer, true);
+		// projectiles go through entities, projectiles
+		for (int p = 0; p < projectileLayerArray.Length; p++) {
+			SetLayerCollisionMask(projectileLayerArray[p], Physics2D.GetLayerCollisionMask(projectileLayerArray[p]) & ~(entityLayerMask | projectileLayerMask));
+			//for (int e = 0; e < entityLayerArray.Length; e++) {
+			//	Physics2D.IgnoreLayerCollision(projectileLayerArray[p], entityLayerArray[e]);
+			//}
+			//for (int p2 = 0; p2 <= p; p2++) {
+			//	Physics2D.IgnoreLayerCollision(projectileLayerArray[p], projectileLayerArray[p2]);
+			//}
+		}
 
-		//brown
-		//Physics2D.IgnoreLayerCollision(brownProjectileLayer, brownProjectileLayer, true);
+		SetLayerCollisionMask(itemLayer, GetLayerMask(itemLayer));  // items only collide with themselves
+	}
+
+	private int GetLayerMask(int layer) {
+		int layerMask = 1 << layer;
+		return layerMask;
+	}
+
+	private int GetLayerMask(int[] layerArray) {
+		int layerMask = 0;
+		for (int li=0; li<layerArray.Length; li++) {
+			layerMask |= (1 << layerArray[li]);
+		}
+		return layerMask;
+	}
+
+	/*
+	 * Physics2D.SetLayerCollisionMask seems to have a bug as it does not affect the transpose of the layer collision matrix
+	 */
+	private void SetLayerCollisionMask(int layer, int layerMask) {
+		BitArray layerMaskBitArray = new BitArray(new int[1] { ~layerMask });
+		for (int li=0; li<numLayers; li++) {
+			bool ignore = layerMaskBitArray[li];
+			Physics2D.IgnoreLayerCollision(layer, li, ignore);
+		}
 	}
 
 	public int GetTeamEntityLayer(Spirit.Affinity affinity) {
