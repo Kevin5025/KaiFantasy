@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Item : ActivatableEquipable {
+	
+	public void BecomeAcquired() {
+		Debug.Log(gameObject.name);
+	}
 
-	public Item(EquipableClass equipableClass, float cooldownTimeout) : base(equipableClass, cooldownTimeout) {
+	public void BecomeDiscarded() {
 
 	}
 

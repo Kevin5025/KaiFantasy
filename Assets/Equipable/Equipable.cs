@@ -4,15 +4,15 @@ using UnityEngine;
 using System;
 
 /**
- * Abilities, Items, and Vassals
+ * Abilities, Items, Vassals, and Ideas
  */
-public abstract class Equipable {
+public abstract class Equipable : MonoBehaviour {
 	
 	public enum EquipableClass { AccessoryItem, HandItem, HeadItem, BodyItem, Ability, LargeVassal, SmallVassal };
-	public EquipableClass equipableClass;
+	public EquipableClass equipableClass;  // set in inspector
 
-	public Equipable(EquipableClass equipableClass) {
-		this.equipableClass = equipableClass;
+	protected virtual void Start() {
+
 	}
 
 	public virtual void Activate(CircleAgent casterAgent) {

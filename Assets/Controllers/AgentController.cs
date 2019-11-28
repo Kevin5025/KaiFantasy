@@ -63,6 +63,8 @@ public abstract class AgentController : MonoBehaviour {
 		Rotate();
 		Move();
 		Fire();
+		AcquireItem();
+		DiscardItem();
 	}
 
 	protected virtual void ManualDebug() { }
@@ -72,6 +74,10 @@ public abstract class AgentController : MonoBehaviour {
 	protected virtual void Move() { }
 
 	protected virtual void Fire() { }
+
+	protected virtual void AcquireItem() { }
+
+	protected virtual void DiscardItem() { }
 
 	/**
 	 * After updating, we rotate and move towards the nextNodeToTargetPosition

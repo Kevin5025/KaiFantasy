@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class M9 : Item {
 
-	public M9(EquipableClass equipableClass) : base(equipableClass, 0.4f) {
-		
+	protected override void Start() {
+		equipableClass = EquipableClass.HandItem;
+		cooldownTimeout = 0.4f;
 	}
 
 	public override void Actuate(CircleAgent casterAgent) {

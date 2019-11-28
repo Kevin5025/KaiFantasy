@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 202400641}
   - component: {fileID: 202400642}
-  m_Layer: 0
+  m_Layer: 22
   m_Name: Alert
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -339,3 +339,5 @@ MonoBehaviour:
   area: 0
   force: 0
   torque: 0
+  inventoryItemGameObjectArray: []
+  equipmentEquipableArray: []

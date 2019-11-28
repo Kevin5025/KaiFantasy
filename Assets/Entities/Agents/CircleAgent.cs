@@ -12,6 +12,8 @@ public class CircleAgent : CircleEntity {
 	protected float fadeTime;
 	protected float fadeTimeConstant;
 
+	// TODO: repositorySkillArray;  // repository / library / studio
+	public Item[] inventoryItemArray;
 	public Equipable[] equipmentEquipableArray;
 
 	protected override void Start() {
@@ -23,13 +25,35 @@ public class CircleAgent : CircleEntity {
 		fadeTime = 6f;
 		fadeTimeConstant = 0.25f / fadeTime;
 
-		equipmentEquipableArray = new Equipable[2];
-		equipmentEquipableArray[0] = new M9(Equipable.EquipableClass.HandItem);
+		inventoryItemArray = new Item[64];
+		equipmentEquipableArray = new Equipable[20];
+		// equipmentEquipableArray[0] = Instantiate M9
 
 		InitializeStats();
 	}
 
 	private void InitializeStats() {
+
+	}
+
+	//public virtual void Hand() {
+
+	//}
+
+	public virtual void AcquireItem() {
+		int itemLayerMask = LayersManager.layersManager.allLayerMaskArray[LayersManager.layersManager.itemLayer];
+		Collider2D[] colliderArray = Physics2D.OverlapCircleAll(transform.position, radius, itemLayerMask);
+		if (colliderArray.Length > 0) {
+			for (int rh=0; rh<colliderArray.Length; rh++) {
+				Debug.Log(colliderArray[rh].name);
+				Debug.Log(MyStaticLibrary.GetDistance(transform.position, colliderArray[rh].ClosestPoint(transform.position)));
+			}
+		} else {
+			Debug.Log("nothing");
+		}
+	}
+
+	public virtual void DiscardItem() {
 
 	}
 
@@ -54,4 +78,5 @@ public class CircleAgent : CircleEntity {
 	//protected override void EliminateSelf () {
 	//	base.EliminateSelf();
 	//}
+
 }

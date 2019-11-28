@@ -69,4 +69,16 @@ public class PlayerController : AgentController {
 			}
 		}
 	}
+
+	protected override void AcquireItem() {
+		base.AcquireItem();
+		if (Input.GetKeyDown(KeyCode.F)) {
+			agent.AcquireItem();
+		}
+		//if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.F)) {
+		//	Debug.Log("F");
+		//} else if (Input.GetKeyDown(KeyCode.F)) {
+		//	Debug.Log("f");
+		//}
+	}
 }

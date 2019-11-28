@@ -30,9 +30,14 @@ public class LayersManager : MonoBehaviour {
 
 	public int[] entityLayerArray;
 	public int[] projectileLayerArray;
+	public int[] wallLayerArray;
 
 	public int[] allLayerArray;
-	private int[] allLayerMaskArray;
+	public int[] allLayerMaskArray;
+
+	public int entityLayerMask;
+	public int projectileLayerMask;
+	public int allLayerMask;
 
 	static LayersManager() {
 		numLayers = 32;
@@ -68,6 +73,7 @@ public class LayersManager : MonoBehaviour {
 
 		entityLayerArray = new int[] { blueEntityLayer, redEntityLayer, brownEntityLayer };
 		projectileLayerArray = new int[] { blueProjectileLayer, redProjectileLayer, brownProjectileLayer, newProjectileLayer };
+		wallLayerArray = new int[] { wallProjectileLayer, wallEntityLayer, wallLayer };
 		allLayerArray = new int[] {
 			blueEntityLayer, blueProjectileLayer, redEntityLayer, redProjectileLayer, brownEntityLayer, brownProjectileLayer, 
 			itemLayer, entityTriggerLayer, projectileTriggerLayer, newProjectileLayer,
@@ -89,27 +95,24 @@ public class LayersManager : MonoBehaviour {
 		// projectiles go through entities, projectiles
 		for (int p = 0; p < projectileLayerArray.Length; p++) {
 			SetLayerCollisionMask(projectileLayerArray[p], Physics2D.GetLayerCollisionMask(projectileLayerArray[p]) & ~(entityLayerMask | projectileLayerMask));
-			//for (int e = 0; e < entityLayerArray.Length; e++) {
-			//	Physics2D.IgnoreLayerCollision(projectileLayerArray[p], entityLayerArray[e]);
-			//}
-			//for (int p2 = 0; p2 <= p; p2++) {
-			//	Physics2D.IgnoreLayerCollision(projectileLayerArray[p], projectileLayerArray[p2]);
-			//}
 		}
 
-		SetLayerCollisionMask(itemLayer, GetLayerMask(itemLayer));  // items only collide with themselves
-	}
-
-	private int GetLayerMask(int layer) {
-		int layerMask = 1 << layer;
-		return layerMask;
+		SetLayerCollisionMask(itemLayer, GetLayerMask(itemLayer) | GetLayerMask(wallLayerArray));  // items only collide with themselves and walls
+		SetLayerCollisionMask(wallProjectileLayer, Physics2D.GetLayerCollisionMask(wallProjectileLayer) & ~GetLayerMask(projectileLayerArray));
+		SetLayerCollisionMask(wallEntityLayer, Physics2D.GetLayerCollisionMask(wallEntityLayer) & ~GetLayerMask(entityLayerArray));
 	}
 
 	private int GetLayerMask(int[] layerArray) {
 		int layerMask = 0;
 		for (int li=0; li<layerArray.Length; li++) {
-			layerMask |= (1 << layerArray[li]);
+			// layerMask |= (1 << layerArray[li]);
+			layerMask |= GetLayerMask(layerArray[li]);
 		}
+		return layerMask;
+	}
+
+	private int GetLayerMask(int layer) {
+		int layerMask = 1 << layer;
 		return layerMask;
 	}
 

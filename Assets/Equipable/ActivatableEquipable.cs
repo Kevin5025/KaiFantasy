@@ -7,12 +7,8 @@ using UnityEngine;
  */
 public abstract class ActivatableEquipable : Equipable {
 
-	protected float cooldownTimeout;
+	public float cooldownTimeout; // set in inspector
 	protected float nextReadyTime;
-
-	public ActivatableEquipable(EquipableClass equipableClass, float cooldownTimeout) : base(equipableClass) {
-		this.cooldownTimeout = cooldownTimeout;
-	}
 
 	/**
      * Checks whether the user is still functional and whether the cooldown period has ended. 
