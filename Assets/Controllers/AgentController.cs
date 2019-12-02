@@ -63,7 +63,7 @@ public abstract class AgentController : MonoBehaviour {
 		Rotate();
 		Move();
 		Fire();
-		AcquireItem();
+		HandleItem();
 		DiscardItem();
 	}
 
@@ -75,7 +75,7 @@ public abstract class AgentController : MonoBehaviour {
 
 	protected virtual void Fire() { }
 
-	protected virtual void AcquireItem() { }
+	protected virtual void HandleItem() { }
 
 	protected virtual void DiscardItem() { }
 

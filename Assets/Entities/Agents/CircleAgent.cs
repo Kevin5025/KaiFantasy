@@ -13,7 +13,7 @@ public class CircleAgent : CircleEntity {
 	protected float fadeTimeConstant;
 
 	// TODO: repositorySkillArray;  // repository / library / studio
-	public Item[] inventoryItemArray;
+	public List<Item> inventoryItemArray;
 	public Equipable[] equipmentEquipableArray;
 
 	protected override void Start() {
@@ -25,7 +25,7 @@ public class CircleAgent : CircleEntity {
 		fadeTime = 6f;
 		fadeTimeConstant = 0.25f / fadeTime;
 
-		inventoryItemArray = new Item[64];
+		inventoryItemArray = new List<Item>();
 		equipmentEquipableArray = new Equipable[20];
 		// equipmentEquipableArray[0] = Instantiate M9
 
@@ -36,26 +36,46 @@ public class CircleAgent : CircleEntity {
 
 	}
 
-	//public virtual void Hand() {
-
-	//}
-
-	public virtual void AcquireItem() {
+	/*
+	 * Hand
+	 */
+	public virtual void HandleItem() {
 		int itemLayerMask = LayersManager.layersManager.allLayerMaskArray[LayersManager.layersManager.itemLayer];
-		Collider2D[] colliderArray = Physics2D.OverlapCircleAll(transform.position, radius, itemLayerMask);
-		if (colliderArray.Length > 0) {
-			for (int rh=0; rh<colliderArray.Length; rh++) {
-				Debug.Log(colliderArray[rh].name);
-				Debug.Log(MyStaticLibrary.GetDistance(transform.position, colliderArray[rh].ClosestPoint(transform.position)));
+		Collider2D[] itemColliderArray = Physics2D.OverlapCircleAll(transform.position, radius, itemLayerMask);
+		Collider2D minDistanceItemCollider = null;
+		float minDistanceItemColliderDistance = float.MaxValue;
+		for (int rh = 0; rh < itemColliderArray.Length; rh++) {
+			float itemColliderDistance = MyStaticLibrary.GetDistance(transform.position, itemColliderArray[rh].ClosestPoint(transform.position));
+			if (itemColliderDistance < minDistanceItemColliderDistance) {
+				minDistanceItemCollider = itemColliderArray[rh];
+				minDistanceItemColliderDistance = itemColliderDistance;
 			}
-		} else {
-			Debug.Log("nothing");
+		}
+		if (minDistanceItemCollider != null) {
+			Item minDistanceItem = minDistanceItemCollider.GetComponent<Item>();
+			PocketItem(minDistanceItem);
 		}
 	}
-
-	public virtual void DiscardItem() {
-
+	
+	/*
+	 * Sometimes, people like to put their hands in their pockets. 
+	 */
+	public virtual void PocketItem(Item item) {
+		item.BecomePocketed(this);
+		inventoryItemArray.Add(item);
 	}
+
+	public virtual void UnpocketItem(Item item) {
+		inventoryItemArray.Remove(item);
+		item.BecomeUnpocketed(this);
+	}
+
+	//public virtual void AcquireItem() {
+	//}
+
+	//public virtual void DiscardItem() {
+
+	//}
 
 	//public override float takeDamage(CircleAgent casterAgent, float damage) {
 	//	float trueDamage = damage;

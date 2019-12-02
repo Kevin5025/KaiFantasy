@@ -38,6 +38,10 @@ public class PlayerController : AgentController {
 		if (Input.GetKeyDown(KeyCode.Alpha0)) {
 			StartCoroutine(ErasePathNodes());
 		}
+
+		if (Input.GetKeyDown(KeyCode.G) && agent.inventoryItemArray.Count > 0) {
+			agent.UnpocketItem(agent.inventoryItemArray[agent.inventoryItemArray.Count - 1]);
+		}
 	}
 
 	/**
@@ -70,10 +74,10 @@ public class PlayerController : AgentController {
 		}
 	}
 
-	protected override void AcquireItem() {
-		base.AcquireItem();
+	protected override void HandleItem() {
+		base.HandleItem();
 		if (Input.GetKeyDown(KeyCode.F)) {
-			agent.AcquireItem();
+			agent.HandleItem();
 		}
 		//if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.F)) {
 		//	Debug.Log("F");
