@@ -8,6 +8,7 @@ using UnityEngine;
 public class PlayerController : AgentController {
 
 	public static PlayerController playerController;
+	protected static int selectedEei;
 
 	protected override void Awake() {
 		base.Awake();
@@ -21,6 +22,7 @@ public class PlayerController : AgentController {
 	protected override void Start() {
 		base.Start();
 		MainCamera.mainCamera.playerTransform = transform;
+		selectedEei = 0;
 	}
 
 	/**
@@ -39,8 +41,8 @@ public class PlayerController : AgentController {
 			StartCoroutine(ErasePathNodes());
 		}
 
-		if (Input.GetKeyDown(KeyCode.G) && agent.inventoryItemArray.Count > 0) {
-			agent.UnpocketItem(agent.inventoryItemArray[agent.inventoryItemArray.Count - 1]);
+		if (Input.GetKeyDown(KeyCode.G)) {
+			agent.UnpocketItem(selectedEei);
 		}
 	}
 
@@ -77,7 +79,7 @@ public class PlayerController : AgentController {
 	protected override void HandleItem() {
 		base.HandleItem();
 		if (Input.GetKeyDown(KeyCode.F)) {
-			agent.HandleItem();
+			agent.HandleItem(selectedEei);
 		}
 		//if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.F)) {
 		//	Debug.Log("F");
