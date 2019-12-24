@@ -22,7 +22,7 @@ public class PlayerController : AgentController {
 	protected override void Start() {
 		base.Start();
 		MainCamera.mainCamera.playerTransform = transform;
-		selectedEei = 0;
+		selectedEei = 4;
 	}
 
 	/**
@@ -64,12 +64,12 @@ public class PlayerController : AgentController {
      * Activation of abilities. 
      */
 	protected override void Fire() {
-		if (Input.GetMouseButton(0)) {
+		if (Input.GetMouseButton(4)) {
 			if (agent.equipmentEquipableArray[0] != null) {
 				agent.equipmentEquipableArray[0].Activate(agent);
 			}
 		}
-		if (Input.GetMouseButton(1)) {
+		if (Input.GetMouseButton(6)) {
 			if (agent.equipmentEquipableArray[1] != null) {
 				agent.equipmentEquipableArray[1].Activate(agent);
 			}
@@ -86,5 +86,9 @@ public class PlayerController : AgentController {
 		//} else if (Input.GetKeyDown(KeyCode.F)) {
 		//	Debug.Log("f");
 		//}
+	}
+
+	public CircleAgent GetAgent() {
+		return agent;
 	}
 }

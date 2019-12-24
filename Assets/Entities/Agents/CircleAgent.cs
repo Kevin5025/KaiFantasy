@@ -29,14 +29,16 @@ public class CircleAgent : CircleEntity {
 		// inventoryItemArray = new List<Item>();
 		// equipmentEquipableClassArray = new Equipable.EquipableClass[20];
 		equipmentEquipableClassArray = new Equipable.EquipableClass[] {
+			Equipable.EquipableClass.AccessoryItem,
+			Equipable.EquipableClass.AccessoryItem,
+			Equipable.EquipableClass.AccessoryItem,
+			Equipable.EquipableClass.AccessoryItem,
+			Equipable.EquipableClass.HandItem,
+			Equipable.EquipableClass.HandItem,
 			Equipable.EquipableClass.HandItem,
 			Equipable.EquipableClass.HandItem,
 			Equipable.EquipableClass.HeadItem,
 			Equipable.EquipableClass.BodyItem,
-			Equipable.EquipableClass.AccessoryItem,
-			Equipable.EquipableClass.AccessoryItem,
-			Equipable.EquipableClass.AccessoryItem,
-			Equipable.EquipableClass.AccessoryItem,
 			Equipable.EquipableClass.Ability,
 			Equipable.EquipableClass.Ability,
 			Equipable.EquipableClass.Ability,
@@ -45,6 +47,8 @@ public class CircleAgent : CircleEntity {
 			Equipable.EquipableClass.SmallVassal,
 			Equipable.EquipableClass.SmallVassal,
 			Equipable.EquipableClass.SmallVassal,
+			Equipable.EquipableClass.Idea,
+			Equipable.EquipableClass.Idea,
 		};
 		equipmentEquipableArray = new Equipable[equipmentEquipableClassArray.Length];
 		// equipmentEquipableArray[0] = Instantiate M9

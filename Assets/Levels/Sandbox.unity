@@ -1141,6 +1141,7 @@ GameObject:
   - component: {fileID: 1179897508}
   - component: {fileID: 1179897507}
   - component: {fileID: 1179897506}
+  - component: {fileID: 1179897510}
   m_Layer: 5
   m_Name: HUDCanvas
   m_TagString: Untagged
@@ -1231,6 +1232,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1179897510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179897505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7506ca12cec426429224201e2df6b60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipmentPanel: {fileID: 1402130966}
+  equipmentSlotArray: []
+  equipmentSlotPrefab: {fileID: 5093142244947330767, guid: de1dce14eb461ec48b60b8b0e4b7e0e1,
+    type: 3}
 --- !u!1 &1182716085
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,7 +1272,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1182716085}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.36230564, y: -0.5768096, z: -197.26956}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1179897509}

@@ -8,7 +8,7 @@ using System;
  */
 public abstract class Equipable : MonoBehaviour {
 	
-	public enum EquipableClass { AccessoryItem, HandItem, HeadItem, BodyItem, Ability, Idea, LargeVassal, SmallVassal };
+	public enum EquipableClass { AccessoryItem, HandItem, HeadItem, BodyItem, Ability, LargeVassal, SmallVassal, Idea, };
 	public EquipableClass equipableClass;  // set in inspector
 
 	protected virtual void Start() {
