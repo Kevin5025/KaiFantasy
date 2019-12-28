@@ -31,8 +31,6 @@ public class CircleAgent : CircleEntity {
 		equipmentEquipableClassArray = new Equipable.EquipableClass[] {
 			Equipable.EquipableClass.AccessoryItem,
 			Equipable.EquipableClass.AccessoryItem,
-			Equipable.EquipableClass.AccessoryItem,
-			Equipable.EquipableClass.AccessoryItem,
 			Equipable.EquipableClass.HandItem,
 			Equipable.EquipableClass.HandItem,
 			Equipable.EquipableClass.HandItem,
@@ -44,6 +42,8 @@ public class CircleAgent : CircleEntity {
 			Equipable.EquipableClass.Ability,
 			Equipable.EquipableClass.Ability,
 			Equipable.EquipableClass.LargeVassal,
+			Equipable.EquipableClass.SmallVassal,
+			Equipable.EquipableClass.SmallVassal,
 			Equipable.EquipableClass.SmallVassal,
 			Equipable.EquipableClass.SmallVassal,
 			Equipable.EquipableClass.SmallVassal,
@@ -63,7 +63,7 @@ public class CircleAgent : CircleEntity {
 	/*
 	 * Hand
 	 */
-	public virtual void HandleItem(int eei) {
+	public virtual int HandleItem(int numEeiAlternative) {
 		int itemLayerMask = LayersManager.layersManager.allLayerMaskArray[LayersManager.layersManager.itemLayer];
 		Collider2D[] itemColliderArray = Physics2D.OverlapCircleAll(transform.position, radius, itemLayerMask);
 
@@ -77,31 +77,50 @@ public class CircleAgent : CircleEntity {
 			}
 		}
 
+		int eei = -1;
 		if (minDistanceItemCollider != null) {
 			Item minDistanceItem = minDistanceItemCollider.GetComponent<Item>();
+			eei = GetPocketItemEei(minDistanceItem, numEeiAlternative);
 			PocketItem(minDistanceItem, eei);
 		}
+		return eei;
 	}
-	
+
 	/*
 	 * Sometimes, people like to put their hands into their pockets. 
 	 */
 	public virtual void PocketItem(Item newItem, int eei) {
-		if (newItem.equipableClass == equipmentEquipableClassArray[eei]) {
+		if (eei > -1) {
 			UnpocketItem(eei);
 			newItem.BecomePocketed(this);
 			equipmentEquipableArray[eei] = newItem;
-		} else {
-			// TODO: else find an empty eei? 
 		}
 	}
 
 	public virtual void UnpocketItem(int eei) {
-		if (equipmentEquipableClassArray[eei] == Equipable.EquipableClass.HandItem && equipmentEquipableArray[eei] != null) {
+		if (eei > -1 && equipmentEquipableArray[eei] != null) {
 			Item oldItem = (Item)equipmentEquipableArray[eei];
 			equipmentEquipableArray[eei] = null;
 			oldItem.BecomeUnpocketed(this);
 		}
+	}
+
+	public virtual int GetPocketItemEei(Item newItem, int numEeiAlternative) {
+		int eei = GetEquipableClassEei(newItem.equipableClass);
+		int eeiAlternative = eei + numEeiAlternative;
+		int eeiFinal = newItem.equipableClass == equipmentEquipableClassArray[eeiAlternative] ? eeiAlternative : eei;
+		return eeiFinal;
+	}
+
+	private int GetEquipableClassEei(Equipable.EquipableClass equipableClass) {
+		int equipableClassEei = -1;
+		for (int eei = 0; eei < equipmentEquipableClassArray.Length; eei++) {
+			if (equipableClass == equipmentEquipableClassArray[eei]) {
+				equipableClassEei = eei;
+				break;
+			}
+		}
+		return equipableClassEei;
 	}
 
 	//public virtual void AcquireItem() {

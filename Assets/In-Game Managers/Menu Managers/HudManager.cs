@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class HudManager : MonoBehaviour {
 
 	public static HudManager hudManager;
+	public CircleAgent playerAgent;
 
 	public GameObject equipmentPanel;//set in Unity
 	public GameObject[] equipmentSlotArray;//filled in UpdateEquipmentMenu
+	public GameObject[] equipmentImageArray;
 	public GameObject equipmentSlotPrefab;//set in Unity
 
 	void Awake() {
@@ -22,9 +24,10 @@ public class HudManager : MonoBehaviour {
 
 	// Start is called before the first frame update
 	void Start() {
-		CircleAgent playerAgent = PlayerController.playerController.GetAgent();
+		playerAgent = PlayerController.playerController.GetAgent();
 		int numEquipmentSlots = playerAgent.equipmentEquipableClassArray.Length;
 		equipmentSlotArray = new GameObject[numEquipmentSlots];
+		equipmentImageArray = new GameObject[numEquipmentSlots];
 		for (int e = 0; e < numEquipmentSlots; e++) {
 			int eMod2 = e % 2;
 			int eDiv2 = e / 2;
@@ -34,7 +37,8 @@ public class HudManager : MonoBehaviour {
 			// equipmentSlotArray[e].transform.parent = equipmentPanel.transform;
 			equipmentSlotArray[e].transform.localScale = Vector3.one;
 			equipmentSlotArray[e].GetComponent<RectTransform>().anchoredPosition = new Vector2(-24f + 48f * eMod2, 216f - 48f * eDiv2);
-			equipmentSlotArray[e].transform.GetChild(0).GetComponent<Image>().color = equipmentSlotArrayColor(playerAgent.equipmentEquipableClassArray[e]);
+			equipmentImageArray[e] = equipmentSlotArray[e].transform.GetChild(0).gameObject;
+			equipmentImageArray[e].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.equipmentEquipableClassArray[e]);
 		}
 	}
 
@@ -43,10 +47,20 @@ public class HudManager : MonoBehaviour {
 
 	}
 
+	public void UpdateEquipmentImage(int eei) {
+		if (eei > -1 && playerAgent.equipmentEquipableArray[eei] != null) {
+			equipmentImageArray[eei].GetComponent<Image>().sprite = playerAgent.equipmentEquipableArray[eei].GetComponent<SpriteRenderer>().sprite;
+			equipmentImageArray[eei].GetComponent<Image>().color = Color.white;
+		} else if (eei > -1 && playerAgent.equipmentEquipableArray[eei] == null) {
+			equipmentImageArray[eei].GetComponent<Image>().sprite = null;
+			equipmentImageArray[eei].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.equipmentEquipableClassArray[eei]);
+		}
+	}
+
 	/**
      * returns the correct background color for the given equipable class
      */
-	public Color equipmentSlotArrayColor(Equipable.EquipableClass equipableClass) {
+	public Color GetEquipmentSlotArrayColor(Equipable.EquipableClass equipableClass) {
 		if (equipableClass == Equipable.EquipableClass.AccessoryItem) {
 			return new Color(1f, 0f, 0.5f);
 		} else if (equipableClass == Equipable.EquipableClass.HandItem) {

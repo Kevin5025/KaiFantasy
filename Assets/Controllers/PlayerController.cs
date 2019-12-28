@@ -22,7 +22,7 @@ public class PlayerController : AgentController {
 	protected override void Start() {
 		base.Start();
 		MainCamera.mainCamera.playerTransform = transform;
-		selectedEei = 4;
+		selectedEei = 6;
 	}
 
 	/**
@@ -43,6 +43,7 @@ public class PlayerController : AgentController {
 
 		if (Input.GetKeyDown(KeyCode.G)) {
 			agent.UnpocketItem(selectedEei);
+			HudManager.hudManager.UpdateEquipmentImage(selectedEei);
 		}
 	}
 
@@ -64,28 +65,31 @@ public class PlayerController : AgentController {
      * Activation of abilities. 
      */
 	protected override void Fire() {
-		if (Input.GetMouseButton(4)) {
-			if (agent.equipmentEquipableArray[0] != null) {
-				agent.equipmentEquipableArray[0].Activate(agent);
+		if (Input.GetMouseButton(0)) {
+			if (agent.equipmentEquipableArray[2] != null) {
+				agent.equipmentEquipableArray[2].Activate(agent);
 			}
 		}
-		if (Input.GetMouseButton(6)) {
-			if (agent.equipmentEquipableArray[1] != null) {
-				agent.equipmentEquipableArray[1].Activate(agent);
+		if (Input.GetMouseButton(1)) {
+			if (agent.equipmentEquipableArray[3] != null) {
+				agent.equipmentEquipableArray[3].Activate(agent);
 			}
 		}
 	}
 
 	protected override void HandleItem() {
 		base.HandleItem();
-		if (Input.GetKeyDown(KeyCode.F)) {
-			agent.HandleItem(selectedEei);
-		}
 		//if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.F)) {
-		//	Debug.Log("F");
-		//} else if (Input.GetKeyDown(KeyCode.F)) {
-		//	Debug.Log("f");
+		//	agent.HandleItem(-1);
 		//}
+		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
+			int eei = agent.HandleItem(0);
+			HudManager.hudManager.UpdateEquipmentImage(eei);
+		}
+		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
+			int eei = agent.HandleItem(1);
+			HudManager.hudManager.UpdateEquipmentImage(eei);
+		}
 	}
 
 	public CircleAgent GetAgent() {

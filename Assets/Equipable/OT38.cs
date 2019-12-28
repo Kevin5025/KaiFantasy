@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class M9 : Item {
+public class OT38 : Item {
 
 	protected override void Start() {
 		equipableClass = EquipableClass.HandItem;
-		cooldownTimeout = 0.2f;
+		cooldownTimeout = 0.5f;
 	}
 
 	public override void Actuate(CircleAgent casterAgent) {
@@ -19,7 +19,7 @@ public class M9 : Item {
 		projectile.casterAgent = casterAgent;
 		projectile.timeout = 1.0f;
 		projectile.initialVelocity = 20f;
-		projectile.baseDamage = 10f;
+		projectile.baseDamage = 30f;
 
 		projectileGameObject.GetComponent<Rigidbody2D>().velocity = projectileGameObject.transform.TransformDirection(new Vector2(0, projectile.initialVelocity));
 		projectileGameObject.GetComponent<Collider2D>().enabled = true;

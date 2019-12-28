@@ -18,6 +18,7 @@ public class LayersManager : MonoBehaviour {
 	public int brownProjectileLayer;
 
 	public int itemLayer;
+	public int handItemLayer;  // ignore this layer for now
 
 	public int entityTriggerLayer;
 	public int projectileTriggerLayer;
@@ -61,6 +62,7 @@ public class LayersManager : MonoBehaviour {
 		brownProjectileLayer = 13;
 
 		itemLayer = 20;
+		handItemLayer = 21;
 
 		entityTriggerLayer = 22;
 		projectileTriggerLayer = 23;
@@ -76,8 +78,8 @@ public class LayersManager : MonoBehaviour {
 		wallLayerArray = new int[] { wallProjectileLayer, wallEntityLayer, wallLayer };
 		allLayerArray = new int[] {
 			blueEntityLayer, blueProjectileLayer, redEntityLayer, redProjectileLayer, brownEntityLayer, brownProjectileLayer, 
-			itemLayer, entityTriggerLayer, projectileTriggerLayer, newProjectileLayer,
-			wallProjectileLayer, wallEntityLayer, wallLayer
+			itemLayer, handItemLayer, entityTriggerLayer, projectileTriggerLayer, newProjectileLayer,
+			wallProjectileLayer, wallEntityLayer, wallLayer,
 		};
 
 		allLayerMaskArray = new int[numLayers];
@@ -97,7 +99,8 @@ public class LayersManager : MonoBehaviour {
 			SetLayerCollisionMask(projectileLayerArray[p], Physics2D.GetLayerCollisionMask(projectileLayerArray[p]) & ~(entityLayerMask | projectileLayerMask));
 		}
 
-		SetLayerCollisionMask(itemLayer, GetLayerMask(itemLayer) | GetLayerMask(wallLayerArray));  // items only collide with themselves and walls
+		SetLayerCollisionMask(itemLayer, GetLayerMask(itemLayer) | GetLayerMask(handItemLayer) | GetLayerMask(wallLayerArray));  // items only collide with themselves and walls
+		SetLayerCollisionMask(handItemLayer, GetLayerMask(itemLayer) | GetLayerMask(handItemLayer) | GetLayerMask(wallLayerArray));  // items only collide with themselves and walls
 		SetLayerCollisionMask(wallProjectileLayer, Physics2D.GetLayerCollisionMask(wallProjectileLayer) & ~GetLayerMask(projectileLayerArray));
 		SetLayerCollisionMask(wallEntityLayer, Physics2D.GetLayerCollisionMask(wallEntityLayer) & ~GetLayerMask(entityLayerArray));
 	}
