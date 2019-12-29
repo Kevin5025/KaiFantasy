@@ -28,17 +28,18 @@ public class HudManager : MonoBehaviour {
 		int numEquipmentSlots = playerAgent.equipmentEquipableClassArray.Length;
 		equipmentSlotArray = new GameObject[numEquipmentSlots];
 		equipmentImageArray = new GameObject[numEquipmentSlots];
-		for (int e = 0; e < numEquipmentSlots; e++) {
-			int eMod2 = e % 2;
-			int eDiv2 = e / 2;
+		for (int eei = 0; eei < numEquipmentSlots; eei++) {
+			int eMod2 = eei % 2;
+			int eDiv2 = eei / 2;
 
-			equipmentSlotArray[e] = Instantiate(equipmentSlotPrefab);
-			equipmentSlotArray[e].transform.SetParent(equipmentPanel.transform);
+			equipmentSlotArray[eei] = Instantiate(equipmentSlotPrefab);
+			equipmentSlotArray[eei].transform.SetParent(equipmentPanel.transform);
 			// equipmentSlotArray[e].transform.parent = equipmentPanel.transform;
-			equipmentSlotArray[e].transform.localScale = Vector3.one;
-			equipmentSlotArray[e].GetComponent<RectTransform>().anchoredPosition = new Vector2(-24f + 48f * eMod2, 216f - 48f * eDiv2);
-			equipmentImageArray[e] = equipmentSlotArray[e].transform.GetChild(0).gameObject;
-			equipmentImageArray[e].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.equipmentEquipableClassArray[e]);
+			equipmentSlotArray[eei].transform.localScale = Vector3.one;
+			equipmentSlotArray[eei].GetComponent<RectTransform>().anchoredPosition = new Vector2(-24f + 48f * eMod2, 216f - 48f * eDiv2);
+			equipmentImageArray[eei] = equipmentSlotArray[eei].transform.GetChild(0).gameObject;
+			equipmentImageArray[eei].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.equipmentEquipableClassArray[eei]);
+			equipmentImageArray[eei].GetComponent<EquipmentImage>().eei = eei;
 		}
 	}
 

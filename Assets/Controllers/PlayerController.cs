@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /**
  * Allows humans to interface their character. 
@@ -89,6 +90,13 @@ public class PlayerController : AgentController {
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
 			int eei = agent.HandleItem(1);
 			HudManager.hudManager.UpdateEquipmentImage(eei);
+		}
+	}
+
+	public void OnEquipmentImageClick(EquipmentImage equipmentImage, PointerEventData eventData) {
+		if (eventData.button == PointerEventData.InputButton.Middle) {
+			agent.UnpocketItem(equipmentImage.eei);
+			HudManager.hudManager.UpdateEquipmentImage(equipmentImage.eei);
 		}
 	}
 

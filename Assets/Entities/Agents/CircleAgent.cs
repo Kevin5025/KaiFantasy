@@ -80,7 +80,7 @@ public class CircleAgent : CircleEntity {
 		int eei = -1;
 		if (minDistanceItemCollider != null) {
 			Item minDistanceItem = minDistanceItemCollider.GetComponent<Item>();
-			eei = GetPocketItemEei(minDistanceItem, numEeiAlternative);
+			eei = GetPocketItemClassEei(minDistanceItem.equipableClass, numEeiAlternative);
 			PocketItem(minDistanceItem, eei);
 		}
 		return eei;
@@ -89,11 +89,11 @@ public class CircleAgent : CircleEntity {
 	/*
 	 * Sometimes, people like to put their hands into their pockets. 
 	 */
-	public virtual void PocketItem(Item newItem, int eei) {
+	public virtual void PocketItem(Item pocketItem, int eei) {
 		if (eei > -1) {
 			UnpocketItem(eei);
-			newItem.BecomePocketed(this);
-			equipmentEquipableArray[eei] = newItem;
+			pocketItem.BecomePocketed(this);
+			equipmentEquipableArray[eei] = pocketItem;
 		}
 	}
 
@@ -105,10 +105,10 @@ public class CircleAgent : CircleEntity {
 		}
 	}
 
-	public virtual int GetPocketItemEei(Item newItem, int numEeiAlternative) {
-		int eei = GetEquipableClassEei(newItem.equipableClass);
+	public virtual int GetPocketItemClassEei(Equipable.EquipableClass pocketItemEquipableClass, int numEeiAlternative) {
+		int eei = GetEquipableClassEei(pocketItemEquipableClass);
 		int eeiAlternative = eei + numEeiAlternative;
-		int eeiFinal = newItem.equipableClass == equipmentEquipableClassArray[eeiAlternative] ? eeiAlternative : eei;
+		int eeiFinal = pocketItemEquipableClass == equipmentEquipableClassArray[eeiAlternative] ? eeiAlternative : eei;
 		return eeiFinal;
 	}
 
