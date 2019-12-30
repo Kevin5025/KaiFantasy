@@ -10,8 +10,8 @@ using UnityEngine.EventSystems;
 public class PlayerController : AgentController {
 
 	public static PlayerController playerController;
-	private int handItemEei0;
-	private int handItemEei1;
+	private int eeiHand0;
+	private int eeiHand1;
 
 	protected override void Awake() {
 		base.Awake();
@@ -25,8 +25,8 @@ public class PlayerController : AgentController {
 	protected override void Start() {
 		base.Start();
 		MainCamera.mainCamera.playerTransform = transform;
-		handItemEei0 = agent.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
-		handItemEei1 = agent.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
+		eeiHand0 = agent.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
+		eeiHand1 = agent.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
 	}
 
 	/**
@@ -65,13 +65,13 @@ public class PlayerController : AgentController {
      */
 	protected override void Fire() {
 		if (Input.GetMouseButton(0)) {
-			if (agent.equipmentEquipableArray[handItemEei0] != null) {
-				agent.equipmentEquipableArray[handItemEei0].Activate(agent);
+			if (agent.equipmentEquipableArray[eeiHand0] != null) {
+				agent.equipmentEquipableArray[eeiHand0].Activate(agent);
 			}
 		}
 		if (Input.GetMouseButton(1)) {
-			if (agent.equipmentEquipableArray[handItemEei1] != null) {
-				agent.equipmentEquipableArray[handItemEei1].Activate(agent);
+			if (agent.equipmentEquipableArray[eeiHand1] != null) {
+				agent.equipmentEquipableArray[eeiHand1].Activate(agent);
 			}
 		}
 	}
@@ -91,12 +91,12 @@ public class PlayerController : AgentController {
 	protected override void PocketHandItem() {
 		base.PocketHandItem();
 		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
-			int eei = agent.PocketHandItem(0);
-			UpdateHandPocketEquipmentImage(eei);
+			agent.PocketItem(eeiHand0);
+			UpdateHandPocketEquipmentImage(eeiHand0);
 		}
 		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
-			int eei = agent.PocketHandItem(1);
-			UpdateHandPocketEquipmentImage(eei);
+			agent.PocketItem(eeiHand1);
+			UpdateHandPocketEquipmentImage(eeiHand1);
 		}
 	}
 

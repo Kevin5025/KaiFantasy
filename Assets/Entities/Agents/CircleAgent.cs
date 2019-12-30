@@ -141,26 +141,17 @@ public class CircleAgent : CircleEntity {
 			}
 		}
 	}
-	
-	/* 
-	 * Swaps handItem and pocketItem
-	 * Sometimes, people like to put their hands into their pockets. 
-	 */
-	public int PocketHandItem(int numNextEei) {
-		Equipable.EquipableClass equipableClass = Equipable.EquipableClass.HandItem;
-		int eei = GetEquipableClassEei(equipableClass, numNextEei);
-		PocketItem(eei);
-		return eei;
-	}
 
 	/*
+	 * Swaps handItem and pocketItem
+	 * Sometimes, people like to put their hands into their pockets. 
 	 * Assumes that pocket exists
 	 */
-	private void PocketItem(int eei) {
-		int eeiPocket = eei + 1;
+	public void PocketItem(int eeiHand) {
+		int eeiPocket = eeiHand + 1;
 		Equipable equipable = equipmentEquipableArray[eeiPocket];
-		equipmentEquipableArray[eeiPocket] = equipmentEquipableArray[eei];
-		equipmentEquipableArray[eei] = equipable;
+		equipmentEquipableArray[eeiPocket] = equipmentEquipableArray[eeiHand];
+		equipmentEquipableArray[eeiHand] = equipable;
 	}
 
 	/*
