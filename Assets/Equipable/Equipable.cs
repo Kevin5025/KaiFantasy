@@ -8,7 +8,7 @@ using System;
  */
 public abstract class Equipable : MonoBehaviour {
 	
-	public enum EquipableClass { AccessoryItem, HandItem, HeadItem, BodyItem, Ability, LargeVassal, SmallVassal, Idea, };
+	public enum EquipableClass { AccessoryItem, HandItem, PocketItem, HeadItem, BodyItem, Ability, LargeVassal, SmallVassal, Idea, };
 	public EquipableClass equipableClass;  // set in inspector
 
 	protected virtual void Start() {
@@ -17,6 +17,10 @@ public abstract class Equipable : MonoBehaviour {
 
 	public virtual void Activate(CircleAgent casterAgent) {
 
+	}
+
+	public static bool IsHandPocketEquipableClass (EquipableClass equipableClass) {
+		return equipableClass == EquipableClass.HandItem || equipableClass == EquipableClass.PocketItem;
 	}
 
 }

@@ -13,6 +13,8 @@ public class HudManager : MonoBehaviour {
 	public GameObject[] equipmentImageArray;
 	public GameObject equipmentSlotPrefab;//set in Unity
 
+	public Color pocketColor;
+
 	void Awake() {
 		if (hudManager == null) {//like a singleton
 			//DontDestroyOnLoad (gameObject);
@@ -41,6 +43,8 @@ public class HudManager : MonoBehaviour {
 			equipmentImageArray[eei].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.equipmentEquipableClassArray[eei]);
 			equipmentImageArray[eei].GetComponent<EquipmentImage>().eei = eei;
 		}
+
+		pocketColor = new Color(0.75f, 0.75f, 0.75f);
 	}
 
 	// Update is called once per frame
@@ -49,10 +53,15 @@ public class HudManager : MonoBehaviour {
 	}
 
 	public void UpdateEquipmentImage(int eei) {
-		if (eei > -1 && playerAgent.equipmentEquipableArray[eei] != null) {
+		bool eeiInArrayBounds = eei > -1 && eei < playerAgent.equipmentEquipableArray.Length;
+		if (eeiInArrayBounds && playerAgent.equipmentEquipableArray[eei] != null) {
 			equipmentImageArray[eei].GetComponent<Image>().sprite = playerAgent.equipmentEquipableArray[eei].GetComponent<SpriteRenderer>().sprite;
-			equipmentImageArray[eei].GetComponent<Image>().color = Color.white;
-		} else if (eei > -1 && playerAgent.equipmentEquipableArray[eei] == null) {
+			if (playerAgent.equipmentEquipableClassArray[eei] != Equipable.EquipableClass.PocketItem) {
+				equipmentImageArray[eei].GetComponent<Image>().color = Color.white;
+			} else {
+				equipmentImageArray[eei].GetComponent<Image>().color = pocketColor;
+			}
+		} else if (eeiInArrayBounds && playerAgent.equipmentEquipableArray[eei] == null) {
 			equipmentImageArray[eei].GetComponent<Image>().sprite = null;
 			equipmentImageArray[eei].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.equipmentEquipableClassArray[eei]);
 		}
@@ -63,9 +72,11 @@ public class HudManager : MonoBehaviour {
      */
 	public Color GetEquipmentSlotArrayColor(Equipable.EquipableClass equipableClass) {
 		if (equipableClass == Equipable.EquipableClass.AccessoryItem) {
-			return new Color(1f, 0f, 0.5f);
+			return new Color(1f, 0f, 1f);
 		} else if (equipableClass == Equipable.EquipableClass.HandItem) {
 			return new Color(1f, 0f, 0f);
+		} else if (equipableClass == Equipable.EquipableClass.PocketItem) {
+			return new Color(0.75f, 0f, 0f);
 		} else if (equipableClass == Equipable.EquipableClass.HeadItem) {
 			return new Color(1f, 0.5f, 0f);
 		} else if (equipableClass == Equipable.EquipableClass.BodyItem) {

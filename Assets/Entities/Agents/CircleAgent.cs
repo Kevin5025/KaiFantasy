@@ -32,9 +32,9 @@ public class CircleAgent : CircleEntity {
 			Equipable.EquipableClass.AccessoryItem,
 			Equipable.EquipableClass.AccessoryItem,
 			Equipable.EquipableClass.HandItem,
+			Equipable.EquipableClass.PocketItem,
 			Equipable.EquipableClass.HandItem,
-			Equipable.EquipableClass.HandItem,
-			Equipable.EquipableClass.HandItem,
+			Equipable.EquipableClass.PocketItem,
 			Equipable.EquipableClass.HeadItem,
 			Equipable.EquipableClass.BodyItem,
 			Equipable.EquipableClass.Ability,
@@ -63,7 +63,28 @@ public class CircleAgent : CircleEntity {
 	/*
 	 * Hand
 	 */
-	public virtual int HandleItem(int numEeiAlternative) {
+	public int HandleItem(int numNextEei) {
+		Item minDistanceItem = GetMinDistanceItem();
+		int eeiHand;
+		if (minDistanceItem != null) {
+			eeiHand = GetEquipableClassEei(minDistanceItem.equipableClass, numNextEei);
+			EquipItem(minDistanceItem, eeiHand);
+		} else {
+			eeiHand = -1;
+		}
+		return eeiHand;
+	}
+
+	private Item GetMinDistanceItem() {
+		Item minDistanceItem = null;
+		Collider2D minDistanceItemCollider = GetMinDistanceItemCollider();
+		if (minDistanceItemCollider != null) {
+			minDistanceItem = minDistanceItemCollider.GetComponent<Item>();
+		}
+		return minDistanceItem;
+	}
+
+	private Collider2D GetMinDistanceItemCollider() {
 		int itemLayerMask = LayersManager.layersManager.allLayerMaskArray[LayersManager.layersManager.itemLayer];
 		Collider2D[] itemColliderArray = Physics2D.OverlapCircleAll(transform.position, radius, itemLayerMask);
 
@@ -76,48 +97,86 @@ public class CircleAgent : CircleEntity {
 				minDistanceItemColliderDistance = itemColliderDistance;
 			}
 		}
+		return minDistanceItemCollider;
+	}
 
-		int eei = -1;
-		if (minDistanceItemCollider != null) {
-			Item minDistanceItem = minDistanceItemCollider.GetComponent<Item>();
-			eei = GetPocketItemClassEei(minDistanceItem.equipableClass, numEeiAlternative);
-			PocketItem(minDistanceItem, eei);
+	/*
+	 * If pocket exists and empty, put handItem into pocket
+	 * If pocket full or nonexisting, drop handItem onto ground
+	 * Put groundItem into hand
+	 */
+	public void EquipItem(Item equipItem, int eeiHand) {
+		if (eeiHand > -1) {
+			int eeiPocketHypothetical = eeiHand + 1;  // hypothetical because pocket may or may not exist
+			if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] == null) {
+				PocketItem(eeiHand);
+			} else {
+				UnequipItem(eeiHand);
+			}
+
+			equipItem.BecomeEquiped(this);
+			equipmentEquipableArray[eeiHand] = equipItem;
 		}
+	}
+
+	/*
+	 * If handItem: 
+	 * Drop handItem onto ground
+	 * If pocket exists and full, put pocketItem into hand
+	 * 
+	 * If pocketItem:
+	 * Drop pocketItem onto ground
+	 * Pocket of pocket will not exist
+	 */
+	public void UnequipItem(int eei) {
+		bool eeiInArrayBounds = eei > -1 && eei < equipmentEquipableArray.Length;
+		if (eeiInArrayBounds && equipmentEquipableArray[eei] != null) {
+			Item unequipItem = (Item)equipmentEquipableArray[eei];
+			equipmentEquipableArray[eei] = null;
+			unequipItem.BecomeUnequiped(this);
+
+			int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
+			if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] != null) {
+				PocketItem(eei);
+			}
+		}
+	}
+	
+	/* 
+	 * Swaps handItem and pocketItem
+	 * Sometimes, people like to put their hands into their pockets. 
+	 */
+	public int PocketHandItem(int numNextEei) {
+		Equipable.EquipableClass equipableClass = Equipable.EquipableClass.HandItem;
+		int eei = GetEquipableClassEei(equipableClass, numNextEei);
+		PocketItem(eei);
 		return eei;
 	}
 
 	/*
-	 * Sometimes, people like to put their hands into their pockets. 
+	 * Assumes that pocket exists
 	 */
-	public virtual void PocketItem(Item pocketItem, int eei) {
-		if (eei > -1) {
-			UnpocketItem(eei);
-			pocketItem.BecomePocketed(this);
-			equipmentEquipableArray[eei] = pocketItem;
-		}
+	private void PocketItem(int eei) {
+		int eeiPocket = eei + 1;
+		Equipable equipable = equipmentEquipableArray[eeiPocket];
+		equipmentEquipableArray[eeiPocket] = equipmentEquipableArray[eei];
+		equipmentEquipableArray[eei] = equipable;
 	}
 
-	public virtual void UnpocketItem(int eei) {
-		if (eei > -1 && equipmentEquipableArray[eei] != null) {
-			Item oldItem = (Item)equipmentEquipableArray[eei];
-			equipmentEquipableArray[eei] = null;
-			oldItem.BecomeUnpocketed(this);
-		}
-	}
-
-	public virtual int GetPocketItemClassEei(Equipable.EquipableClass pocketItemEquipableClass, int numEeiAlternative) {
-		int eei = GetEquipableClassEei(pocketItemEquipableClass);
-		int eeiAlternative = eei + numEeiAlternative;
-		int eeiFinal = pocketItemEquipableClass == equipmentEquipableClassArray[eeiAlternative] ? eeiAlternative : eei;
-		return eeiFinal;
-	}
-
-	private int GetEquipableClassEei(Equipable.EquipableClass equipableClass) {
+	/*
+	 * Gets the numNextEei-th index that matches the equipableClass
+	 * If numNextEei too big, then gets the last index that matches the equipableClass
+	 */
+	public int GetEquipableClassEei(Equipable.EquipableClass equipableClass, int numNextEei) {
 		int equipableClassEei = -1;
+		int numEeiCurrent = 0;
 		for (int eei = 0; eei < equipmentEquipableClassArray.Length; eei++) {
 			if (equipableClass == equipmentEquipableClassArray[eei]) {
 				equipableClassEei = eei;
-				break;
+				numEeiCurrent++;
+				if (numEeiCurrent > numNextEei) {
+					break;
+				}
 			}
 		}
 		return equipableClassEei;
@@ -147,9 +206,5 @@ public class CircleAgent : CircleEntity {
 		}
 		EliminateSelf();
 	}
-
-	//protected override void EliminateSelf () {
-	//	base.EliminateSelf();
-	//}
 
 }

@@ -64,7 +64,7 @@ public abstract class AgentController : MonoBehaviour {
 		Move();
 		Fire();
 		HandleItem();
-		DiscardItem();
+		PocketHandItem();
 	}
 
 	protected virtual void ManualDebug() { }
@@ -77,7 +77,11 @@ public abstract class AgentController : MonoBehaviour {
 
 	protected virtual void HandleItem() { }
 
-	protected virtual void DiscardItem() { }
+	protected virtual void PocketHandItem() { }
+
+	protected void DiscardItem(int eei) {
+		agent.UnequipItem(eei);
+	}
 
 	/**
 	 * After updating, we rotate and move towards the nextNodeToTargetPosition

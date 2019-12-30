@@ -5,11 +5,13 @@ using UnityEngine.EventSystems;
 
 /**
  * Allows humans to interface their character. 
+ * TODO: extend into Keyboard Controller and XBox Controller
  */
 public class PlayerController : AgentController {
 
 	public static PlayerController playerController;
-	protected static int selectedEei;
+	private int handItemEei0;
+	private int handItemEei1;
 
 	protected override void Awake() {
 		base.Awake();
@@ -23,7 +25,8 @@ public class PlayerController : AgentController {
 	protected override void Start() {
 		base.Start();
 		MainCamera.mainCamera.playerTransform = transform;
-		selectedEei = 6;
+		handItemEei0 = agent.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
+		handItemEei1 = agent.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
 	}
 
 	/**
@@ -40,11 +43,6 @@ public class PlayerController : AgentController {
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha0)) {
 			StartCoroutine(ErasePathNodes());
-		}
-
-		if (Input.GetKeyDown(KeyCode.G)) {
-			agent.UnpocketItem(selectedEei);
-			HudManager.hudManager.UpdateEquipmentImage(selectedEei);
 		}
 	}
 
@@ -67,35 +65,50 @@ public class PlayerController : AgentController {
      */
 	protected override void Fire() {
 		if (Input.GetMouseButton(0)) {
-			if (agent.equipmentEquipableArray[2] != null) {
-				agent.equipmentEquipableArray[2].Activate(agent);
+			if (agent.equipmentEquipableArray[handItemEei0] != null) {
+				agent.equipmentEquipableArray[handItemEei0].Activate(agent);
 			}
 		}
 		if (Input.GetMouseButton(1)) {
-			if (agent.equipmentEquipableArray[3] != null) {
-				agent.equipmentEquipableArray[3].Activate(agent);
+			if (agent.equipmentEquipableArray[handItemEei1] != null) {
+				agent.equipmentEquipableArray[handItemEei1].Activate(agent);
 			}
 		}
 	}
 
 	protected override void HandleItem() {
 		base.HandleItem();
-		//if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.F)) {
-		//	agent.HandleItem(-1);
-		//}
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
 			int eei = agent.HandleItem(0);
-			HudManager.hudManager.UpdateEquipmentImage(eei);
+			UpdateHandPocketEquipmentImage(eei);
 		}
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
 			int eei = agent.HandleItem(1);
-			HudManager.hudManager.UpdateEquipmentImage(eei);
+			UpdateHandPocketEquipmentImage(eei);
 		}
+	}
+
+	protected override void PocketHandItem() {
+		base.PocketHandItem();
+		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
+			int eei = agent.PocketHandItem(0);
+			UpdateHandPocketEquipmentImage(eei);
+		}
+		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
+			int eei = agent.PocketHandItem(1);
+			UpdateHandPocketEquipmentImage(eei);
+		}
+	}
+
+	private void UpdateHandPocketEquipmentImage(int eei) {
+		HudManager.hudManager.UpdateEquipmentImage(eei);
+		int eeiPocket = eei + 1;
+		HudManager.hudManager.UpdateEquipmentImage(eeiPocket);
 	}
 
 	public void OnEquipmentImageClick(EquipmentImage equipmentImage, PointerEventData eventData) {
 		if (eventData.button == PointerEventData.InputButton.Middle) {
-			agent.UnpocketItem(equipmentImage.eei);
+			DiscardItem(equipmentImage.eei);
 			HudManager.hudManager.UpdateEquipmentImage(equipmentImage.eei);
 		}
 	}
