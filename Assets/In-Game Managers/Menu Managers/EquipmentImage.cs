@@ -18,7 +18,7 @@ public class EquipmentImage : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
-		PlayerController.playerController.OnEquipmentImageClick(this, eventData);
+		PlayerCircleBodyController.playerCircleBodyController.OnEquipmentImageClick(this, eventData);
 	}
 
 }

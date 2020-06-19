@@ -7,20 +7,12 @@ using Priority_Queue;
 /**
  * Abstracted behaviors for easy access later. 
  */
-public abstract class AgentController : MonoBehaviour {
+public abstract class CircleBodyController : SpiritController {
 
-	protected CircleAgent agent;
-
-	// TODO: nest into map that takes "ally" and "adversary" as keys
-	protected IList<CircleAgent> presentAllyList;
-	protected IList<CircleAgent> presentAdversaryList;
-	public CircleAgent primeAlly;  // TODO: antagonist / protagonist? 
-	public CircleAgent primeAdversary;
+	public CircleBody circleBody;  // set beforehand
+	protected IItemHandlerBody itemHandlerBody;
 
 	static float epsilon;
-	static bool[,,] environmentGraph;  // this stuff doesn't belong to this object but is copied here for convenience and legibility
-	static int XN;
-	static int YM;
 	protected static GameObject[,] circleSmallGrid;  // for debugging purposes
 	protected Stack<AStarPriorityQueueNode> path;
 	protected AStarPriorityQueueNode nextNode;
@@ -29,23 +21,17 @@ public abstract class AgentController : MonoBehaviour {
 	public float[] personalityUniform;
 	public float[] personalityGaussian;
 
-	static AgentController() {
+	static CircleBodyController() {
 		epsilon = 0.0001f;
 	}
 
-	protected virtual void Awake() { }
-
-	protected virtual void Start() {
-		agent = GetComponent<CircleAgent>();
-		presentAllyList = new List<CircleAgent>();
-		presentAdversaryList = new List<CircleAgent>();
-		primeAlly = null;
-		primeAdversary = null;
+	protected override void Start() {
+		circleBody = GetComponent<CircleBody>();
+		spirit = circleBody;
+		itemHandlerBody = circleBody;
+		base.Start();
 		
-		environmentGraph = EnvironmentManager.environmentManager.environmentGraph;
-		XN = environmentGraph.GetLength(0);
-		YM = environmentGraph.GetLength(1);
-		circleSmallGrid = new GameObject[XN, YM];
+		circleSmallGrid = new GameObject[EnvironmentManager.environmentManager.XN, EnvironmentManager.environmentManager.YM];
 		path = new Stack<AStarPriorityQueueNode>();
 		nextNodePosition = transform.position;
 		nextNode = new AStarPriorityQueueNode(0f, EnvironmentManager.environmentManager.GetIndexX(this.nextNodePosition.x), EnvironmentManager.environmentManager.GetIndexY(this.nextNodePosition.y), -1, -1);
@@ -79,10 +65,6 @@ public abstract class AgentController : MonoBehaviour {
 
 	protected virtual void PocketHandItem() { }
 
-	protected void DiscardItem(int eei) {
-		agent.UnequipItem(eei);
-	}
-
 	/**
 	 * After updating, we rotate and move towards the nextNodeToTargetPosition
 	 */
@@ -97,66 +79,6 @@ public abstract class AgentController : MonoBehaviour {
 	protected bool IsAtNextNodePosition() {
 		bool isAtNextNodePosition = MyStaticLibrary.GetDistance(transform.position, nextNodePosition) < MyStaticLibrary._sqrt0_5;
 		return isAtNextNodePosition;
-	}
-
-	protected virtual void OnTriggerEnter2D(Collider2D collider) {
-		CircleAgent colliderCircleAgent = collider.GetComponent<CircleAgent>();
-		if (colliderCircleAgent != null) {
-			if (colliderCircleAgent.affinity == agent.affinity) {
-				presentAllyList.Add(colliderCircleAgent);
-				// Debug.Log(presentAllyList.Count);
-				if (primeAlly == null) {
-					FindPrimeAlly();
-				}
-			} else {
-				presentAdversaryList.Add(colliderCircleAgent);
-				// Debug.Log(presentAdversaryList.Count);
-				if (primeAdversary == null) {
-					FindPrimeAdversary();
-				}
-			}
-		}
-	}
-
-	protected virtual void OnTriggerExit2D(Collider2D collider) {
-		CircleAgent colliderCircleAgent = collider.GetComponent<CircleAgent>();
-		if (colliderCircleAgent != null) {
-			if (colliderCircleAgent.affinity == agent.affinity) {
-				presentAllyList.Remove(colliderCircleAgent);
-				// Debug.Log(presentAllyList.Count);
-				if (colliderCircleAgent == primeAlly) {
-					FindPrimeAlly();
-				}
-			} else {
-				presentAdversaryList.Remove(colliderCircleAgent);
-				// Debug.Log(presentAdversaryList.Count);
-				if (colliderCircleAgent == primeAdversary) {
-					FindPrimeAdversary();
-				}
-			}
-		}
-	}
-
-	/**
-     * Returns prime present ally circle agent or null if none. 
-     */
-	protected virtual void FindPrimeAlly() {
-		if (presentAllyList.Count > 0) {
-			primeAlly = presentAllyList[0];
-		} else {
-			primeAlly = null;
-		}
-	}
-
-	/**
-     * Returns prime present adversary circle agent or null if none. 
-     */
-	protected virtual void FindPrimeAdversary() {
-		if (presentAdversaryList.Count > 0) {
-			primeAdversary = presentAdversaryList[0];
-		} else {
-			primeAdversary = null;
-		}
 	}
 
 	///**
@@ -188,9 +110,9 @@ public abstract class AgentController : MonoBehaviour {
 	//}
 
 	protected virtual IEnumerator FindPathAStarSearch(Vector2 targetPosition) {
-		int frontierSize = XN + YM;  // ASSUMPTION: frontierSize > 0
+		int frontierSize = EnvironmentManager.environmentManager.XN + EnvironmentManager.environmentManager.YM;  // ASSUMPTION: frontierSize > 0
 		FastPriorityQueue<AStarPriorityQueueNode> frontier = new FastPriorityQueue<AStarPriorityQueueNode>(frontierSize);
-		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[XN, YM];  // element is null if never in frontier before
+		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[EnvironmentManager.environmentManager.XN, EnvironmentManager.environmentManager.YM];  // element is null if never in frontier before
 
 		/**
 		 * source node and target node
@@ -201,7 +123,7 @@ public abstract class AgentController : MonoBehaviour {
 		int targetIndexX = EnvironmentManager.environmentManager.GetIndexX(targetPosition.x);
 		int targetIndexY = EnvironmentManager.environmentManager.GetIndexY(targetPosition.y);
 
-		if (!environmentGraph[sourceIndexX, sourceIndexY, 0] || !environmentGraph[targetIndexX, targetIndexY, 0]) {
+		if (!EnvironmentManager.environmentManager.environmentGraph[sourceIndexX, sourceIndexY, 0] || !EnvironmentManager.environmentManager.environmentGraph[targetIndexX, targetIndexY, 0]) {
 			Debug.Log("astar source or target in entity wall");  // occurs if target corpse slides through wall
 			yield break;
 		}
@@ -291,8 +213,8 @@ public abstract class AgentController : MonoBehaviour {
 	}
 
 	protected IEnumerator ErasePathNodes() {
-		for (int indexX = 0; indexX < XN; indexX++) {
-			for (int indexY = 0; indexY < YM; indexY++) {
+		for (int indexX = 0; indexX < EnvironmentManager.environmentManager.XN; indexX++) {
+			for (int indexY = 0; indexY < EnvironmentManager.environmentManager.YM; indexY++) {
 				if (circleSmallGrid[indexX, indexY] != null) {
 					Destroy(circleSmallGrid[indexX, indexY]);
 				}

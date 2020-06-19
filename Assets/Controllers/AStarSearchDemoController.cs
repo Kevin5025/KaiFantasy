@@ -12,14 +12,14 @@ public class AStarSearchDemoController : AimFireController {
 	protected override void Move() {
 		base.Move();
 		if (!IsAtNextNodePosition()) {
-			agent.MoveTargetPosition(nextNodePosition);
+			circleBody.MoveTargetPosition(nextNodePosition);
 		}
 	}
 
 	protected override void ManualDebug() {
 		base.ManualDebug();
 		if (Input.GetKeyDown(KeyCode.Alpha8)) {
-			StartCoroutine(FindPathAStarSearch(PlayerController.playerController.transform.position));
+			StartCoroutine(FindPathAStarSearch(PlayerCircleBodyController.playerCircleBodyController.transform.position));
 		}
 	}
 

@@ -13,9 +13,9 @@ public abstract class ActivatableEquipable : Equipable {
 	/**
      * Checks whether the user is still functional and whether the cooldown period has ended. 
      */
-	public override void Activate(CircleAgent casterAgent) {
+	public override void Activate(Body casterAgent) {
 		base.Activate(casterAgent);
-		if (!casterAgent.defunct && nextReadyTime <= Time.time) {
+		if (((int)casterAgent.healthState) >= (int) CircleBody.HealthState.Capable && nextReadyTime <= Time.time) {
 			Actuate(casterAgent);
 			nextReadyTime = Time.time + cooldownTimeout;
 		}
@@ -24,7 +24,7 @@ public abstract class ActivatableEquipable : Equipable {
 	/**
 	 * To be override with the details of the ability
 	 */
-	public virtual void Actuate(CircleAgent casterAgent) {
+	public virtual void Actuate(Body casterAgent) {
 		
 	}
 

@@ -7,39 +7,37 @@ using UnityEngine;
  * This is a special entity that is a circle. 
  * Circles have a certain amount of force and torque in this Universe to move and rotate. 
  */
-public class CircleEntity : Entity {
+public class CircleBody : Body {
 
 	protected Rigidbody2D rb2D;
 	public float radius;
 	public float area;
-	public float force;
+	public float moveForce;
+	public float crawlForce;
 	public float torque;
 
-	protected override void Start () {
+	protected override void Start() {
 		base.Start();
 		rb2D = GetComponent<Rigidbody2D>();
 		radius = Mathf.Sqrt(2 * rb2D.inertia / rb2D.mass);
-		area = (float) Math.PI * radius * radius;
+		area = (float)Math.PI * radius * radius;
 		GetComponent<Rigidbody2D>().mass = area;
-		force = GetComponent<Rigidbody2D>().mass * 25f;
+		moveForce = GetComponent<Rigidbody2D>().mass * 25f;
+		crawlForce = moveForce * 0.2f;
 		torque = GetComponent<Rigidbody2D>().inertia * 50f;
 
-		//TODO: More varied stats
-		maxHealth = area * 300f;
-		health = maxHealth;
-		healthRegenerationRate = 0.01f;
-		viscosity = 5f;
+		headPosition = new Vector2(0, 0.6f * radius);  // 0.297
 	}
 
-	protected override void FixedUpdate () {
+	protected override void FixedUpdate() {
 		base.FixedUpdate();
 	}
 
 	/**
      * Smart rotation based. Uses current angular momentum for predicted rotation and compares to desired rotation. 
      */
-	public virtual void RotateTargetPosition (Vector2 targetPosition) {
-		if (!defunct) {
+	public virtual void RotateTargetPosition(Vector2 targetPosition) {
+		if ((int)healthState >= 2) {
 			float currentRotation = transform.eulerAngles.z;
 			float targetRotation = Mathf.Atan2(targetPosition.x - transform.position.x, targetPosition.y - transform.position.y) * -Mathf.Rad2Deg;//0 to 180, then -180 to 0 counterclockwise
 			float offsetRotation = targetRotation - currentRotation;
@@ -47,8 +45,8 @@ public class CircleEntity : Entity {
 		}
 	}
 
-	public virtual void RotateOffsetRotation (float offsetRotation) {
-		if (!defunct) {
+	public virtual void RotateOffsetRotation(float offsetRotation) {
+		if ((int)healthState >= 2) {
 			transform.Rotate(0, 0, offsetRotation);
 		}
 	}
@@ -56,7 +54,7 @@ public class CircleEntity : Entity {
 	/**
      * Decides which of the 8 WASD directions (including diagonals) to move, in order to reach target position. 
      */
-	public virtual void MoveTargetPosition (Vector2 targetPosition) {
+	public virtual void MoveTargetPosition(Vector2 targetPosition) {
 		Vector2 currentPosition = transform.position;
 		Vector2 offsetPosition = targetPosition - currentPosition;
 
@@ -71,8 +69,8 @@ public class CircleEntity : Entity {
      * Moves up for W, down for S, right for D, and left for A. 
      * Diagonal movement for orthogonal combinations of WASD. 
      */
-	public virtual void MoveWASD (bool W, bool S, bool D, bool A) {
-		if (!defunct) {
+	public virtual void MoveWASD(bool W, bool S, bool D, bool A) {
+		if ((int)healthState >= 2) {
 			float verticalDirection = 0;
 			verticalDirection += W ? 1 : 0;
 			verticalDirection += S ? -1 : 0;
@@ -85,6 +83,7 @@ public class CircleEntity : Entity {
 			float horizontalForce = 0;
 			if ((new Vector2(horizontalDirection, verticalDirection).magnitude > 0)) {
 				double direction = Math.Atan2(verticalDirection, horizontalDirection);
+				float force = healthState == HealthState.Fibrillating ? crawlForce : moveForce;
 				verticalForce = force * (float)Math.Sin(direction);
 				horizontalForce = force * (float)Math.Cos(direction);
 			}

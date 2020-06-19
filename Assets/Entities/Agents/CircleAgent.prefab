@@ -202,7 +202,8 @@ GameObject:
   - component: {fileID: 1163348203879531530}
   - component: {fileID: 6497138091723446912}
   - component: {fileID: 6228286187741402108}
-  - component: {fileID: 1436756751}
+  - component: {fileID: 4501218954530227132}
+  - component: {fileID: 8236943464953990146}
   m_Layer: 0
   m_Name: CircleAgent
   m_TagString: Untagged
@@ -317,7 +318,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.495
---- !u!114 &1436756751
+--- !u!114 &4501218954530227132
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -326,18 +327,50 @@ MonoBehaviour:
   m_GameObject: {fileID: 7552869659386274455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5573908de03fb4148baae12df79e1b59, type: 3}
+  m_Script: {fileID: 11500000, guid: 321d1eb29848a8e44b2aceed501ee11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  affinity: 2
-  maxHealth: 0
-  health: 0
-  healthRegenerationRate: 0
+  affinity: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
+  itemHandlerBody: {fileID: 8236943464953990146}
+  headPosition: {x: 0, y: 0}
   viscosity: 0
+  healthState: 3
+  healthStateUpperThresholdList:
+  - 0
+  - 100
+  - 200
+  - 400
+  - 1000
+  - 0
+  healthStateRateList:
+  - 0
+  - -2
+  - 0.1
+  - 0.01
+  - -0.1
+  - 0
+  capableCapacityRate: 0.005
+  capableCapacityComplexity: 2
+  healthRateGeneralBonus: 0
+  health: 300
   defunct: 0
+  ascended: 0
   radius: 0
   area: 0
   force: 0
   torque: 0
-  inventoryItemGameObjectArray: []
+--- !u!114 &8236943464953990146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7552869659386274455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37ab56dad5276af4eb8991aaafc4fe27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipmentEquipableClassArray: 
   equipmentEquipableArray: []

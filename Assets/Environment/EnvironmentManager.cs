@@ -32,6 +32,8 @@ public class EnvironmentManager : MonoBehaviour {
 	public int maxIndexY;
 
 	public bool[,,] environmentGraph;  // returns whether (X, Y, V) is a valid vector direction, the V=0 direction tells us whether the position is clear
+	public int XN;
+	public int YM;
 	private GameObject[,] circleSmallArray;
 
 	static EnvironmentManager() {
@@ -59,6 +61,8 @@ public class EnvironmentManager : MonoBehaviour {
 		maxIndexY = maxPositionY - minPositionY;
 
 		InitializeEnvironmentGraph();
+		XN = environmentGraph.GetLength(0);
+		YM = environmentGraph.GetLength(1);
 		circleSmallArray = new GameObject[maxIndexX + 1, maxIndexY + 1];
 	}
 

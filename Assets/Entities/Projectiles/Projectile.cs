@@ -11,16 +11,20 @@ using UnityEngine;
  * 
  * TODO: Energy/elemental martial arts bending, in contrast to bullets
  */
-public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
+public class Projectile : Entity {
 
-	public CircleAgent casterAgent;//set by casterAgent
+	public Body casterAgent;  //set beforehand by casterAgent
 	public float timeout;
 	public float initialVelocity;
 	public float baseDamage;
 	
 	protected override void Start() {
-		base.Start();
+		// base.Start();
 		//GetComponent<Rigidbody2D>().velocity = transform.TransformDirection(new Vector2(0, initialVelocity));//too slow to go and causes inaccurate shooting; moved to gun as opposed to bullet
+	}
+
+	public virtual void LateStart() {
+		base.Start();
 	}
 
 	/**
@@ -30,7 +34,7 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 		base.FixedUpdate();
 		timeout -= Time.fixedDeltaTime;
 		if (timeout <= 0) {
-			Expire();
+			Disintegrate();
 		}
 		//Debug.Log(GetComponent<Rigidbody2D>().velocity.magnitude);
 	}
@@ -59,7 +63,7 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 
 	protected virtual void OnTriggerEnter2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			Entity collisionGameObjectEntity = collider.GetComponentInParent<Entity>();
+			Body collisionGameObjectEntity = collider.GetComponentInParent<Body>();
 			//Debug.Log("trigger enter " + collisionGameObjectEntity + " " + collider.name + " velocity ");
 			if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
 				GetComponent<Rigidbody2D>().drag += collisionGameObjectEntity.viscosity;
@@ -70,9 +74,8 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 
 	protected virtual void OnTriggerStay2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			Entity collisionGameObjectEntity = collider.GetComponentInParent<Entity>();
+			Body collisionGameObjectEntity = collider.GetComponentInParent<Body>();
 			// Debug.Log("trigger stay " + collisionGameObjectEntity + " " + collider.name + " velocity ");
-
 			if (collisionGameObjectEntity.affinity != casterAgent.affinity) {
 				float speedFactor = Mathf.Pow((GetComponent<Rigidbody2D>().velocity - collisionGameObjectEntity.GetComponent<Rigidbody2D>().velocity).magnitude / initialVelocity, 2);
 				float damage = baseDamage * speedFactor;
@@ -85,7 +88,7 @@ public class Bullet : Spirit {//TODO: abstract Bullet and various ammo types
 
 	protected virtual void OnTriggerExit2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			Entity collisionGameObjectEntity = collider.GetComponentInParent<Entity>();
+			Body collisionGameObjectEntity = collider.GetComponentInParent<Body>();
 			//Debug.Log("trigger exit " + collisionGameObjectEntity + " " + collider.name);
 			if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
 				GetComponent<Rigidbody2D>().drag -= collisionGameObjectEntity.viscosity;

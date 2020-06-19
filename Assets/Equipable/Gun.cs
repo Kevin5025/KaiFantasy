@@ -2,27 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class M9 : Item {
+public class Gun : Item {
+
+	public float timeout;
+	public float initialVelocity;
+	public float baseDamage;
 
 	protected override void Start() {
+		base.Start();
 		equipableClass = EquipableClass.HandItem;
-		cooldownTimeout = 0.2f;
 	}
 
-	public override void Actuate(CircleAgent casterAgent) {
-		//Debug.Log("M9");
-		Vector2 headPosition = casterAgent.transform.TransformPoint(new Vector2(0, 0.6f * casterAgent.radius));  // 0.297
+	public override void Actuate(Body casterAgent) {
+		base.Actuate(casterAgent);
+		Vector2 headPosition = casterAgent.transform.TransformPoint(casterAgent.headPosition);
 		GameObject projectileGameObject = GameObject.Instantiate(PrefabReferences.prefabReferences.bullet, headPosition, casterAgent.transform.rotation);
 
-		Bullet projectile = projectileGameObject.AddComponent<Bullet>();
+		Projectile projectile = projectileGameObject.AddComponent<Projectile>();
 		projectile.affinity = casterAgent.affinity;
 		projectile.casterAgent = casterAgent;
-		projectile.timeout = 1.0f;
-		projectile.initialVelocity = 20f;
-		projectile.baseDamage = 10f;
+		projectile.timeout = timeout;
+		projectile.initialVelocity = initialVelocity;
+		projectile.baseDamage = baseDamage;
+		projectile.LateStart();
 
 		projectileGameObject.GetComponent<Rigidbody2D>().velocity = projectileGameObject.transform.TransformDirection(new Vector2(0, projectile.initialVelocity));
 		projectileGameObject.GetComponent<Collider2D>().enabled = true;
 	}
-
 }

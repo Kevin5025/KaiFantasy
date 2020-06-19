@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateFireController : AgentController {
+public class RotateFireController : CircleBodyController {
 
 	public float rotateFactor;
 
@@ -17,13 +17,13 @@ public class RotateFireController : AgentController {
 	}
 
 	protected virtual void Spin() {
-		agent.RotateOffsetRotation(rotateFactor * 60f * Time.deltaTime);
+		circleBody.RotateOffsetRotation(rotateFactor * 60f * Time.fixedDeltaTime);
 	}
 
 	protected override void Fire() {
 		base.Fire();
-		if (agent.equipmentEquipableArray[0] != null) {
-			agent.equipmentEquipableArray[0].Activate(agent);
+		if (itemHandlerBody.GetEquipmentEquipableArray()[0] != null) {
+			itemHandlerBody.GetEquipmentEquipableArray()[0].Activate(circleBody);
 		}
 	}
 }

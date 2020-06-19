@@ -3,28 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /**
- * This is anything that can be controlled and fight. 
+ * This is anything that can use items. 
  */
-public class CircleAgent : CircleEntity {
-
-	protected AgentController agentController;
-
-	protected float fadeTime;
-	protected float fadeTimeConstant;
+public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
+	
+	float itemHandleRadius;
 
 	// TODO: repositorySkillArray;  // repository / library / studio
 	// public List<Item> inventoryItemArray;
 	public Equipable.EquipableClass[] equipmentEquipableClassArray; // TODO: different agent classes with different equipable class arrays
 	public Equipable[] equipmentEquipableArray;
 
-	protected override void Start() {
-		base.Start();
-		//gameObject.layer = LayersManager.layersManager.getTeamAgentLayer(team);
-
-		agentController = GetComponent<AgentController>();
-
-		fadeTime = 6f;
-		fadeTimeConstant = 0.25f / fadeTime;
+	protected virtual void Start() {
+		Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
+		itemHandleRadius = Mathf.Sqrt(2 * rb2D.inertia / rb2D.mass);
 
 		// inventoryItemArray = new List<Item>();
 		// equipmentEquipableClassArray = new Equipable.EquipableClass[20];
@@ -86,7 +78,7 @@ public class CircleAgent : CircleEntity {
 
 	private Collider2D GetMinDistanceItemCollider() {
 		int itemLayerMask = LayersManager.layersManager.allLayerMaskArray[LayersManager.layersManager.itemLayer];
-		Collider2D[] itemColliderArray = Physics2D.OverlapCircleAll(transform.position, radius, itemLayerMask);
+		Collider2D[] itemColliderArray = Physics2D.OverlapCircleAll(transform.position, itemHandleRadius, itemLayerMask);
 
 		Collider2D minDistanceItemCollider = null;
 		float minDistanceItemColliderDistance = float.MaxValue;
@@ -173,29 +165,19 @@ public class CircleAgent : CircleEntity {
 		return equipableClassEei;
 	}
 
+	public Equipable.EquipableClass[] GetEquipmentEquipableClassArray() {
+		return equipmentEquipableClassArray;
+	}
+
+	public Equipable[] GetEquipmentEquipableArray() {
+		return equipmentEquipableArray;
+	}
+
 	//public virtual void AcquireItem() {
 	//}
 
 	//public virtual void DiscardItem() {
 
 	//}
-
-	//public override float takeDamage(CircleAgent casterAgent, float damage) {
-	//	float trueDamage = damage;
-	//	health -= trueDamage;
-	//	return trueDamage;
-	//}
-
-	/**
-     * Overrides entity fade for a gradual disappearance, since these agents are more important than any entity. 
-     */
-	protected override IEnumerator Fade() {
-		for (float f = 0.25f; f > 0; f -= Time.deltaTime * fadeTimeConstant) {
-			spriteRenderer.color = new Color(r, g, b, f);
-			//yield return new WaitForSeconds(1f);//3f? //is this consistent? 
-			yield return null;  // https://answers.unity.com/questions/755196/yield-return-null-vs-yield-return-waitforendoffram.html
-		}
-		EliminateSelf();
-	}
 
 }

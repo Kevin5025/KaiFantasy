@@ -5,11 +5,9 @@
  */
 public abstract class Spirit : MonoBehaviour {
 
-	public enum Affinity { RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN, BROWN, NONE };//TODO: GREY for zombies
+	public enum Affinity { RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN, BROWN, NONE };//TODO: GREY for zombies?
 	public Affinity affinity;
-
-	protected SpriteRenderer spriteRenderer;
-	protected float r; protected float g; protected float b;
+	public Color color;
 
 	protected virtual void Awake () {
 
@@ -19,11 +17,7 @@ public abstract class Spirit : MonoBehaviour {
      * Assign sprite color based on team. 
      */
 	protected virtual void Start () {
-		gameObject.layer = GetTeamLayer();
-
-		spriteRenderer = GetComponent<SpriteRenderer>();
-		spriteRenderer.color = GetTeamColor(spriteRenderer.color, affinity);
-		r = spriteRenderer.color.r; g = spriteRenderer.color.g; b = spriteRenderer.color.b;
+		color = GetTeamColor(affinity);
 	}
 	
 	protected virtual void Update () {
@@ -34,32 +28,23 @@ public abstract class Spirit : MonoBehaviour {
 
 	}
 
-	protected abstract int GetTeamLayer(); 
-
-	/**
-	 * Occurs on death / destruction
-	 */
-	protected virtual void Expire() {
-		Destroy(gameObject);
-	}
-
-	public Color GetTeamColor (Color color, Affinity affinity) {
+	public static Color GetTeamColor(Affinity affinity) {
 		if (affinity == Affinity.RED) {
-			return new Color(color.r, 0, 0);
+			return new Color(1, 0, 0);
 		} else if (affinity == Affinity.GREEN) {
-			return new Color(0, color.g, 0);
+			return new Color(0, 1, 0);
 		} else if (affinity == Affinity.BLUE) {
-			return new Color(0, 0, color.b);
+			return new Color(0, 0, 1);
 		} else if (affinity == Affinity.YELLOW) {
-			return new Color(color.r, color.g, 0);
+			return new Color(1, 1, 0);
 		} else if (affinity == Affinity.MAGENTA) {
-			return new Color(color.r, 0, color.b);
+			return new Color(1, 0, 1);
 		} else if (affinity == Affinity.CYAN) {
-			return new Color(0, color.g, color.b);
+			return new Color(0, 1, 1);
 		} else if (affinity == Affinity.BROWN) {//saddle brown = (139,69,19)/256
-			return new Color(139f / 255f * color.r, 69f / 255f * color.g, 19f / 255f * color.b);
+			return new Color(139f / 255f, 69f / 255f, 19f / 255f);
 		} else {
-			return color;
+			return new Color(1, 1, 1);
 		}
 	}
 }

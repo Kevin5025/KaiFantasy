@@ -15,7 +15,7 @@ public abstract class Equipable : MonoBehaviour {
 
 	}
 
-	public virtual void Activate(CircleAgent casterAgent) {
+	public virtual void Activate(Body casterAgent) {
 
 	}
 

@@ -1,74 +1,55 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-/**
- * This is anything that can be destroyed or killed by taking damage. 
- */
 public abstract class Entity : Spirit {
+	
+	protected SpriteRenderer spriteRenderer;
+	protected float fadeDisintegratedUpperColorAlpha;
+	protected float fadeDuration;
 
-	public float maxHealth;
-	public float health;
-	public float healthRegenerationRate;
-	public float viscosity;
-
-	public bool defunct;//aka dead, destroyed, etc. 
-	protected float fadeDuration = 1f;
-
-	protected override void Start () {
+	protected override void Start() {
 		base.Start();
-		defunct = false;
-	}
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		fadeDisintegratedUpperColorAlpha = 0.125f;
+		fadeDuration = 4f;
 
-	/**
-     * Handles death (expiration) and regeneration. 
-     */
-	protected override void FixedUpdate () {
+		gameObject.layer = GetTeamLayer();
+		spriteRenderer.color = color;
+	}
+	
+	protected override void FixedUpdate() {
 		base.FixedUpdate();
-		if (!defunct) {
-			if (health < maxHealth) {
-				health += healthRegenerationRate * maxHealth * Time.fixedDeltaTime;
-			} else if (health > maxHealth) {
-				health = maxHealth;
-			}
-			if (health <= 0) {
-				health = 0;
-				Expire();
-			}
-		}
 	}
 
-	protected override int GetTeamLayer() {
-		return LayersManager.layersManager.GetTeamEntityLayer(affinity);
-	}
-
-	public virtual float takeDamage(CircleAgent casterAgent, float damage) {
-		float trueDamage = damage;
-		health -= trueDamage;
-		return trueDamage;
-	}
+	protected abstract int GetTeamLayer();
 
 	/**
-     * Occurs on death / destruction
+     * Occurs on death / destruction / expiration
      */
-	protected override void Expire () {
-		defunct = true;
+	protected virtual void Disintegrate() {
 		Collider2D collider2D = GetComponent<Collider2D>();
 		if (collider2D != null) {
 			collider2D.enabled = false;  // TODO: test if OnTriggerExit2D
 		}
-		StartCoroutine(Fade());
+		// TODO: become resources
+		StartCoroutine(FadeDisintegrated());
 	}
 
 	/**
-     * Visually lets users know that the entity is defunct. 
+     * Overrides entity fade for a gradual disappearance, since these agents are more important than any entity. 
      */
-	protected virtual IEnumerator Fade () {
-		spriteRenderer.color = new Color(r, g, b, 0.25f);//instant fade
-		yield return new WaitForSeconds(fadeDuration);
+	protected virtual IEnumerator FadeDisintegrated() {
+		float fadeTimeConstant = fadeDisintegratedUpperColorAlpha / fadeDuration;
+		for (float f = fadeDisintegratedUpperColorAlpha; f > 0; f -= Time.deltaTime * fadeTimeConstant) {
+			spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, f);
+			//yield return new WaitForSeconds(1f);//3f? //is this consistent? 
+			yield return null;  // https://answers.unity.com/questions/755196/yield-return-null-vs-yield-return-waitforendoffram.html
+		}
 		EliminateSelf();
 	}
 
-	protected virtual void EliminateSelf () {
-		Destroy(gameObject);
+	protected virtual void EliminateSelf() {
+		Destroy(gameObject);  // TODO: eliminate agent override in Body class
 	}
 }

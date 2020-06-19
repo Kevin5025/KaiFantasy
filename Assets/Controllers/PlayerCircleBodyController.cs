@@ -7,16 +7,16 @@ using UnityEngine.EventSystems;
  * Allows humans to interface their character. 
  * TODO: extend into Keyboard Controller and XBox Controller
  */
-public class PlayerController : AgentController {
+public class PlayerCircleBodyController : CircleBodyController {
 
-	public static PlayerController playerController;
+	public static PlayerCircleBodyController playerCircleBodyController;  // singleton
+
 	private int eeiHand0;
 	private int eeiHand1;
 
-	protected override void Awake() {
-		base.Awake();
-		if (playerController == null) {
-			playerController = this;
+	protected virtual void Awake() {
+		if (playerCircleBodyController == null) {
+			playerCircleBodyController = this;
 		} else {
 			Destroy(gameObject);
 		}
@@ -25,8 +25,8 @@ public class PlayerController : AgentController {
 	protected override void Start() {
 		base.Start();
 		MainCamera.mainCamera.playerTransform = transform;
-		eeiHand0 = agent.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
-		eeiHand1 = agent.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
+		eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
+		eeiHand1 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
 	}
 
 	/**
@@ -50,14 +50,14 @@ public class PlayerController : AgentController {
      * Character rotates to face wherever the mouse is. 
      */
 	protected override void Rotate() {
-		agent.RotateTargetPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+		circleBody.RotateTargetPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 	}
 
 	/**
      * WASD controls. 
      */
 	protected override void Move() {
-		agent.MoveWASD(Input.GetKey(KeyCode.W), Input.GetKey(KeyCode.S), Input.GetKey(KeyCode.D), Input.GetKey(KeyCode.A));
+		circleBody.MoveWASD(Input.GetKey(KeyCode.W), Input.GetKey(KeyCode.S), Input.GetKey(KeyCode.D), Input.GetKey(KeyCode.A));
 	}
 
 	/**
@@ -65,37 +65,35 @@ public class PlayerController : AgentController {
      */
 	protected override void Fire() {
 		if (Input.GetMouseButton(0)) {
-			if (agent.equipmentEquipableArray[eeiHand0] != null) {
-				agent.equipmentEquipableArray[eeiHand0].Activate(agent);
+			if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0] != null) {
+				itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0].Activate(circleBody);
 			}
 		}
 		if (Input.GetMouseButton(1)) {
-			if (agent.equipmentEquipableArray[eeiHand1] != null) {
-				agent.equipmentEquipableArray[eeiHand1].Activate(agent);
+			if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1] != null) {
+				itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1].Activate(circleBody);
 			}
 		}
 	}
 
 	protected override void HandleItem() {
-		base.HandleItem();
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
-			int eei = agent.HandleItem(0);
+			int eei = itemHandlerBody.HandleItem(0);
 			UpdateHandPocketEquipmentImage(eei);
 		}
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
-			int eei = agent.HandleItem(1);
+			int eei = itemHandlerBody.HandleItem(1);
 			UpdateHandPocketEquipmentImage(eei);
 		}
 	}
 
 	protected override void PocketHandItem() {
-		base.PocketHandItem();
 		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
-			agent.PocketItem(eeiHand0);
+			itemHandlerBody.PocketItem(eeiHand0);
 			UpdateHandPocketEquipmentImage(eeiHand0);
 		}
 		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
-			agent.PocketItem(eeiHand1);
+			itemHandlerBody.PocketItem(eeiHand1);
 			UpdateHandPocketEquipmentImage(eeiHand1);
 		}
 	}
@@ -113,7 +111,11 @@ public class PlayerController : AgentController {
 		}
 	}
 
-	public CircleAgent GetAgent() {
-		return agent;
+	protected void DiscardItem(int eei) {
+		itemHandlerBody.UnequipItem(eei);
+	}
+
+	public Body GetBody() {
+		return circleBody;
 	}
 }

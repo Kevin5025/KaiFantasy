@@ -263,6 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primeAlly: {fileID: 0}
   primeAdversary: {fileID: 0}
+  circleBody: {fileID: 0}
   personalityUniform: []
   personalityGaussian: []
   rotateFactor: 0
@@ -391,7 +392,7 @@ GameObject:
   - component: {fileID: 165767488}
   - component: {fileID: 165767487}
   - component: {fileID: 165767486}
-  - component: {fileID: 165767485}
+  - component: {fileID: 165767490}
   m_Layer: 20
   m_Name: Helmet
   m_TagString: Untagged
@@ -399,20 +400,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &165767485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 165767484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 751f9fb59d0c0e848b5870ec1450198d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipableClass: 2
-  cooldownTimeout: 0
 --- !u!61 &165767486
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -522,6 +509,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &165767490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165767484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95ae0e2ac8a6c42479474f670b12b7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipableClass: 3
+  cooldownTimeout: 0
 --- !u!1 &223761287
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,6 +757,8 @@ MonoBehaviour:
   maxPositionY: 0
   maxIndexX: 0
   maxIndexY: 0
+  XN: 0
+  YM: 0
 --- !u!1001 &308758860
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -873,7 +876,7 @@ GameObject:
   - component: {fileID: 328016978}
   - component: {fileID: 328016977}
   - component: {fileID: 328016976}
-  - component: {fileID: 328016975}
+  - component: {fileID: 328016980}
   m_Layer: 20
   m_Name: OT38
   m_TagString: Untagged
@@ -881,20 +884,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &328016975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 328016974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c851368e058cfd242af1b9c55cbd5565, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipableClass: 1
-  cooldownTimeout: 0.5
 --- !u!61 &328016976
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1004,6 +993,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &328016980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328016974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9576d3d0ffaf5478fdff8fe8d0e054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipableClass: 1
+  cooldownTimeout: 0.5
+  timeout: 1
+  initialVelocity: 20
+  baseDamage: 30
 --- !u!1 &791382505
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,6 +1193,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4501218954530227132, guid: d3d9db8570bd7ed4fbcd50fb4cf75597,
+        type: 3}
+      propertyPath: affinity
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3d9db8570bd7ed4fbcd50fb4cf75597, type: 3}
 --- !u!20 &911565473 stripped
@@ -1207,7 +1218,7 @@ GameObject:
   - component: {fileID: 918014842}
   - component: {fileID: 918014841}
   - component: {fileID: 918014844}
-  - component: {fileID: 918014845}
+  - component: {fileID: 918014846}
   m_Layer: 20
   m_Name: M9
   m_TagString: Untagged
@@ -1324,7 +1335,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &918014845
+--- !u!114 &918014846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1333,11 +1344,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 918014840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c90fa957b8e87914ababc12cb88821e6, type: 3}
+  m_Script: {fileID: 11500000, guid: ee9576d3d0ffaf5478fdff8fe8d0e054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   equipableClass: 1
-  cooldownTimeout: 0.4
+  cooldownTimeout: 0.2
+  timeout: 1
+  initialVelocity: 20
+  baseDamage: 10
 --- !u!4 &945166553 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3690379942687190565, guid: 6cb62d445ebd1904caf70e6f2be6c9fb,
@@ -1530,10 +1544,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7506ca12cec426429224201e2df6b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerAgent: {fileID: 0}
   equipmentPanel: {fileID: 1402130966}
   equipmentSlotArray: []
+  equipmentImageArray: []
   equipmentSlotPrefab: {fileID: 5093142244947330767, guid: de1dce14eb461ec48b60b8b0e4b7e0e1,
     type: 3}
+  pocketColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1182716085
 GameObject:
   m_ObjectHideFlags: 0
@@ -1686,6 +1703,11 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4501218954530227132, guid: d3d9db8570bd7ed4fbcd50fb4cf75597,
+        type: 3}
+      propertyPath: affinity
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3d9db8570bd7ed4fbcd50fb4cf75597, type: 3}
 --- !u!1 &1235199868 stripped
@@ -1708,6 +1730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primeAlly: {fileID: 0}
   primeAdversary: {fileID: 0}
+  circleBody: {fileID: 0}
   personalityUniform: []
   personalityGaussian: []
   rotateFactor: 0
@@ -1822,6 +1845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primeAlly: {fileID: 0}
   primeAdversary: {fileID: 0}
+  circleBody: {fileID: 0}
   personalityUniform: []
   personalityGaussian: []
   rotateFactor: 0
@@ -2016,6 +2040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primeAlly: {fileID: 0}
   primeAdversary: {fileID: 0}
+  circleBody: {fileID: 0}
   personalityUniform: []
   personalityGaussian: []
 --- !u!1 &1494074518 stripped
@@ -2142,6 +2167,11 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1436756751, guid: d3d9db8570bd7ed4fbcd50fb4cf75597, type: 3}
+      propertyPath: affinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4501218954530227132, guid: d3d9db8570bd7ed4fbcd50fb4cf75597,
+        type: 3}
       propertyPath: affinity
       value: 2
       objectReference: {fileID: 0}
@@ -2419,10 +2449,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1436756751, guid: d3d9db8570bd7ed4fbcd50fb4cf75597, type: 3}
-      propertyPath: affinity
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3d9db8570bd7ed4fbcd50fb4cf75597, type: 3}
 --- !u!1 &1679749752 stripped
@@ -2445,6 +2471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primeAlly: {fileID: 0}
   primeAdversary: {fileID: 0}
+  circleBody: {fileID: 0}
   personalityUniform: []
   personalityGaussian: []
   rotateFactor: 0
@@ -2876,6 +2903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primeAlly: {fileID: 0}
   primeAdversary: {fileID: 0}
+  circleBody: {fileID: 0}
   personalityUniform: []
   personalityGaussian: []
   rotateFactor: 0
