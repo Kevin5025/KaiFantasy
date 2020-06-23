@@ -9,7 +9,7 @@ using Priority_Queue;
  */
 public abstract class CircleBodyController : SpiritController {
 
-	public CircleBody circleBody;  // set beforehand
+	public CircleBody circleBody;
 	protected IItemHandlerBody itemHandlerBody;
 
 	static float epsilon;
@@ -48,6 +48,7 @@ public abstract class CircleBodyController : SpiritController {
 		// alertCooldownTime -= Time.deltaTime;  // float.MinValue ~ -3.4E38 seconds
 		Rotate();
 		Move();
+		Dash();
 		Fire();
 		HandleItem();
 		PocketHandItem();
@@ -58,6 +59,8 @@ public abstract class CircleBodyController : SpiritController {
 	protected virtual void Rotate() { }
 
 	protected virtual void Move() { }
+
+	protected virtual void Dash() { }
 
 	protected virtual void Fire() { }
 

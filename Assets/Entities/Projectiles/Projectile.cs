@@ -32,11 +32,13 @@ public class Projectile : Entity {
      */
 	protected override void FixedUpdate() {
 		base.FixedUpdate();
-		timeout -= Time.fixedDeltaTime;
-		if (timeout <= 0) {
-			Disintegrate();
+		if (!defunct) {
+			timeout -= Time.fixedDeltaTime;
+			if (timeout <= 0) {
+				Disintegrate();
+			}
+			//Debug.Log(GetComponent<Rigidbody2D>().velocity.magnitude);
 		}
-		//Debug.Log(GetComponent<Rigidbody2D>().velocity.magnitude);
 	}
 
 	protected override int GetTeamLayer() {

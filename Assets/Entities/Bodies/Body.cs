@@ -25,7 +25,6 @@ public abstract class Body : Entity, IItemHandlerBody {
 	public float healthRateGeneralBonus;  // set beforehand
 	public float health;  // set starting value beforehand
 
-	public bool defunct;  // aka "dead", "destroyed", etc. 
 	public bool ascended;  // temporary coding variable
 	
 	protected float fadeBrickedUpperColorAlpha;
@@ -36,7 +35,6 @@ public abstract class Body : Entity, IItemHandlerBody {
 		base.Start();
 		viscosity = 5f;
 
-		defunct = false;
 		ascended = false;
 
 		fadeBrickedUpperColorAlpha = 0.25f;
@@ -70,7 +68,6 @@ public abstract class Body : Entity, IItemHandlerBody {
 
 	protected virtual void HealthEffectUpdate(HealthState healthState) {
 		if (healthState == HealthState.Disintegrated) {
-			defunct = true;
 			Disintegrate();
 		} else if (healthState == HealthState.Bricked) {
 			// float fadeBrickedColorAlpha = LinearRangeAnalogy(health, healthStateUpperThresholdList[(int)HealthState.Disintegrated], healthStateUpperThresholdList[(int)HealthState.Bricked], fadeDisintegratedUpperColorAlpha, fadeBrickedUpperColorAlpha);

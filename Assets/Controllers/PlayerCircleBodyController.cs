@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -57,7 +58,45 @@ public class PlayerCircleBodyController : CircleBodyController {
      * WASD controls. 
      */
 	protected override void Move() {
-		circleBody.MoveWASD(Input.GetKey(KeyCode.W), Input.GetKey(KeyCode.S), Input.GetKey(KeyCode.D), Input.GetKey(KeyCode.A));
+		bool D = Input.GetKey(KeyCode.D);
+		bool A = Input.GetKey(KeyCode.A);
+		bool W = Input.GetKey(KeyCode.W);
+		bool S = Input.GetKey(KeyCode.S);
+
+		circleBody.MoveWASD(D, A, W, S);
+	}
+
+	protected override void Dash() {
+		bool space = Input.GetKey(KeyCode.Space);
+		if (space) {
+			bool D = Input.GetKey(KeyCode.D);
+			bool A = Input.GetKey(KeyCode.A);
+			bool W = Input.GetKey(KeyCode.W);
+			bool S = Input.GetKey(KeyCode.S);
+
+			circleBody.DashWASD(D, A, W, S);
+		}
+
+	}
+
+	public static Vector2 GetUnitVector(bool D, bool A, bool W, bool S) {
+		float horizontalDirection = 0;
+		horizontalDirection += D ? 1 : 0;
+		horizontalDirection += A ? -1 : 0;
+
+		float verticalDirection = 0;
+		verticalDirection += W ? 1 : 0;
+		verticalDirection += S ? -1 : 0;
+
+		Vector2 unitDirectionVector = new Vector2(horizontalDirection, verticalDirection);
+		if (unitDirectionVector.magnitude > 1) {
+			unitDirectionVector /= unitDirectionVector.magnitude;
+			//double direction = Math.Atan2(verticalDirection, horizontalDirection);
+			//float verticalMagnitude = (float)Math.Sin(direction);
+			//float horizontalMagnitude = (float)Math.Cos(direction);
+		}
+
+		return unitDirectionVector;
 	}
 
 	/**
@@ -106,13 +145,9 @@ public class PlayerCircleBodyController : CircleBodyController {
 
 	public void OnEquipmentImageClick(EquipmentImage equipmentImage, PointerEventData eventData) {
 		if (eventData.button == PointerEventData.InputButton.Middle) {
-			DiscardItem(equipmentImage.eei);
+			itemHandlerBody.UnequipItem(equipmentImage.eei);
 			HudManager.hudManager.UpdateEquipmentImage(equipmentImage.eei);
 		}
-	}
-
-	protected void DiscardItem(int eei) {
-		itemHandlerBody.UnequipItem(eei);
 	}
 
 	public Body GetBody() {

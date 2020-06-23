@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Gun : Item {
 
-	public float timeout;
-	public float initialVelocity;
-	public float baseDamage;
+	public float projectileTimeout;  // set in inspector
+	public float initialVelocity;  // set in inspector
+	public float baseDamage;  // set in inspector
 
 	protected override void Start() {
 		base.Start();
 		equipableClass = EquipableClass.HandItem;
 	}
 
-	public override void Actuate(Body casterAgent) {
+	public override void Actuate(Body casterAgent, Dictionary<object, object> argumentDictionary = null) {
 		base.Actuate(casterAgent);
 		Vector2 headPosition = casterAgent.transform.TransformPoint(casterAgent.headPosition);
 		GameObject projectileGameObject = GameObject.Instantiate(PrefabReferences.prefabReferences.bullet, headPosition, casterAgent.transform.rotation);
@@ -21,7 +21,7 @@ public class Gun : Item {
 		Projectile projectile = projectileGameObject.AddComponent<Projectile>();
 		projectile.affinity = casterAgent.affinity;
 		projectile.casterAgent = casterAgent;
-		projectile.timeout = timeout;
+		projectile.timeout = projectileTimeout;
 		projectile.initialVelocity = initialVelocity;
 		projectile.baseDamage = baseDamage;
 		projectile.LateStart();

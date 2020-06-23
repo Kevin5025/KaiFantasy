@@ -12,21 +12,29 @@ public class CircleBody : Body {
 	protected Rigidbody2D rb2D;
 	public float radius;
 	public float area;
+	public float torque;
 	public float moveForce;
 	public float crawlForce;
-	public float torque;
+	public float dashImpulse;
+
+	protected GameObject dashGameObject;
+	protected Dash dash;
 
 	protected override void Start() {
 		base.Start();
+		headPosition = new Vector2(0, 0.6f * radius);  // 0.297
+
 		rb2D = GetComponent<Rigidbody2D>();
 		radius = Mathf.Sqrt(2 * rb2D.inertia / rb2D.mass);
 		area = (float)Math.PI * radius * radius;
 		GetComponent<Rigidbody2D>().mass = area;
+		torque = GetComponent<Rigidbody2D>().inertia * 50f;
 		moveForce = GetComponent<Rigidbody2D>().mass * 25f;
 		crawlForce = moveForce * 0.2f;
-		torque = GetComponent<Rigidbody2D>().inertia * 50f;
+		dashImpulse = moveForce * 0.5f;
 
-		headPosition = new Vector2(0, 0.6f * radius);  // 0.297
+		dashGameObject = Instantiate(PrefabReferences.prefabReferences.dash);
+		dash = dashGameObject.GetComponent<Dash>();
 	}
 
 	protected override void FixedUpdate() {
@@ -62,37 +70,35 @@ public class CircleBody : Body {
 		bool S = Math.Atan2(offsetPosition.y, offsetPosition.x) > -7 * Math.PI / 8 && Math.Atan2(offsetPosition.y, offsetPosition.x) < -1 * Math.PI / 8;//offsetPosition.y < 0;
 		bool D = Math.Atan2(offsetPosition.y, offsetPosition.x) > -3 * Math.PI / 8 && Math.Atan2(offsetPosition.y, offsetPosition.x) < 3 * Math.PI / 8;//offsetPosition.x > 0;
 		bool A = Math.Atan2(offsetPosition.y, offsetPosition.x) > 5 * Math.PI / 8 || Math.Atan2(offsetPosition.y, offsetPosition.x) < -5 * Math.PI / 8;//offsetPosition.x < 0;
-		MoveWASD(W, S, D, A);
+		MoveWASD(D, A, W, S);
 	}
 
 	/**
      * Moves up for W, down for S, right for D, and left for A. 
      * Diagonal movement for orthogonal combinations of WASD. 
      */
-	public virtual void MoveWASD(bool W, bool S, bool D, bool A) {
-		if ((int)healthState >= 2) {
-			float verticalDirection = 0;
-			verticalDirection += W ? 1 : 0;
-			verticalDirection += S ? -1 : 0;
+	public virtual void MoveWASD(bool D, bool A, bool W, bool S) {
+		if ((int)healthState >= (int)HealthState.Fibrillating) {
+			Vector2 unitVector = PlayerCircleBodyController.GetUnitVector(D, A, W, S);
+			float force = healthState == HealthState.Fibrillating ? crawlForce : moveForce;
+			Vector2 forceVector = force * unitVector;
 
-			float horizontalDirection = 0;
-			horizontalDirection += D ? 1 : 0;
-			horizontalDirection += A ? -1 : 0;
-
-			float verticalForce = 0;
-			float horizontalForce = 0;
-			if ((new Vector2(horizontalDirection, verticalDirection).magnitude > 0)) {
-				double direction = Math.Atan2(verticalDirection, horizontalDirection);
-				float force = healthState == HealthState.Fibrillating ? crawlForce : moveForce;
-				verticalForce = force * (float)Math.Sin(direction);
-				horizontalForce = force * (float)Math.Cos(direction);
-			}
-			//Debug.Log(new Vector2(horizontalForce, verticalForce));
-			//if (relative) {
-			//    rb2D.AddRelativeForce(power * new Vector2(horizontalForce, verticalForce));
+			//if (relative) {  // different control scheme
+			//    rb2D.AddRelativeForce(forceVector);
 			//} else {
-			rb2D.AddForce(new Vector2(horizontalForce, verticalForce));
+			rb2D.AddForce(forceVector);
 			//}
+		}
+	}
+
+	public virtual void DashWASD(bool D, bool A, bool W, bool S) {
+		if ((int)healthState >= (int)HealthState.Capable) {
+			Dictionary<object, object> argumentDictionary = new Dictionary<object, object>();
+			argumentDictionary['D'] = D;
+			argumentDictionary['A'] = A;
+			argumentDictionary['W'] = W;
+			argumentDictionary['S'] = S;
+			dash.Activate(this, argumentDictionary);
 		}
 	}
 }

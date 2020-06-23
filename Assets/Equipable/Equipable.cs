@@ -8,15 +8,18 @@ using System;
  */
 public abstract class Equipable : MonoBehaviour {
 	
-	public enum EquipableClass { AccessoryItem, HandItem, PocketItem, HeadItem, BodyItem, Ability, LargeVassal, SmallVassal, Idea, };
+	public enum EquipableClass { AccessoryItem, HandItem, PocketItem, HeadItem, BodyItem, Ability, LargeVassal, SmallVassal, Idea, Intrinsic };
 	public EquipableClass equipableClass;  // set in inspector
 
 	protected virtual void Start() {
 
 	}
 
-	public virtual void Activate(Body casterAgent) {
-
+	/*
+	 * This empty function just makes it easier to do polymorphic calls to Activate
+	 */
+	public virtual void Activate(Body casterAgent, Dictionary<object, object> argumentDictionary = null) {
+		// do nothing
 	}
 
 	public static bool IsHandPocketEquipableClass (EquipableClass equipableClass) {

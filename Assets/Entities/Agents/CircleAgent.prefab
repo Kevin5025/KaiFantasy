@@ -332,6 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   affinity: 0
   color: {r: 0, g: 0, b: 0, a: 0}
+  defunct: 0
   itemHandlerBody: {fileID: 8236943464953990146}
   headPosition: {x: 0, y: 0}
   viscosity: 0
@@ -354,12 +355,14 @@ MonoBehaviour:
   capableCapacityComplexity: 2
   healthRateGeneralBonus: 0
   health: 300
-  defunct: 0
   ascended: 0
   radius: 0
   area: 0
-  force: 0
   torque: 0
+  moveForce: 0
+  crawlForce: 0
+  dashImpulse: 0
+  dash: {fileID: 0}
 --- !u!114 &8236943464953990146
 MonoBehaviour:
   m_ObjectHideFlags: 0

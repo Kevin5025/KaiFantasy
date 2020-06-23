@@ -8,6 +8,8 @@ public abstract class Entity : Spirit {
 	protected float fadeDisintegratedUpperColorAlpha;
 	protected float fadeDuration;
 
+	public bool defunct;  // aka "dead", "destroyed", etc. 
+
 	protected override void Start() {
 		base.Start();
 		spriteRenderer = GetComponent<SpriteRenderer>();
@@ -16,6 +18,8 @@ public abstract class Entity : Spirit {
 
 		gameObject.layer = GetTeamLayer();
 		spriteRenderer.color = color;
+
+		defunct = false;
 	}
 	
 	protected override void FixedUpdate() {
@@ -28,6 +32,7 @@ public abstract class Entity : Spirit {
      * Occurs on death / destruction / expiration
      */
 	protected virtual void Disintegrate() {
+		defunct = true;
 		Collider2D collider2D = GetComponent<Collider2D>();
 		if (collider2D != null) {
 			collider2D.enabled = false;  // TODO: test if OnTriggerExit2D
