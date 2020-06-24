@@ -15,7 +15,10 @@ MonoImporter:
   - circleLarge2: {instanceID: 0}
   - bullet: {fileID: 6751215688927150264, guid: 40c9e5deb79480f48a9b4e5845f2a1bc,
       type: 3}
-  - dash: {fileID: 8458492898896454762, guid: 8b5af76ecc583b1448806537f3f576c3, type: 3}
+  - dashGameObject: {fileID: 8458492898896454762, guid: 8b5af76ecc583b1448806537f3f576c3,
+      type: 3}
+  - m9GameObject: {fileID: 1364650183859750882, guid: f9691fa835b639d41a5458c280c700db,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

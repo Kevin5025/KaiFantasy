@@ -12,9 +12,6 @@ public class PlayerCircleBodyController : CircleBodyController {
 
 	public static PlayerCircleBodyController playerCircleBodyController;  // singleton
 
-	private int eeiHand0;
-	private int eeiHand1;
-
 	protected virtual void Awake() {
 		if (playerCircleBodyController == null) {
 			playerCircleBodyController = this;
@@ -26,8 +23,6 @@ public class PlayerCircleBodyController : CircleBodyController {
 	protected override void Start() {
 		base.Start();
 		MainCamera.mainCamera.playerTransform = transform;
-		eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
-		eeiHand1 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
 	}
 
 	/**
@@ -104,11 +99,13 @@ public class PlayerCircleBodyController : CircleBodyController {
      */
 	protected override void Fire() {
 		if (Input.GetMouseButton(0)) {
+			int eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
 			if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0] != null) {
 				itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0].Activate(circleBody);
 			}
 		}
 		if (Input.GetMouseButton(1)) {
+			int eeiHand1 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
 			if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1] != null) {
 				itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1].Activate(circleBody);
 			}
@@ -118,29 +115,25 @@ public class PlayerCircleBodyController : CircleBodyController {
 	protected override void HandleItem() {
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
 			int eei = itemHandlerBody.HandleItem(0);
-			UpdateHandPocketEquipmentImage(eei);
+			HudManager.hudManager.UpdateHandPocketEquipmentImage(eei);
 		}
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
 			int eei = itemHandlerBody.HandleItem(1);
-			UpdateHandPocketEquipmentImage(eei);
+			HudManager.hudManager.UpdateHandPocketEquipmentImage(eei);
 		}
 	}
 
 	protected override void PocketHandItem() {
+		int eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
 		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
 			itemHandlerBody.PocketItem(eeiHand0);
-			UpdateHandPocketEquipmentImage(eeiHand0);
+			HudManager.hudManager.UpdateHandPocketEquipmentImage(eeiHand0);
 		}
 		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
+			int eeiHand1 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
 			itemHandlerBody.PocketItem(eeiHand1);
-			UpdateHandPocketEquipmentImage(eeiHand1);
+			HudManager.hudManager.UpdateHandPocketEquipmentImage(eeiHand1);
 		}
-	}
-
-	private void UpdateHandPocketEquipmentImage(int eei) {
-		HudManager.hudManager.UpdateEquipmentImage(eei);
-		int eeiPocket = eei + 1;
-		HudManager.hudManager.UpdateEquipmentImage(eeiPocket);
 	}
 
 	public void OnEquipmentImageClick(EquipmentImage equipmentImage, PointerEventData eventData) {

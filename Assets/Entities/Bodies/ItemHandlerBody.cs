@@ -7,11 +7,13 @@ using UnityEngine;
  */
 public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 	
-	float itemHandleRadius;
+	protected float itemHandleRadius;
 
 	// TODO: repositorySkillArray;  // repository / library / studio
 	// public List<Item> inventoryItemArray;
-	public Equipable.EquipableClass[] equipmentEquipableClassArray; // TODO: different agent classes with different equipable class arrays
+	public Equipable.EquipableClass[] equipmentEquipableClassArray;  // TODO: different agent classes with different equipable class arrays
+	protected int eeiHand0;
+	protected int eeiHand1;
 	public Equipable[] equipmentEquipableArray;
 
 	protected virtual void Start() {
@@ -42,8 +44,14 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 			Equipable.EquipableClass.Idea,
 			Equipable.EquipableClass.Idea,
 		};
+		eeiHand0 = GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
+		eeiHand1 = GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
+
 		equipmentEquipableArray = new Equipable[equipmentEquipableClassArray.Length];
-		// equipmentEquipableArray[0] = Instantiate M9
+		GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences.m9GameObject);
+		Debug.Log(m9GameObject);
+		EquipItem(m9GameObject.GetComponent<Item>(), eeiHand0);
+		Debug.Log(equipmentEquipableArray[eeiHand0]);
 
 		InitializeStats();
 	}
@@ -114,11 +122,11 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 	/*
 	 * If handItem: 
 	 * Drop handItem onto ground
-	 * If pocket exists and full, put pocketItem into hand
+	 * // If pocket exists and full, put pocketItem into hand
 	 * 
 	 * If pocketItem:
 	 * Drop pocketItem onto ground
-	 * Pocket of pocket will not exist
+	 * // Pocket of pocket will not exist
 	 */
 	public void UnequipItem(int eei) {
 		bool eeiInArrayBounds = eei > -1 && eei < equipmentEquipableArray.Length;
@@ -127,10 +135,10 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 			equipmentEquipableArray[eei] = null;
 			unequipItem.BecomeUnequiped(this);
 
-			int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
-			if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] != null) {
-				PocketItem(eei);
-			}
+			//int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
+			//if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] != null) {
+			//	PocketItem(eei);
+			//}
 		}
 	}
 

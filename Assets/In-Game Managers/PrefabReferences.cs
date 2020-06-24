@@ -17,7 +17,10 @@ public class PrefabReferences : MonoBehaviour {
 	public GameObject circleLarge2;
 
 	public GameObject bullet;
-	public GameObject dash;
+
+	public GameObject dashGameObject;
+
+	public GameObject m9GameObject;
 
 	protected virtual void Awake() {
 		if (prefabReferences == null) {//like a singleton

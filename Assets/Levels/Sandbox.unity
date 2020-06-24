@@ -2257,6 +2257,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8458492898896454762, guid: 8b5af76ecc583b1448806537f3f576c3,
         type: 3}
+    - target: {fileID: 9028517267304557422, guid: ca53db40cae99f34f8c66b9551219ad6,
+        type: 3}
+      propertyPath: dashGameObject
+      value: 
+      objectReference: {fileID: 8458492898896454762, guid: 8b5af76ecc583b1448806537f3f576c3,
+        type: 3}
+    - target: {fileID: 9028517267304557422, guid: ca53db40cae99f34f8c66b9551219ad6,
+        type: 3}
+      propertyPath: m9GameObject
+      value: 
+      objectReference: {fileID: 1364650183859750882, guid: f9691fa835b639d41a5458c280c700db,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca53db40cae99f34f8c66b9551219ad6, type: 3}
 --- !u!1001 &1808366842

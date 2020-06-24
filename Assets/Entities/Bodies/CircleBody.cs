@@ -33,7 +33,7 @@ public class CircleBody : Body {
 		crawlForce = moveForce * 0.2f;
 		dashImpulse = moveForce * 0.5f;
 
-		dashGameObject = Instantiate(PrefabReferences.prefabReferences.dash);
+		dashGameObject = Instantiate(PrefabReferences.prefabReferences.dashGameObject);
 		dash = dashGameObject.GetComponent<Dash>();
 	}
 

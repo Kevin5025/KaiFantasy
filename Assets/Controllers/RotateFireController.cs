@@ -22,8 +22,9 @@ public class RotateFireController : CircleBodyController {
 
 	protected override void Fire() {
 		base.Fire();
-		if (itemHandlerBody.GetEquipmentEquipableArray()[0] != null) {
-			itemHandlerBody.GetEquipmentEquipableArray()[0].Activate(circleBody);
+		int eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
+		if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0] != null) {
+			itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0].Activate(circleBody);
 		}
 	}
 }

@@ -45,11 +45,25 @@ public class HudManager : MonoBehaviour {
 		}
 
 		pocketColor = new Color(0.75f, 0.75f, 0.75f);
+
+		HudManager.hudManager.UpdateAllEquipmentImage();  // TODO: test if this line is needed
 	}
 
 	// Update is called once per frame
 	void Update() {
 
+	}
+
+	public void UpdateAllEquipmentImage() {
+		for (int e = 0; e < equipmentImageArray.Length; e++) {
+			UpdateEquipmentImage(e);
+		}
+	}
+	
+	public void UpdateHandPocketEquipmentImage(int eei) {
+		HudManager.hudManager.UpdateEquipmentImage(eei);
+		int eeiPocket = eei + 1;
+		HudManager.hudManager.UpdateEquipmentImage(eeiPocket);
 	}
 
 	public void UpdateEquipmentImage(int eei) {
