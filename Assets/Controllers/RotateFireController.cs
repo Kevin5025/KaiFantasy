@@ -24,7 +24,10 @@ public class RotateFireController : CircleBodyController {
 		base.Fire();
 		int eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
 		if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0] != null) {
-			itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0].Activate(circleBody);
+			Dictionary<object, object> argumentDictionary = new Dictionary<object, object>();
+			argumentDictionary["MB"] = Input.GetMouseButton(0);
+			argumentDictionary["MBD"] = Input.GetMouseButtonDown(0);
+			itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0].Activate(circleBody, argumentDictionary);
 		}
 	}
 }

@@ -98,28 +98,41 @@ public class PlayerCircleBodyController : CircleBodyController {
      * Activation of abilities. 
      */
 	protected override void Fire() {
-		if (Input.GetMouseButton(0)) {
-			int eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
-			if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0] != null) {
-				itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0].Activate(circleBody);
-			}
+		int eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
+		if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0] != null) {
+			Dictionary<object, object> argumentDictionary = new Dictionary<object, object>();
+			argumentDictionary["MB"] = Input.GetMouseButton(0);
+			argumentDictionary["MBD"] = Input.GetMouseButtonDown(0);
+			itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0].Activate(circleBody, argumentDictionary);
 		}
-		if (Input.GetMouseButton(1)) {
-			int eeiHand1 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
-			if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1] != null) {
-				itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1].Activate(circleBody);
-			}
+		int eeiHand1 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
+		if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1] != null) {
+			Dictionary<object, object> argumentDictionary = new Dictionary<object, object>();
+			argumentDictionary["MB"] = Input.GetMouseButton(1);
+			argumentDictionary["MBD"] = Input.GetMouseButtonDown(1);
+			itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1].Activate(circleBody, argumentDictionary);
+		}
+	}
+
+	protected override void Reload() {
+		int eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
+		if (Input.GetKey(KeyCode.R) && itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0] is Gun) {
+			((Gun)itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0]).Reload(circleBody);
+		}
+		int eeiHand1 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
+		if (Input.GetKey(KeyCode.R) && itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1] is Gun) {
+			((Gun)itemHandlerBody.GetEquipmentEquipableArray()[eeiHand1]).Reload(circleBody);
 		}
 	}
 
 	protected override void HandleItem() {
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
-			int eei = itemHandlerBody.HandleItem(0);
-			HudManager.hudManager.UpdateHandPocketEquipmentImage(eei);
+			int eeiHand0 = itemHandlerBody.HandleItem(0);
+			HudManager.hudManager.UpdateHandPocketEquipmentImage(eeiHand0);
 		}
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
-			int eei = itemHandlerBody.HandleItem(1);
-			HudManager.hudManager.UpdateHandPocketEquipmentImage(eei);
+			int eeiHand1 = itemHandlerBody.HandleItem(1);
+			HudManager.hudManager.UpdateHandPocketEquipmentImage(eeiHand1);
 		}
 	}
 

@@ -161,4 +161,8 @@ public abstract class Body : Entity, IItemHandlerBody {
 	public Equipable[] GetEquipmentEquipableArray() {
 		return itemHandlerBody.GetEquipmentEquipableArray();
 	}
+
+	public int[] GetAmmunitionCountArray() {
+		return (itemHandlerBody).GetAmmunitionCountArray();
+	}
 }

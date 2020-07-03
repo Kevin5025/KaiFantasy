@@ -50,6 +50,7 @@ public abstract class CircleBodyController : SpiritController {
 		Move();
 		Dash();
 		Fire();
+		Reload();
 		HandleItem();
 		PocketHandItem();
 	}
@@ -63,6 +64,8 @@ public abstract class CircleBodyController : SpiritController {
 	protected virtual void Dash() { }
 
 	protected virtual void Fire() { }
+
+	protected virtual void Reload() { }
 
 	protected virtual void HandleItem() { }
 

@@ -15,6 +15,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 	protected int eeiHand0;
 	protected int eeiHand1;
 	public Equipable[] equipmentEquipableArray;
+	public int[] ammunitionCountArray;
 
 	protected virtual void Start() {
 		Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
@@ -49,15 +50,9 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 
 		equipmentEquipableArray = new Equipable[equipmentEquipableClassArray.Length];
 		GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences.m9GameObject);
-		Debug.Log(m9GameObject);
 		EquipItem(m9GameObject.GetComponent<Item>(), eeiHand0);
-		Debug.Log(equipmentEquipableArray[eeiHand0]);
 
-		InitializeStats();
-	}
-
-	private void InitializeStats() {
-
+		ammunitionCountArray = new int[Gun.numAmmunitionTypes];
 	}
 
 	/*
@@ -179,6 +174,10 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 
 	public Equipable[] GetEquipmentEquipableArray() {
 		return equipmentEquipableArray;
+	}
+
+	public int[] GetAmmunitionCountArray() {
+		return ammunitionCountArray;
 	}
 
 	//public virtual void AcquireItem() {

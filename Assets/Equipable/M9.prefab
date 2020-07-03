@@ -142,7 +142,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipableClass: 1
-  cooldownTimeout: 0.2
+  cooldownTimeout: 0.12
   projectileTimeout: 1
   initialVelocity: 20
-  baseDamage: 10
+  baseDamage: 12
+  firingMode: 0
+  magazineCapacity: 15
+  reloadTime: 1.6
+  bulletCount: 1

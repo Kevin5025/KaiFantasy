@@ -18,11 +18,17 @@ public abstract class ActivatableEquipable : Equipable {
 	/**
      * Checks whether the user is still functional and whether the cooldown period has ended. 
      */
-	public override void Activate(Body casterAgent, Dictionary<object, object> argumentDictionary = null) {
-		if (((int)casterAgent.healthState) >= (int) CircleBody.HealthState.Capable && nextReadyTime <= Time.time) {
+	public override bool Activate(Body casterAgent, Dictionary<object, object> argumentDictionary = null) {
+		bool isCapable = ((int)casterAgent.healthState) >= (int)CircleBody.HealthState.Capable;
+		bool isReady = nextReadyTime <= Time.time;
+
+		bool didActivate = false;
+		if (isCapable && isReady) {
 			Actuate(casterAgent, argumentDictionary);
 			nextReadyTime = Time.time + cooldownTimeout;
+			didActivate = true;
 		}
+		return didActivate;
 	}
 
 	/**

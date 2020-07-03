@@ -17,9 +17,11 @@ public abstract class Equipable : MonoBehaviour {
 
 	/*
 	 * This empty function just makes it easier to do polymorphic calls to Activate
+	 * returns whether or not Actuation occurred
 	 */
-	public virtual void Activate(Body casterAgent, Dictionary<object, object> argumentDictionary = null) {
+	public virtual bool Activate(Body casterAgent, Dictionary<object, object> argumentDictionary = null) {
 		// do nothing
+		return false;
 	}
 
 	public static bool IsHandPocketEquipableClass (EquipableClass equipableClass) {

@@ -11,5 +11,6 @@ public interface IItemHandlerBody {
 	int GetEquipableClassEei(Equipable.EquipableClass equipableClass, int numNextEei);
 	Equipable.EquipableClass[] GetEquipmentEquipableClassArray();
 	Equipable[] GetEquipmentEquipableArray();
+	int[] GetAmmunitionCountArray();
 
 }
