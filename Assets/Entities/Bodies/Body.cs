@@ -27,9 +27,12 @@ public abstract class Body : Entity, IItemHandlerBody {
 
 	public bool ascended;  // temporary coding variable
 	
-	protected float fadeBrickedUpperColorAlpha;
-	protected float fadeFibrillatingUpperColorAlpha;
-	protected float fadeCapableUpperColorAlpha;
+	protected float brickedColorAlpha;
+	protected float fibrillatingColorAlpha;
+	protected float capableColorAlpha;
+	protected Color brickedColor;
+	protected Color fibrillatingColor;
+	protected Color capableColor;
 
 	protected override void Start () {
 		base.Start();
@@ -37,9 +40,12 @@ public abstract class Body : Entity, IItemHandlerBody {
 
 		ascended = false;
 
-		fadeBrickedUpperColorAlpha = 0.25f;
-		fadeFibrillatingUpperColorAlpha = 0.5f;
-		fadeCapableUpperColorAlpha = 1f;
+		brickedColorAlpha = 0.25f;
+		fibrillatingColorAlpha = 0.5f;
+		capableColorAlpha = 1f;
+		brickedColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, brickedColorAlpha);
+		fibrillatingColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, fibrillatingColorAlpha);
+		capableColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, capableColorAlpha);
 	}
 
 	/**
@@ -71,14 +77,13 @@ public abstract class Body : Entity, IItemHandlerBody {
 			Disintegrate();
 		} else if (healthState == HealthState.Bricked) {
 			// float fadeBrickedColorAlpha = LinearRangeAnalogy(health, healthStateUpperThresholdList[(int)HealthState.Disintegrated], healthStateUpperThresholdList[(int)HealthState.Bricked], fadeDisintegratedUpperColorAlpha, fadeBrickedUpperColorAlpha);
-			spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, fadeBrickedUpperColorAlpha);
+			spriteRenderer.color = brickedColor;
 		} else if (healthState == HealthState.Fibrillating) {
-			spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, fadeFibrillatingUpperColorAlpha);
-		} else if (healthState == HealthState.Capable && this.healthState != HealthState.Overflowing) {
-			spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, fadeCapableUpperColorAlpha);
-		} else if (healthState == HealthState.Overflowing && this.healthState != HealthState.Capable) {
-			spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, fadeCapableUpperColorAlpha);
-		} else if (healthState == HealthState.Ascended) {
+			spriteRenderer.color = fibrillatingColor;
+		} else if ((int)healthState >= (int)HealthState.Capable) {
+			spriteRenderer.color = capableColor;
+		}
+		if (healthState == HealthState.Ascended) {
 			ascended = true;
 		}
 	}

@@ -82,8 +82,8 @@ public class Projectile : Entity {
 				float speedFactor = Mathf.Pow((GetComponent<Rigidbody2D>().velocity - collisionGameObjectEntity.GetComponent<Rigidbody2D>().velocity).magnitude / initialVelocity, 2);
 				float damage = baseDamage * speedFactor;
 				collisionGameObjectEntity.takeDamage(casterAgent, damage);
-				//Debug.Log(speedFactor);
-				Debug.Log(damage);
+				// Debug.Log(speedFactor);
+				// Debug.Log(damage);
 			}
 		}
 	}

@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Entity : Spirit {
 	
 	protected SpriteRenderer spriteRenderer;
-	protected float fadeDisintegratedUpperColorAlpha;
+	protected float disintegratedColorAlpha;
 	protected float fadeDuration;
 
 	public bool defunct;  // aka "dead", "destroyed", etc. 
@@ -13,7 +13,7 @@ public abstract class Entity : Spirit {
 	protected override void Start() {
 		base.Start();
 		spriteRenderer = GetComponent<SpriteRenderer>();
-		fadeDisintegratedUpperColorAlpha = 0.125f;
+		disintegratedColorAlpha = 0.125f;
 		fadeDuration = 4f;
 
 		gameObject.layer = GetTeamLayer();
@@ -45,8 +45,8 @@ public abstract class Entity : Spirit {
      * Overrides entity fade for a gradual disappearance, since these agents are more important than any entity. 
      */
 	protected virtual IEnumerator FadeDisintegrated() {
-		float fadeTimeConstant = fadeDisintegratedUpperColorAlpha / fadeDuration;
-		for (float f = fadeDisintegratedUpperColorAlpha; f > 0; f -= Time.deltaTime * fadeTimeConstant) {
+		float fadeTimeConstant = disintegratedColorAlpha / fadeDuration;
+		for (float f = disintegratedColorAlpha; f > 0; f -= Time.deltaTime * fadeTimeConstant) {
 			spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, f);
 			//yield return new WaitForSeconds(1f);//3f? //is this consistent? 
 			yield return null;  // https://answers.unity.com/questions/755196/yield-return-null-vs-yield-return-waitforendoffram.html

@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HudManager : MonoBehaviour {
+public class HudCanvasManager : MonoBehaviour {
 
-	public static HudManager hudManager;
+	public static HudCanvasManager hudCanvasManager;
+
 	public Body playerAgent;
 
-	public GameObject equipmentPanel;//set in Unity
+	public GameObject equipmentPanel;  //set in Unity
 	public GameObject[] equipmentSlotArray;//filled in UpdateEquipmentMenu
 	public GameObject[] equipmentImageArray;
-	public GameObject equipmentSlotPrefab;//set in Unity
+	public GameObject equipmentSlotPrefab;  //set in Unity
 
 	public Color pocketColor;
 
 	void Awake() {
-		if (hudManager == null) {//like a singleton
+		if (hudCanvasManager == null) {//like a singleton
 			//DontDestroyOnLoad (gameObject);
-			hudManager = this;
+			hudCanvasManager = this;
 		} else {
 			Destroy(gameObject);
 		}
@@ -27,6 +28,7 @@ public class HudManager : MonoBehaviour {
 	// Start is called before the first frame update
 	void Start() {
 		playerAgent = PlayerCircleBodyController.playerCircleBodyController.GetBody();
+
 		int numEquipmentSlots = playerAgent.GetEquipmentEquipableClassArray().Length;
 		equipmentSlotArray = new GameObject[numEquipmentSlots];
 		equipmentImageArray = new GameObject[numEquipmentSlots];
@@ -43,15 +45,17 @@ public class HudManager : MonoBehaviour {
 			equipmentImageArray[eei].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.GetEquipmentEquipableClassArray()[eei]);
 			equipmentImageArray[eei].GetComponent<EquipmentImage>().eei = eei;
 		}
-
 		pocketColor = new Color(0.75f, 0.75f, 0.75f);
-
-		HudManager.hudManager.UpdateAllEquipmentImage();  // TODO: test if this line is needed
+		HudCanvasManager.hudCanvasManager.UpdateAllEquipmentImage();  // TODO: test if this line is needed
 	}
 
 	// Update is called once per frame
 	void Update() {
+		
+	}
 
+	void FixedUpdate() {
+		
 	}
 
 	public void UpdateAllEquipmentImage() {
@@ -61,9 +65,9 @@ public class HudManager : MonoBehaviour {
 	}
 	
 	public void UpdateHandPocketEquipmentImage(int eei) {
-		HudManager.hudManager.UpdateEquipmentImage(eei);
+		HudCanvasManager.hudCanvasManager.UpdateEquipmentImage(eei);
 		int eeiPocket = eei + 1;
-		HudManager.hudManager.UpdateEquipmentImage(eeiPocket);
+		HudCanvasManager.hudCanvasManager.UpdateEquipmentImage(eeiPocket);
 	}
 
 	public void UpdateEquipmentImage(int eei) {
