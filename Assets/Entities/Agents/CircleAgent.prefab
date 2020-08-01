@@ -202,8 +202,12 @@ GameObject:
   - component: {fileID: 1163348203879531530}
   - component: {fileID: 6497138091723446912}
   - component: {fileID: 6228286187741402108}
+  - component: {fileID: 3397197449394214710}
+  - component: {fileID: 7315162891492590613}
+  - component: {fileID: 2410889011607648770}
   - component: {fileID: 4501218954530227132}
   - component: {fileID: 8236943464953990146}
+  - component: {fileID: 7447942241357683245}
   m_Layer: 0
   m_Name: CircleAgent
   m_TagString: Untagged
@@ -318,7 +322,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.495
---- !u!114 &4501218954530227132
+--- !u!114 &3397197449394214710
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -327,15 +331,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 7552869659386274455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 321d1eb29848a8e44b2aceed501ee11c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a38d140721b8e64cb94f754b2199729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteHealthState: 3
+  headPosition: {x: 0, y: 0}
+  viscosity: 0
+--- !u!114 &7315162891492590613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7552869659386274455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de2c95ef48e7894d8c6fa9cb1e93e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   affinity: 0
   color: {r: 0, g: 0, b: 0, a: 0}
-  defunct: 0
-  itemHandlerBody: {fileID: 8236943464953990146}
-  headPosition: {x: 0, y: 0}
-  viscosity: 0
+--- !u!114 &2410889011607648770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7552869659386274455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f0a73c728329e4180aab848c6b576f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   healthState: 3
   healthStateUpperThresholdList:
   - 0
@@ -356,13 +383,25 @@ MonoBehaviour:
   healthRateGeneralBonus: 0
   health: 300
   ascended: 0
+  defunct: 0
+--- !u!114 &4501218954530227132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7552869659386274455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321d1eb29848a8e44b2aceed501ee11c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   radius: 0
   area: 0
   torque: 0
   moveForce: 0
   crawlForce: 0
   dashImpulse: 0
-  dash: {fileID: 0}
 --- !u!114 &8236943464953990146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,4 +415,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentEquipableClassArray: 
-  equipmentEquipableArray: []
+  bankFinancialCountArray: 
+--- !u!114 &7447942241357683245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7552869659386274455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca577f02a8423843b5f539119086deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

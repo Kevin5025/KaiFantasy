@@ -1,76 +1,87 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /**
  * This is anything that can use items. 
  */
-public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
-	
+public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
+
+	protected IActivator activator;  // set in inspector
+
 	protected float itemHandleRadius;
 
 	// TODO: repositorySkillArray;  // repository / library / studio
 	// public List<Item> inventoryItemArray;
-	public Equipable.EquipableClass[] equipmentEquipableClassArray;  // TODO: different agent classes with different equipable class arrays
+	public EquipableClass[] equipmentEquipableClassArray;  // TODO: different agent classes with different equipable class arrays
 	protected int eeiHand0;
 	protected int eeiHand1;
-	public Equipable[] equipmentEquipableArray;
-	public int[] ammunitionCountArray;
+	public IEquipable[] equipmentEquipableItemArray;
+	public int[] bankFinancialCountArray;
 
 	protected virtual void Start() {
+		activator = GetComponent<Activator>();
+
 		Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
 		itemHandleRadius = Mathf.Sqrt(2 * rb2D.inertia / rb2D.mass);
 
 		// inventoryItemArray = new List<Item>();
 		// equipmentEquipableClassArray = new Equipable.EquipableClass[20];
-		equipmentEquipableClassArray = new Equipable.EquipableClass[] {
-			Equipable.EquipableClass.AccessoryItem,
-			Equipable.EquipableClass.AccessoryItem,
-			Equipable.EquipableClass.HandItem,
-			Equipable.EquipableClass.PocketItem,
-			Equipable.EquipableClass.HandItem,
-			Equipable.EquipableClass.PocketItem,
-			Equipable.EquipableClass.HeadItem,
-			Equipable.EquipableClass.BodyItem,
-			Equipable.EquipableClass.Ability,
-			Equipable.EquipableClass.Ability,
-			Equipable.EquipableClass.Ability,
-			Equipable.EquipableClass.Ability,
-			Equipable.EquipableClass.LargeVassal,
-			Equipable.EquipableClass.SmallVassal,
-			Equipable.EquipableClass.SmallVassal,
-			Equipable.EquipableClass.SmallVassal,
-			Equipable.EquipableClass.SmallVassal,
-			Equipable.EquipableClass.SmallVassal,
-			Equipable.EquipableClass.Idea,
-			Equipable.EquipableClass.Idea,
+		equipmentEquipableClassArray = new EquipableClass[] {
+			EquipableClass.HandItem,
+			EquipableClass.PocketItem,
+			EquipableClass.HandItem,
+			EquipableClass.PocketItem,
+			EquipableClass.HeadItem,
+			EquipableClass.BodyItem,
+			EquipableClass.Ability,
+			EquipableClass.Ability,
+			EquipableClass.Ability,
+			EquipableClass.Ability,
+			EquipableClass.LargeVassal,
+			EquipableClass.SmallVassal,
+			EquipableClass.SmallVassal,
+			EquipableClass.SmallVassal,
+			EquipableClass.SmallVassal,
+			EquipableClass.SmallVassal,
+			EquipableClass.AccessoryItem,
+			EquipableClass.AccessoryItem,
+			EquipableClass.Idea,
+			EquipableClass.Idea,
 		};
-		eeiHand0 = GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
-		eeiHand1 = GetEquipableClassEei(Equipable.EquipableClass.HandItem, 1);
+		eeiHand0 = GetEquipableClassEei(EquipableClass.HandItem, 0);
+		eeiHand1 = GetEquipableClassEei(EquipableClass.HandItem, 1);
 
-		equipmentEquipableArray = new Equipable[equipmentEquipableClassArray.Length];
-		GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences.m9GameObject);
-		EquipItem(m9GameObject.GetComponent<Item>(), eeiHand0);
-
-		ammunitionCountArray = new int[Gun.numAmmunitionTypes];
+		equipmentEquipableItemArray = new IEquipable[equipmentEquipableClassArray.Length];
+		//GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences.m9GameObject);
+		//EquipableItem m9 = m9GameObject.GetComponent<EquipableItem>();
+		//m9.eei = GetEquipableClassEei(m9.GetEquipableClass(), 0);
+		//EquipItem(m9);
+		
+		int numFinanceTypes = FinancialItem.numAmmunitionTypes + FinancialItem.numManaTypes + FinancialItem.numResourceTypes;
+		bankFinancialCountArray = new int[numFinanceTypes];
+		bankFinancialCountArray[0] = 15;
 	}
 
 	/*
 	 * Hand
 	 */
-	public int HandleItem(int numNextEei) {
+	public Item HandleItem(int numNextIi) {
 		Item minDistanceItem = GetMinDistanceItem();
-		int eeiHand;
 		if (minDistanceItem != null) {
-			eeiHand = GetEquipableClassEei(minDistanceItem.equipableClass, numNextEei);
-			EquipItem(minDistanceItem, eeiHand);
-		} else {
-			eeiHand = -1;
+			EquipableItem minDistanceEquipableItem = minDistanceItem.GetComponent<EquipableItem>();
+			FinancialItem minDistanceFinancialItem = minDistanceItem.GetComponent<FinancialItem>();
+
+			if (minDistanceEquipableItem != null) {
+				minDistanceEquipableItem.eei = GetEquipableClassEei(minDistanceEquipableItem.GetEquipableClass(), numNextIi);
+				EquipItem(minDistanceEquipableItem);
+			} else if (minDistanceFinancialItem != null) {
+				CreditItem(minDistanceFinancialItem);
+			}
 		}
-		return eeiHand;
+		return minDistanceItem;
 	}
 
-	private Item GetMinDistanceItem() {
+	public Item GetMinDistanceItem() {
 		Item minDistanceItem = null;
 		Collider2D minDistanceItemCollider = GetMinDistanceItemCollider();
 		if (minDistanceItemCollider != null) {
@@ -94,24 +105,23 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 		}
 		return minDistanceItemCollider;
 	}
-
+	
 	/*
 	 * If pocket exists and empty, put handItem into pocket
 	 * If pocket full or nonexisting, drop handItem onto ground
 	 * Put groundItem into hand
 	 */
-	public void EquipItem(Item equipItem, int eeiHand) {
-		if (eeiHand > -1) {
-			int eeiPocketHypothetical = eeiHand + 1;  // hypothetical because pocket may or may not exist
-			if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] == null) {
-				PocketItem(eeiHand);
-			} else {
-				UnequipItem(eeiHand);
-			}
-
-			equipItem.BecomeEquiped(this);
-			equipmentEquipableArray[eeiHand] = equipItem;
+	public void EquipItem(EquipableItem equipableItem) {
+		int eei = equipableItem.eei;
+		int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
+		if (equipmentEquipableClassArray[eeiPocketHypothetical] == EquipableClass.PocketItem && equipmentEquipableItemArray[eeiPocketHypothetical] == null) {
+			PocketItem(eei);
+		} else {
+			UnequipItem(eei);
 		}
+
+		equipmentEquipableItemArray[eei] = equipableItem;
+		equipableItem.BecomeObtained(this);
 	}
 
 	/*
@@ -124,11 +134,11 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 	 * // Pocket of pocket will not exist
 	 */
 	public void UnequipItem(int eei) {
-		bool eeiInArrayBounds = eei > -1 && eei < equipmentEquipableArray.Length;
-		if (eeiInArrayBounds && equipmentEquipableArray[eei] != null) {
-			Item unequipItem = (Item)equipmentEquipableArray[eei];
-			equipmentEquipableArray[eei] = null;
-			unequipItem.BecomeUnequiped(this);
+		bool eeiInArrayBounds = eei > -1 && eei < equipmentEquipableItemArray.Length;
+		if (eeiInArrayBounds && equipmentEquipableItemArray[eei] != null) {
+			Item unequipItem = (Item)equipmentEquipableItemArray[eei];
+			equipmentEquipableItemArray[eei] = null;
+			unequipItem.BecomeUnobtained(this);
 
 			//int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
 			//if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] != null) {
@@ -144,16 +154,16 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 	 */
 	public void PocketItem(int eeiHand) {
 		int eeiPocket = eeiHand + 1;
-		Equipable equipable = equipmentEquipableArray[eeiPocket];
-		equipmentEquipableArray[eeiPocket] = equipmentEquipableArray[eeiHand];
-		equipmentEquipableArray[eeiHand] = equipable;
+		IEquipable equipable = equipmentEquipableItemArray[eeiPocket];
+		equipmentEquipableItemArray[eeiPocket] = equipmentEquipableItemArray[eeiHand];
+		equipmentEquipableItemArray[eeiHand] = equipable;
 	}
 
 	/*
 	 * Gets the numNextEei-th index that matches the equipableClass
 	 * If numNextEei too big, then gets the last index that matches the equipableClass
 	 */
-	public int GetEquipableClassEei(Equipable.EquipableClass equipableClass, int numNextEei) {
+	public int GetEquipableClassEei(EquipableClass equipableClass, int numNextEei) {
 		int equipableClassEei = -1;
 		int numEeiCurrent = 0;
 		for (int eei = 0; eei < equipmentEquipableClassArray.Length; eei++) {
@@ -168,16 +178,36 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 		return equipableClassEei;
 	}
 
-	public Equipable.EquipableClass[] GetEquipmentEquipableClassArray() {
+	public void CreditItem(FinancialItem financialItem) {
+		int fci = (int)financialItem.financialClass;
+		bankFinancialCountArray[fci] += financialItem.quantity;
+		financialItem.BecomeObtained(this);
+	}
+
+	public void DebitItem(int fci) {
+		// TODO
+	}
+
+
+
+	public EquipableClass[] GetEquipmentEquipableClassArray() {
 		return equipmentEquipableClassArray;
 	}
 
-	public Equipable[] GetEquipmentEquipableArray() {
-		return equipmentEquipableArray;
+	public IEquipable[] GetEquipmentEquipableArray() {
+		return equipmentEquipableItemArray;
 	}
 
-	public int[] GetAmmunitionCountArray() {
-		return ammunitionCountArray;
+	public int[] GetFinanceCountArray() {
+		return bankFinancialCountArray;
+	}
+
+	public HealthState GetHealthState() {
+		return activator.GetHealthState();
+	}
+
+	public void SetHealthState(HealthState healthState) {
+		activator.SetHealthState(healthState);
 	}
 
 	//public virtual void AcquireItem() {

@@ -4,19 +4,19 @@ using UnityEngine;
 
 public abstract class SpiritController : MonoBehaviour {
 
-	protected Spirit spirit;  // set beforehand
+	protected ISpirit spirit;  // set in inspector?
 
 	// TODO: nest into map that takes "ally" and "adversary" as keys
-	protected IList<Spirit> presentAllyList;
-	protected IList<Spirit> presentAdversaryList;
-	public Spirit primeAlly;  // TODO: antagonist / protagonist? 
-	public Spirit primeAdversary;
+	protected IList<ISpirit> presentAllyList;
+	protected IList<ISpirit> presentAdversaryList;
+	public ISpirit primeAlly;  // TODO: antagonist / protagonist? 
+	public ISpirit primeAdversary;
 
 	protected virtual void Start() {
 		spirit = GetComponent<Spirit>();
 
-		presentAllyList = new List<Spirit>();
-		presentAdversaryList = new List<Spirit>();
+		presentAllyList = new List<ISpirit>();
+		presentAdversaryList = new List<ISpirit>();
 		primeAlly = null;
 		primeAdversary = null;
 
@@ -26,9 +26,9 @@ public abstract class SpiritController : MonoBehaviour {
 	 * Alert
 	 */
 	protected virtual void OnTriggerEnter2D(Collider2D collider) {
-		Spirit colliderAgent = collider.GetComponent<Spirit>();
+		ISpirit colliderAgent = collider.GetComponent<Spirit>();
 		if (colliderAgent != null) {
-			if (colliderAgent.affinity == spirit.affinity) {
+			if (colliderAgent.GetAffinity() == spirit.GetAffinity()) {
 				presentAllyList.Add(colliderAgent);
 				// Debug.Log(presentAllyList.Count);
 				if (primeAlly == null) {
@@ -48,9 +48,9 @@ public abstract class SpiritController : MonoBehaviour {
 	 * Alert
 	 */
 	protected virtual void OnTriggerExit2D(Collider2D collider) {
-		Spirit colliderAgent = collider.GetComponent<Spirit>();
+		ISpirit colliderAgent = collider.GetComponent<Spirit>();
 		if (colliderAgent != null) {
-			if (colliderAgent.affinity == spirit.affinity) {
+			if (colliderAgent.GetAffinity() == spirit.GetAffinity()) {
 				presentAllyList.Remove(colliderAgent);
 				// Debug.Log(presentAllyList.Count);
 				if (colliderAgent == primeAlly) {

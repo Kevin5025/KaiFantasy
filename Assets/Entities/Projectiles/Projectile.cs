@@ -11,20 +11,17 @@ using UnityEngine;
  * 
  * TODO: Energy/elemental martial arts bending, in contrast to bullets
  */
-public class Projectile : Entity {
+public class Projectile : SpriteBody {
 
-	public Body casterAgent;  //set beforehand by casterAgent
+	public CompleteBody completeBodyActivator;  //set beforehand by casterAgent
 	public float timeout;
 	public float initialVelocity;
 	public float baseDamage;
+	public bool defunct;
 	
 	protected override void Start() {
-		// base.Start();
-		//GetComponent<Rigidbody2D>().velocity = transform.TransformDirection(new Vector2(0, initialVelocity));//too slow to go and causes inaccurate shooting; moved to gun as opposed to bullet
-	}
-
-	public virtual void LateStart() {
 		base.Start();
+		defunct = false;
 	}
 
 	/**
@@ -35,6 +32,7 @@ public class Projectile : Entity {
 		if (!defunct) {
 			timeout -= Time.fixedDeltaTime;
 			if (timeout <= 0) {
+				defunct = true;
 				Disintegrate();
 			}
 			//Debug.Log(GetComponent<Rigidbody2D>().velocity.magnitude);
@@ -42,7 +40,7 @@ public class Projectile : Entity {
 	}
 
 	protected override int GetTeamLayer() {
-		return LayersManager.layersManager.GetTeamProjectileLayer(affinity);
+		return LayersManager.layersManager.GetTeamProjectileLayer(GetAffinity());
 	}
 
 	/**
@@ -65,23 +63,23 @@ public class Projectile : Entity {
 
 	protected virtual void OnTriggerEnter2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			Body collisionGameObjectEntity = collider.GetComponentInParent<Body>();
+			CompleteBody collisionGameObjectCompleteBody = collider.GetComponentInParent<CompleteBody>();
 			//Debug.Log("trigger enter " + collisionGameObjectEntity + " " + collider.name + " velocity ");
-			if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
-				GetComponent<Rigidbody2D>().drag += collisionGameObjectEntity.viscosity;
-				GetComponent<Rigidbody2D>().angularDrag += collisionGameObjectEntity.viscosity;
+			if (collisionGameObjectCompleteBody != completeBodyActivator && collider.name == "Body") {
+				GetComponent<Rigidbody2D>().drag += collisionGameObjectCompleteBody.viscosity;
+				GetComponent<Rigidbody2D>().angularDrag += collisionGameObjectCompleteBody.viscosity;
 			}
 		}
 	}
 
 	protected virtual void OnTriggerStay2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			Body collisionGameObjectEntity = collider.GetComponentInParent<Body>();
+			CompleteBody collisionGameObjectCompleteBody = collider.GetComponentInParent<CompleteBody>();
 			// Debug.Log("trigger stay " + collisionGameObjectEntity + " " + collider.name + " velocity ");
-			if (collisionGameObjectEntity.affinity != casterAgent.affinity) {
-				float speedFactor = Mathf.Pow((GetComponent<Rigidbody2D>().velocity - collisionGameObjectEntity.GetComponent<Rigidbody2D>().velocity).magnitude / initialVelocity, 2);
+			if (collisionGameObjectCompleteBody.GetAffinity() != completeBodyActivator.GetAffinity()) {
+				float speedFactor = Mathf.Pow((GetComponent<Rigidbody2D>().velocity - collisionGameObjectCompleteBody.GetComponent<Rigidbody2D>().velocity).magnitude / initialVelocity, 2);
 				float damage = baseDamage * speedFactor;
-				collisionGameObjectEntity.takeDamage(casterAgent, damage);
+				collisionGameObjectCompleteBody.TakeDamage(completeBodyActivator, damage);
 				// Debug.Log(speedFactor);
 				// Debug.Log(damage);
 			}
@@ -90,11 +88,11 @@ public class Projectile : Entity {
 
 	protected virtual void OnTriggerExit2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			Body collisionGameObjectEntity = collider.GetComponentInParent<Body>();
+			CompleteBody collisionGameObjectCompleteBody = collider.GetComponentInParent<CompleteBody>();
 			//Debug.Log("trigger exit " + collisionGameObjectEntity + " " + collider.name);
-			if (collisionGameObjectEntity != casterAgent && collider.name == "Body") {
-				GetComponent<Rigidbody2D>().drag -= collisionGameObjectEntity.viscosity;
-				GetComponent<Rigidbody2D>().angularDrag -= collisionGameObjectEntity.viscosity;
+			if (collisionGameObjectCompleteBody != completeBodyActivator && collider.name == "Body") {
+				GetComponent<Rigidbody2D>().drag -= collisionGameObjectCompleteBody.viscosity;
+				GetComponent<Rigidbody2D>().angularDrag -= collisionGameObjectCompleteBody.viscosity;
 			}
 		}
 	}

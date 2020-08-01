@@ -9,9 +9,9 @@ public class WorldCanvasManager : MonoBehaviour {
 	public GameObject healthRingFillPrefab;  // set in Unity
 	public GameObject ringThinTickPrefab;  // set in Unity
 
-	public Body playerAgent;
-	public Body debugAgent;  // set in inspector
-	public IList<Body> bodyAgentList;
+	public CompleteBody playerAgent;
+	public CompleteBody debugAgent;  // set in inspector
+	public IList<CompleteBody> bodyAgentList;
 	public IList<GameObject> healthRingFillList;
 
 	void Awake() {
@@ -23,8 +23,8 @@ public class WorldCanvasManager : MonoBehaviour {
 	}
 
 	void Start() {
-		playerAgent = PlayerCircleBodyController.playerCircleBodyController.GetBody();
-		bodyAgentList = new List<Body>() { playerAgent, debugAgent };
+		playerAgent = PlayerCompleteBodyController.playerCompleteBodyController.GetBody();
+		bodyAgentList = new List<CompleteBody>() { playerAgent, debugAgent };
 		healthRingFillList = new List<GameObject>();
 		for (int b = 0; b < bodyAgentList.Count; b++) {
 			GameObject healthPieFill = Instantiate(healthRingFillPrefab);
@@ -38,7 +38,7 @@ public class WorldCanvasManager : MonoBehaviour {
 		
 	}
 
-	private void FixedUpdate() {
+	void FixedUpdate() {
 		for (int b = 0; b < bodyAgentList.Count; b++) {
 			healthRingFillList[b].transform.position = bodyAgentList[b].transform.position;  // having this is fixedUpdate somehow gives better results
 		}

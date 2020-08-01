@@ -3,9 +3,8 @@
 /**
  * This is anything that has a team affiliation. 
  */
-public abstract class Spirit : MonoBehaviour {
+public class Spirit : MonoBehaviour, ISpirit {
 
-	public enum Affinity { RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN, BROWN, NONE };//TODO: GREY for zombies?
 	public Affinity affinity;
 	public Color color;
 
@@ -46,5 +45,21 @@ public abstract class Spirit : MonoBehaviour {
 		} else {
 			return new Color(1, 1, 1);
 		}
+	}
+
+	public Affinity GetAffinity() {
+		return affinity;
+	}
+
+	public void SetAffinity(Affinity affinity) {
+		this.affinity = affinity;
+	}
+
+	public Color GetColor() {
+		return color;
+	}
+
+	public Transform GetTransform() {
+		return transform;
 	}
 }

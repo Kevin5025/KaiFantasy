@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateFireController : CircleBodyController {
+public class RotateFireController : CompleteBodyController {
 
 	public float rotateFactor;
 
@@ -17,17 +17,12 @@ public class RotateFireController : CircleBodyController {
 	}
 
 	protected virtual void Spin() {
-		circleBody.RotateOffsetRotation(rotateFactor * 60f * Time.fixedDeltaTime);
+		completeBody.RotateOffsetRotation(rotateFactor * 60f * Time.fixedDeltaTime);
 	}
 
 	protected override void Fire() {
 		base.Fire();
-		int eeiHand0 = itemHandlerBody.GetEquipableClassEei(Equipable.EquipableClass.HandItem, 0);
-		if (itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0] != null) {
-			Dictionary<object, object> argumentDictionary = new Dictionary<object, object>();
-			argumentDictionary["MB"] = Input.GetMouseButton(0);
-			argumentDictionary["MBD"] = Input.GetMouseButtonDown(0);
-			itemHandlerBody.GetEquipmentEquipableArray()[eeiHand0].Activate(circleBody, argumentDictionary);
-		}
+		int eeiHand0 = completeBody.GetEquipableClassEei(EquipableClass.HandItem, 0);
+		SafeFire(eeiHand0, true, true);
 	}
 }

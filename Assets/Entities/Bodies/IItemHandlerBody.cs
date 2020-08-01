@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿
 public interface IItemHandlerBody {
 	
-	int HandleItem(int numNextEei);
-	void EquipItem(Item equipItem, int eeiHand);
+	Item HandleItem(int numNextEei);
+	void EquipItem(EquipableItem equipableItem);
 	void UnequipItem(int eei);
 	void PocketItem(int eeiHand);
-	int GetEquipableClassEei(Equipable.EquipableClass equipableClass, int numNextEei);
-	Equipable.EquipableClass[] GetEquipmentEquipableClassArray();
-	Equipable[] GetEquipmentEquipableArray();
-	int[] GetAmmunitionCountArray();
+	int GetEquipableClassEei(EquipableClass equipableClass, int numNextEei);
+	void CreditItem(FinancialItem financialItem);
+	void DebitItem(int fci);
+	EquipableClass[] GetEquipmentEquipableClassArray();
+	IEquipable[] GetEquipmentEquipableArray();
+	int[] GetFinanceCountArray();
 
 }

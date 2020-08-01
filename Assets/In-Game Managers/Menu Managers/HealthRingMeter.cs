@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HealthRingMeter : Meter {
 
-	public Body body;
+	public CompleteBody body;
 	public IList<GameObject> healthRingTickList;
 
 	protected override void Start() {
@@ -16,15 +16,15 @@ public class HealthRingMeter : Meter {
 	}
 
 	protected override void Update() {
-		capacity = body.healthStateUpperThresholdList[(int)Body.HealthState.Capable];
+		capacity = body.GetHealthStateUpperThresholdList()[(int)HealthState.Capable];
 		float cumulativeCapacity = 0;
 		for (int m=0; m<maskArray.Length; m++) {
 			maskArray[m].transform.localEulerAngles = new Vector3(0, 0, 360f * cumulativeCapacity / capacity);
 
-			capacityArray[m] = body.healthStateUpperThresholdList[m + 1] - body.healthStateUpperThresholdList[m];
+			capacityArray[m] = body.GetHealthStateUpperThresholdList()[m + 1] - body.GetHealthStateUpperThresholdList()[m];
 			cumulativeCapacity += capacityArray[m];
 
-			sizeArray[m] = Mathf.Min(body.health, body.healthStateUpperThresholdList[m + 1]) - body.healthStateUpperThresholdList[m];
+			sizeArray[m] = Mathf.Min(body.GetHealth(), body.GetHealthStateUpperThresholdList()[m + 1]) - body.GetHealthStateUpperThresholdList()[m];
 			maskArray[m].fillAmount = sizeArray[m] / capacity;  // conveniently, cannot be negative
 		}
 		int t = 0;

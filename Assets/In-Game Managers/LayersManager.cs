@@ -130,24 +130,24 @@ public class LayersManager : MonoBehaviour {
 		}
 	}
 
-	public int GetTeamEntityLayer(Spirit.Affinity affinity) {
-		if (affinity == Spirit.Affinity.BLUE) {
+	public int GetTeamEntityLayer(Affinity affinity) {
+		if (affinity == Affinity.BLUE) {
 			return blueEntityLayer;
-		} else if (affinity == Spirit.Affinity.RED) {
+		} else if (affinity == Affinity.RED) {
 			return redEntityLayer;
-		} else if (affinity == Spirit.Affinity.BROWN) {
+		} else if (affinity == Affinity.BROWN) {
 			return brownEntityLayer;
 		} else {
 			return -1;
 		}
 	}
 
-	public int GetTeamProjectileLayer(Spirit.Affinity affinity) {
-		if (affinity == Spirit.Affinity.BLUE) {
+	public int GetTeamProjectileLayer(Affinity affinity) {
+		if (affinity == Affinity.BLUE) {
 			return blueProjectileLayer;
-		} else if (affinity == Spirit.Affinity.RED) {
+		} else if (affinity == Affinity.RED) {
 			return redProjectileLayer;
-		} else if (affinity == Spirit.Affinity.BROWN) {
+		} else if (affinity == Affinity.BROWN) {
 			return brownProjectileLayer;
 		} else {
 			return -1;
