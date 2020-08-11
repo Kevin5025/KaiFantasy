@@ -59,8 +59,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 		m9.eei = GetEquipableClassEei(m9.GetEquipableClass(), 0);
 		EquipItem(m9);
 
-		int numFinanceTypes = FinancialItem.numAmmunitionTypes + FinancialItem.numManaTypes + FinancialItem.numResourceTypes;
-		bankFinancialCountArray = new int[numFinanceTypes];
+		bankFinancialCountArray = new int[FinancialItem.numFinanceTypes];
 		bankFinancialCountArray[0] = 15;
 	}
 

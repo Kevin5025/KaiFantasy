@@ -19,7 +19,7 @@ MonoImporter:
       type: 3}
   - m9GameObject: {fileID: 1364650183859750882, guid: f9691fa835b639d41a5458c280c700db,
       type: 3}
-  executionOrder: 0
+  executionOrder: -80
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

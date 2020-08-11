@@ -19,6 +19,7 @@ public class HudCanvasManager : MonoBehaviour {
 	public GameObject[] financeImageArray;
 	public GameObject[] financeTextArray;
 	public GameObject financeSlotPrefab;  // set in inspector
+	protected Sprite[] financeSpriteArray;
 
 	public Color pocketColor;
 
@@ -49,11 +50,30 @@ public class HudCanvasManager : MonoBehaviour {
 	}
 
 	protected void InitializeFinancePanel() {
-		int numFinanceSlots = playerAgent.GetFinanceCountArray().Length;
-		financeSlotArray = new GameObject[numFinanceSlots];
-		financeImageArray = new GameObject[numFinanceSlots];
-		financeTextArray = new GameObject[numFinanceSlots];
-		for (int fi = 0; fi < numFinanceSlots; fi++) {
+		financeSpriteArray = new Sprite[] {
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+
+			PrefabReferences.prefabReferences.squareMediumYL,  // square = discrete
+			PrefabReferences.prefabReferences.squareMediumYL,
+			PrefabReferences.prefabReferences.circleMediumYL,  // circle = continuous
+		};
+
+		financeSlotArray = new GameObject[FinancialItem.numFinanceTypes];
+		financeImageArray = new GameObject[FinancialItem.numFinanceTypes];
+		financeTextArray = new GameObject[FinancialItem.numFinanceTypes];
+		for (int fi = 0; fi < FinancialItem.numFinanceTypes; fi++) {
 			int fMod3 = fi % 3;
 			int fDiv3 = fi / 3;
 			int fDiv6 = fi / 6;
@@ -64,7 +84,8 @@ public class HudCanvasManager : MonoBehaviour {
 			financeSlotArray[fi].GetComponent<RectTransform>().anchoredPosition = new Vector2(-32f + 32f * fMod3, 47 - 18f * fDiv3 - 2f * fDiv6);
 
 			financeImageArray[fi] = financeSlotArray[fi].transform.GetChild(0).gameObject;
-			// financeImageArray[fi].GetComponent<Image>().color;
+			financeImageArray[fi].GetComponent<Image>().sprite = financeSpriteArray[fi];
+			financeImageArray[fi].GetComponent<Image>().color = FinancialItem.financialItemColorDictionary[(FinancialClass)fi];
 			financeImageArray[fi].GetComponent<FinanceImage>().fi = fi;
 
 			financeTextArray[fi] = financeSlotArray[fi].transform.GetChild(1).gameObject;
@@ -99,7 +120,7 @@ public class HudCanvasManager : MonoBehaviour {
 			equipmentSlotArray[eei].GetComponent<RectTransform>().anchoredPosition = new Vector2(-24f + 48f * eMod2, 216f - 48f * eDiv2);
 
 			equipmentImageArray[eei] = equipmentSlotArray[eei].transform.GetChild(0).gameObject;
-			equipmentImageArray[eei].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.GetEquipmentEquipableClassArray()[eei]);
+			equipmentImageArray[eei].GetComponent<Image>().color = Equipable.equipableColorDictionary[playerAgent.GetEquipmentEquipableClassArray()[eei]];
 			equipmentImageArray[eei].GetComponent<EquipmentImage>().eei = eei;
 		}
 		pocketColor = new Color(0.75f, 0.75f, 0.75f);
@@ -129,34 +150,8 @@ public class HudCanvasManager : MonoBehaviour {
 			}
 		} else if (eeiInArrayBounds && playerAgent.GetEquipmentEquipableArray()[eei] == null) {
 			equipmentImageArray[eei].GetComponent<Image>().sprite = null;
-			equipmentImageArray[eei].GetComponent<Image>().color = GetEquipmentSlotArrayColor(playerAgent.GetEquipmentEquipableClassArray()[eei]);
+			equipmentImageArray[eei].GetComponent<Image>().color = Equipable.equipableColorDictionary[playerAgent.GetEquipmentEquipableClassArray()[eei]];
 		}
 	}
 
-	/**
-     * returns the correct background color for the given equipable class
-     */
-	public Color GetEquipmentSlotArrayColor(EquipableClass equipableClass) {
-		if (equipableClass == EquipableClass.AccessoryItem) {
-			return new Color(1f, 0f, 1f);
-		} else if (equipableClass == EquipableClass.HandItem) {
-			return new Color(1f, 0f, 0f);
-		} else if (equipableClass == EquipableClass.PocketItem) {
-			return new Color(0.75f, 0f, 0f);
-		} else if (equipableClass == EquipableClass.HeadItem) {
-			return new Color(1f, 0.5f, 0f);
-		} else if (equipableClass == EquipableClass.BodyItem) {
-			return new Color(1f, 1f, 0f);
-		} else if (equipableClass == EquipableClass.Ability) {
-			return new Color(0f, 1f, 0f);
-		} else if (equipableClass == EquipableClass.LargeVassal) {
-			return new Color(0f, 1f, 1f);
-		} else if (equipableClass == EquipableClass.SmallVassal) {
-			return new Color(0f, 0f, 1f);
-		} else if (equipableClass == EquipableClass.Idea) {
-			return new Color(0.5f, 0.5f, 0.5f);
-		} else {
-			return new Color(1, 1, 1);
-		}
-	}
 }

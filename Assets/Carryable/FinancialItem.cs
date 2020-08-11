@@ -5,7 +5,7 @@ using UnityEngine;
 public enum FinancialClass {
 	RedAmmo, YellowAmmo, GreenAmmo, CyanAmmo, BlueAmmo, MagentaAmmo,
 	RedMana, YellowMana, GreenMana, CyanMana, BlueMana, MagentaMana,
-	Wood, Ore, Gems, 
+	Wood, Ore, Water, 
 };
 
 public class FinancialItem : Item {
@@ -13,11 +13,13 @@ public class FinancialItem : Item {
 	public static int numAmmunitionTypes;
 	public static int numManaTypes;
 	public static int numResourceTypes;
+	public static int numFinanceTypes;
 	public static Dictionary<FinancialClass, Color> financialItemColorDictionary;
 	static FinancialItem() {
 		numAmmunitionTypes = 6;
 		numManaTypes = 6;
 		numResourceTypes = 3;
+		numFinanceTypes = numAmmunitionTypes + numManaTypes + numResourceTypes;
 		financialItemColorDictionary = new Dictionary<FinancialClass, Color> {
 			{ FinancialClass.RedAmmo, new Color(1, 0, 0) },
 			{ FinancialClass.YellowAmmo, new Color(1, 1, 0) },
@@ -35,14 +37,16 @@ public class FinancialItem : Item {
 
 			{ FinancialClass.Wood, new Color(139f / 255f, 69f / 255f, 19f / 255f) },
 			{ FinancialClass.Ore, new Color(0.5f, 0.5f, 0.5f) },
-			{ FinancialClass.Gems, new Color(1, 1, 1) },  // TODO
+			{ FinancialClass.Water, new Color(64f / 255f, 164f / 255f, 223f / 255f) }, // https://rgb.to/color/6058/clear-water-blue
 		};
 	}
 
-	public FinancialClass financialClass;
-	public int quantity;
+	public FinancialClass financialClass;  // set beforehand
+	public int quantity;  // set beforehand
 
 	protected virtual void Start() {
+		float scale = Mathf.Pow(2, (quantity/30) - 1);
+		transform.localScale = new Vector2(scale, scale);
 		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 		spriteRenderer.color = financialItemColorDictionary[financialClass];
 	}
@@ -52,6 +56,7 @@ public class FinancialItem : Item {
 	}
 
 	public override void BecomeUnobtained(ItemHandlerBody agent) {
+		Debug.Log("testing");
 		throw new System.NotImplementedException();  // TODO
 	}
 }

@@ -16,6 +16,15 @@ public class PrefabReferences : MonoBehaviour {
 	public GameObject circleMedium2;
 	public GameObject circleLarge2;
 
+	public Sprite circleMediumX;
+	public Sprite circleMediumY;
+	public Sprite circleMediumYL;
+	public Sprite circleMediumYT;
+	public Sprite squareMediumX;
+	public Sprite squareMediumY;
+	public Sprite squareMediumYL;
+	public Sprite squareMediumYT;
+
 	public GameObject bullet;
 
 	public GameObject dashGameObject;

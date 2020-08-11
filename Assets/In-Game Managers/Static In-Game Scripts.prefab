@@ -50,9 +50,22 @@ MonoBehaviour:
   circleMedium: {fileID: 0}
   circleLarge: {fileID: 0}
   circleSmall2: {fileID: 158216, guid: 734bcd304e6422744be1f1dc35217504, type: 3}
-  circleMedium2: {fileID: 0}
+  circleMedium2: {fileID: 8693251050651066266, guid: 70f24252fb486714a8227b10be7595a6,
+    type: 3}
   circleLarge2: {fileID: 0}
+  circleMediumX: {fileID: 21300000, guid: a5bb084d0bf8d68428d1ba4bdd1e43f4, type: 3}
+  circleMediumY: {fileID: 21300000, guid: 52f80b463b532004ebd7ba2b4bfc1da1, type: 3}
+  circleMediumYL: {fileID: 21300000, guid: 9ef0aedb154002e4ea06a109410c09df, type: 3}
+  circleMediumYT: {fileID: 21300000, guid: 7b96ff2684b341e43976aa9367e42068, type: 3}
+  squareMediumX: {fileID: 21300000, guid: 07e8d399174a1334cb3d9d896cbea6c7, type: 3}
+  squareMediumY: {fileID: 21300000, guid: 2952a5dbbc18c9b40974441ff2218a80, type: 3}
+  squareMediumYL: {fileID: 21300000, guid: d5a452bc44b4ce845a55ceec3bb3da45, type: 3}
+  squareMediumYT: {fileID: 21300000, guid: 38aa9227233a52f4b85bba1a2473ec26, type: 3}
   bullet: {fileID: 6751215688927150264, guid: 40c9e5deb79480f48a9b4e5845f2a1bc, type: 3}
+  dashGameObject: {fileID: 8458492898896454762, guid: 8b5af76ecc583b1448806537f3f576c3,
+    type: 3}
+  m9GameObject: {fileID: 1364650183859750882, guid: f9691fa835b639d41a5458c280c700db,
+    type: 3}
 --- !u!114 &4801433165417844749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,6 +84,19 @@ MonoBehaviour:
   redProjectileLayer: 0
   brownEntityLayer: 0
   brownProjectileLayer: 0
+  itemLayer: 0
+  handItemLayer: 0
+  entityTriggerLayer: 0
+  projectileTriggerLayer: 0
+  newProjectileLayer: 0
+  wallProjectileLayer: 0
+  wallEntityLayer: 0
+  wallLayer: 0
   entityLayerArray: 
   projectileLayerArray: 
-  layerArray: 
+  wallLayerArray: 
+  allLayerArray: 
+  allLayerMaskArray: 
+  entityLayerMask: 0
+  projectileLayerMask: 0
+  allLayerMask: 0

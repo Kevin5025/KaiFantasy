@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public enum EquipableClass { AccessoryItem, HandItem, PocketItem, HeadItem, BodyItem, Ability, LargeVassal, SmallVassal, Idea };
+public enum EquipableClass { HandItem, PocketItem, HeadItem, BodyItem, Ability, LargeVassal, SmallVassal, AccessoryItem, Idea };
 
 public interface IEquipable {
 

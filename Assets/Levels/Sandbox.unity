@@ -1149,7 +1149,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
 --- !u!50 &1039159711
 Rigidbody2D:
@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   financialClass: 0
-  quantity: 15
+  quantity: 30
 --- !u!1001 &1156631047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2598,30 +2598,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9028517267304557422, guid: ca53db40cae99f34f8c66b9551219ad6,
-        type: 3}
-      propertyPath: circleMedium2
-      value: 
-      objectReference: {fileID: 8693251050651066266, guid: 70f24252fb486714a8227b10be7595a6,
-        type: 3}
-    - target: {fileID: 9028517267304557422, guid: ca53db40cae99f34f8c66b9551219ad6,
-        type: 3}
-      propertyPath: dash
-      value: 
-      objectReference: {fileID: 8458492898896454762, guid: 8b5af76ecc583b1448806537f3f576c3,
-        type: 3}
-    - target: {fileID: 9028517267304557422, guid: ca53db40cae99f34f8c66b9551219ad6,
-        type: 3}
-      propertyPath: dashGameObject
-      value: 
-      objectReference: {fileID: 8458492898896454762, guid: 8b5af76ecc583b1448806537f3f576c3,
-        type: 3}
-    - target: {fileID: 9028517267304557422, guid: ca53db40cae99f34f8c66b9551219ad6,
-        type: 3}
-      propertyPath: m9GameObject
-      value: 
-      objectReference: {fileID: 1364650183859750882, guid: f9691fa835b639d41a5458c280c700db,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca53db40cae99f34f8c66b9551219ad6, type: 3}
 --- !u!1001 &1808366842
