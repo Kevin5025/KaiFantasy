@@ -25,12 +25,16 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 	protected Color fibrillatingColor;
 	protected Color capableColor;
 
-	protected override void Start () {
-		base.Start();
+	protected override void Awake() {
+		base.Awake();
 		healthBody = GetComponent<HealthBody>();
 		physicsBody = GetComponent<CirclePhysicsBody>();
 		itemHandlerBody = GetComponent<ItemHandlerBody>();
 		activator = GetComponent<Activator>();
+	}
+
+	protected override void Start () {
+		base.Start();
 
 		headPosition = new Vector2(0, 0.6f * GetRadius());  // 0.297
 		viscosity = 5f;
@@ -113,8 +117,8 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 		return itemHandlerBody.HandleItem(numNextEei);
 	}
 
-	public void EquipItem(EquipableItem equipableItem) {
-		itemHandlerBody.EquipItem(equipableItem);
+	public void EquipItem(EquipableItem equipableItem, int numNextEei = 0) {
+		itemHandlerBody.EquipItem(equipableItem, numNextEei);
 	}
 
 	public void UnequipItem(int eei) {

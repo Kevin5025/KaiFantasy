@@ -1,12 +1,27 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /**
  * This is anything that has a team affiliation. 
  */
 public class Spirit : MonoBehaviour, ISpirit {
 
+	public static Dictionary<Affinity, Color> teamColorDictionary;
+
 	public Affinity affinity;
 	public Color color;
+
+	static Spirit() {
+		teamColorDictionary = new Dictionary<Affinity, Color> {
+			{ Affinity.RED, new Color(1, 0, 0) },
+			{ Affinity.GREEN, new Color(0, 1, 0) },
+			{ Affinity.BLUE, new Color(0, 0, 1) },
+			{ Affinity.YELLOW, new Color(1, 1, 0) },
+			{ Affinity.MAGENTA, new Color(1, 0, 1) },
+			{ Affinity.CYAN, new Color(0, 1, 1) },
+			{ Affinity.BROWN, new Color(139f / 255f, 69f / 255f, 19f / 255f) }
+		};
+	}
 
 	protected virtual void Awake () {
 
@@ -28,23 +43,7 @@ public class Spirit : MonoBehaviour, ISpirit {
 	}
 
 	public static Color GetTeamColor(Affinity affinity) {
-		if (affinity == Affinity.RED) {
-			return new Color(1, 0, 0);
-		} else if (affinity == Affinity.GREEN) {
-			return new Color(0, 1, 0);
-		} else if (affinity == Affinity.BLUE) {
-			return new Color(0, 0, 1);
-		} else if (affinity == Affinity.YELLOW) {
-			return new Color(1, 1, 0);
-		} else if (affinity == Affinity.MAGENTA) {
-			return new Color(1, 0, 1);
-		} else if (affinity == Affinity.CYAN) {
-			return new Color(0, 1, 1);
-		} else if (affinity == Affinity.BROWN) {//saddle brown = (139,69,19)/256
-			return new Color(139f / 255f, 69f / 255f, 19f / 255f);
-		} else {
-			return new Color(1, 1, 1);
-		}
+		return teamColorDictionary[affinity];
 	}
 
 	public Affinity GetAffinity() {

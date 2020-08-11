@@ -6,9 +6,13 @@ public class Dash : MonoBehaviour, IActivatable {
 
 	IActivatable activatable;  // set in inspector as DashActivatable
 
-	protected virtual void Start() {
+	protected virtual void Awake() {
 		activatable = GetComponent<DashActivatable>();
 		// activatable.cooldownTimeout = 4f;
+	}
+
+	protected virtual void Start() {
+		
 	}
 
 	public bool BecomeActivated(IActivator activator, Dictionary<object, object> argumentDictionary = null) {

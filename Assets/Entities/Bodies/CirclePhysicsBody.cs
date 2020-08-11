@@ -22,9 +22,11 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 	protected GameObject dashGameObject;
 	protected Dash dash;
 
-	protected virtual void Start() {
+	protected virtual void Awake() {
 		activator = GetComponent<Activator>();
+	}
 
+	protected virtual void Start() {
 		rb2D = GetComponent<Rigidbody2D>();
 		radius = Mathf.Sqrt(2 * rb2D.inertia / rb2D.mass);
 		area = (float)Math.PI * radius * radius;

@@ -10,15 +10,18 @@ public abstract class SpriteBody : MonoBehaviour, ISpirit {
 	protected float disintegratedColorAlpha;
 	protected float fadeDuration;
 
-	protected virtual void Start() {
+	protected virtual void Awake() {
 		spirit = GetComponent<Spirit>();
+	}
 
+	protected virtual void Start() {
 		spriteRenderer = GetComponent<SpriteRenderer>();
+		spriteRenderer.color = spirit.GetColor();
+
 		disintegratedColorAlpha = 0.125f;
 		fadeDuration = 4f;
 
 		gameObject.layer = GetTeamLayer();
-		spriteRenderer.color = spirit.GetColor();
 	}
 
 	protected virtual void Update() {

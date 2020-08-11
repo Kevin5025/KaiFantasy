@@ -1055,6 +1055,7 @@ GameObject:
   - component: {fileID: 1039159708}
   - component: {fileID: 1039159711}
   - component: {fileID: 1039159710}
+  - component: {fileID: 1039159712}
   m_Layer: 20
   m_Name: Ammunition
   m_TagString: Untagged
@@ -1171,6 +1172,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1039159712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039159707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15213e75ae561c4fb5b74d44e9f7f5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  financialClass: 0
+  quantity: 15
 --- !u!1001 &1156631047
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 1364650183859750883}
   - component: {fileID: 1364650183859750886}
   - component: {fileID: 1364650183859750884}
-  - component: {fileID: 5659446314441155402}
+  - component: {fileID: 4843076464650910290}
+  - component: {fileID: 3328687541498779205}
   - component: {fileID: 2022746450858676089}
   m_Layer: 20
   m_Name: M9
@@ -150,7 +151,20 @@ MonoBehaviour:
   magazineCount: 0
   reloadTime: 1.6
   bulletCount: 1
---- !u!114 &5659446314441155402
+--- !u!114 &4843076464650910290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364650183859750882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e3cad7e71fbd3498800bae8c7dbafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eei: -1
+--- !u!114 &3328687541498779205
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

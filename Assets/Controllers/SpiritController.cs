@@ -12,9 +12,11 @@ public abstract class SpiritController : MonoBehaviour {
 	public ISpirit primeAlly;  // TODO: antagonist / protagonist? 
 	public ISpirit primeAdversary;
 
-	protected virtual void Start() {
+	protected virtual void Awake() {
 		spirit = GetComponent<Spirit>();
+	}
 
+	protected virtual void Start() {
 		presentAllyList = new List<ISpirit>();
 		presentAdversaryList = new List<ISpirit>();
 		primeAlly = null;

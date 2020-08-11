@@ -17,11 +17,15 @@ public class Gun : EquipableItem, IActivatable {
 	public float reloadTime;  // inspector
 	public int bulletCount;  // inspector
 
-	protected override void Start() {
-		base.Start();
+	protected override void Awake() {
+		base.Awake();
 		activatable = GetComponent<GunActivatable>();
 		// equipable.SetEquipableClass(EquipableClass.HandItem);
 		magazineCount = 0;
+	}
+
+	protected override void Start() {
+		base.Start();
 	}
 
 	public virtual void Reload(CompleteBody completeBodyActivator) {

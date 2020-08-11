@@ -18,9 +18,11 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 	public IEquipable[] equipmentEquipableItemArray;
 	public int[] bankFinancialCountArray;
 
-	protected virtual void Start() {
+	protected virtual void Awake() {
 		activator = GetComponent<Activator>();
+	}
 
+	protected virtual void Start() {
 		Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
 		itemHandleRadius = Mathf.Sqrt(2 * rb2D.inertia / rb2D.mass);
 
@@ -52,11 +54,11 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 		eeiHand1 = GetEquipableClassEei(EquipableClass.HandItem, 1);
 
 		equipmentEquipableItemArray = new IEquipable[equipmentEquipableClassArray.Length];
-		//GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences.m9GameObject);
-		//EquipableItem m9 = m9GameObject.GetComponent<EquipableItem>();
-		//m9.eei = GetEquipableClassEei(m9.GetEquipableClass(), 0);
-		//EquipItem(m9);
-		
+		GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences.m9GameObject);
+		EquipableItem m9 = m9GameObject.GetComponent<EquipableItem>();
+		m9.eei = GetEquipableClassEei(m9.GetEquipableClass(), 0);
+		EquipItem(m9);
+
 		int numFinanceTypes = FinancialItem.numAmmunitionTypes + FinancialItem.numManaTypes + FinancialItem.numResourceTypes;
 		bankFinancialCountArray = new int[numFinanceTypes];
 		bankFinancialCountArray[0] = 15;
@@ -68,17 +70,20 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 	public Item HandleItem(int numNextIi) {
 		Item minDistanceItem = GetMinDistanceItem();
 		if (minDistanceItem != null) {
-			EquipableItem minDistanceEquipableItem = minDistanceItem.GetComponent<EquipableItem>();
-			FinancialItem minDistanceFinancialItem = minDistanceItem.GetComponent<FinancialItem>();
-
-			if (minDistanceEquipableItem != null) {
-				minDistanceEquipableItem.eei = GetEquipableClassEei(minDistanceEquipableItem.GetEquipableClass(), numNextIi);
-				EquipItem(minDistanceEquipableItem);
-			} else if (minDistanceFinancialItem != null) {
-				CreditItem(minDistanceFinancialItem);
-			}
+			ObtainItem(minDistanceItem, numNextIi);
 		}
 		return minDistanceItem;
+	}
+
+	public void ObtainItem(Item item, int numNextIi=0) {
+		EquipableItem equipableItem = item.GetComponent<EquipableItem>();
+		FinancialItem financialItem = item.GetComponent<FinancialItem>();
+
+		if (equipableItem != null) {
+			EquipItem(equipableItem, numNextIi);
+		} else if (financialItem != null) {
+			CreditItem(financialItem);
+		}
 	}
 
 	public Item GetMinDistanceItem() {
@@ -111,7 +116,8 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 	 * If pocket full or nonexisting, drop handItem onto ground
 	 * Put groundItem into hand
 	 */
-	public void EquipItem(EquipableItem equipableItem) {
+	public void EquipItem(EquipableItem equipableItem, int numNextEei=0) {
+		equipableItem.eei = GetEquipableClassEei(equipableItem.GetEquipableClass(), numNextEei);
 		int eei = equipableItem.eei;
 		int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
 		if (equipmentEquipableClassArray[eeiPocketHypothetical] == EquipableClass.PocketItem && equipmentEquipableItemArray[eeiPocketHypothetical] == null) {
@@ -136,9 +142,9 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 	public void UnequipItem(int eei) {
 		bool eeiInArrayBounds = eei > -1 && eei < equipmentEquipableItemArray.Length;
 		if (eeiInArrayBounds && equipmentEquipableItemArray[eei] != null) {
-			Item unequipItem = (Item)equipmentEquipableItemArray[eei];
+			EquipableItem unequipItem = (EquipableItem)equipmentEquipableItemArray[eei];  // TODO handle
 			equipmentEquipableItemArray[eei] = null;
-			unequipItem.BecomeUnobtained(this);
+			unequipItem.BecomeUnobtained(this);  // TODO set eei to -1
 
 			//int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
 			//if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] != null) {

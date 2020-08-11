@@ -6,8 +6,12 @@ public class Activator : MonoBehaviour, IActivator {
 
 	protected HealthStateBody healthStateBody;  // set in inspector
 
-	void Start() {
+	protected virtual void Awake() {
 		healthStateBody = GetComponent<HealthStateBody>();
+	}
+
+	protected virtual void Start() {
+		
 	}
 
 	public static bool Activate(IActivator activator, IActivatable activatable, Dictionary<object, object> argumentDictionary = null) {

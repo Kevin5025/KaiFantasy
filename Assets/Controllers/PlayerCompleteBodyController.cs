@@ -12,7 +12,8 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 
 	public static PlayerCompleteBodyController playerCompleteBodyController;  // singleton
 
-	protected virtual void Awake() {
+	protected override void Awake() {
+		base.Awake();
 		if (playerCompleteBodyController == null) {
 			playerCompleteBodyController = this;
 		} else {

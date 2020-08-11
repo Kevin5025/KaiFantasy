@@ -24,9 +24,13 @@ public abstract class CompleteBodyController : SpiritController {
 		epsilon = 0.0001f;
 	}
 
+	protected override void Awake() {
+		base.Awake();
+		completeBody = GetComponent<CompleteBody>();
+	}
+
 	protected override void Start() {
 		base.Start();
-		completeBody = GetComponent<CompleteBody>();
 		
 		circleSmallGrid = new GameObject[EnvironmentManager.environmentManager.XN, EnvironmentManager.environmentManager.YM];
 		path = new Stack<AStarPriorityQueueNode>();

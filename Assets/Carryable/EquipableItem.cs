@@ -6,8 +6,12 @@ public class EquipableItem : Item, IEquipable {
 	public IEquipable equipable;  // set in inspector
 	public int eei;  // set elsewhere
 	
-	protected virtual void Start() {
+	protected virtual void Awake() {
 		equipable = GetComponent<Equipable>();
+	}
+
+	protected virtual void Start() {
+		
 	}
 
 	public override void BecomeObtained(ItemHandlerBody agent) {
