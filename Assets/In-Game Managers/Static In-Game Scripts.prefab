@@ -66,6 +66,8 @@ MonoBehaviour:
     type: 3}
   m9GameObject: {fileID: 1364650183859750882, guid: f9691fa835b639d41a5458c280c700db,
     type: 3}
+  financialItemGameObject: {fileID: 16213141475727780, guid: 822d5e4fa2df0c443a8d37fe12001734,
+    type: 3}
 --- !u!114 &4801433165417844749
 MonoBehaviour:
   m_ObjectHideFlags: 0

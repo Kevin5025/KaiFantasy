@@ -30,6 +30,7 @@ public class PrefabReferences : MonoBehaviour {
 	public GameObject dashGameObject;
 
 	public GameObject m9GameObject;
+	public GameObject financialItemGameObject;
 
 	protected virtual void Awake() {
 		if (prefabReferences == null) {//like a singleton

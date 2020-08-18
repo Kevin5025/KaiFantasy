@@ -149,8 +149,8 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 		return itemHandlerBody.GetEquipmentEquipableArray();
 	}
 
-	public int[] GetFinanceCountArray() {
-		return itemHandlerBody.GetFinanceCountArray();
+	public float[] GetFinanceQuantityArray() {
+		return itemHandlerBody.GetFinanceQuantityArray();
 	}
 
 	public void SetHealthState(HealthState healthState) {

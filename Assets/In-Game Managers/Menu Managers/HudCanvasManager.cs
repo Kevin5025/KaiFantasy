@@ -19,7 +19,7 @@ public class HudCanvasManager : MonoBehaviour {
 	public GameObject[] financeImageArray;
 	public GameObject[] financeTextArray;
 	public GameObject financeSlotPrefab;  // set in inspector
-	protected Sprite[] financeSpriteArray;
+	public Sprite[] financeSpriteArray;
 
 	public Color pocketColor;
 
@@ -30,6 +30,26 @@ public class HudCanvasManager : MonoBehaviour {
 		} else {
 			Destroy(gameObject);
 		}
+
+		financeSpriteArray = new Sprite[] {
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences.squareMediumX,
+
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences.circleMediumY,
+
+			PrefabReferences.prefabReferences.squareMediumYL,  // square = discrete
+			PrefabReferences.prefabReferences.squareMediumYL,
+			PrefabReferences.prefabReferences.circleMediumYL,  // circle = continuous
+		};
 	}
 
 	// Start is called before the first frame update
@@ -50,26 +70,6 @@ public class HudCanvasManager : MonoBehaviour {
 	}
 
 	protected void InitializeFinancePanel() {
-		financeSpriteArray = new Sprite[] {
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-
-			PrefabReferences.prefabReferences.squareMediumYL,  // square = discrete
-			PrefabReferences.prefabReferences.squareMediumYL,
-			PrefabReferences.prefabReferences.circleMediumYL,  // circle = continuous
-		};
-
 		financeSlotArray = new GameObject[FinancialItem.numFinanceTypes];
 		financeImageArray = new GameObject[FinancialItem.numFinanceTypes];
 		financeTextArray = new GameObject[FinancialItem.numFinanceTypes];
@@ -86,7 +86,7 @@ public class HudCanvasManager : MonoBehaviour {
 			financeImageArray[fi] = financeSlotArray[fi].transform.GetChild(0).gameObject;
 			financeImageArray[fi].GetComponent<Image>().sprite = financeSpriteArray[fi];
 			financeImageArray[fi].GetComponent<Image>().color = FinancialItem.financialItemColorDictionary[(FinancialClass)fi];
-			financeImageArray[fi].GetComponent<FinanceImage>().fi = fi;
+			financeImageArray[fi].GetComponent<FinanceImage>().ffi = fi;
 
 			financeTextArray[fi] = financeSlotArray[fi].transform.GetChild(1).gameObject;
 		}
@@ -99,10 +99,10 @@ public class HudCanvasManager : MonoBehaviour {
 		}
 	}
 
-	public void UpdateFinanceText(int fti) {
-		bool ftInArrayBounds = fti > -1 && fti < playerAgent.GetEquipmentEquipableArray().Length;
+	public void UpdateFinanceText(int ffi) {
+		bool ftInArrayBounds = ffi > -1 && ffi < playerAgent.GetEquipmentEquipableArray().Length;
 		if (ftInArrayBounds) {
-			financeTextArray[fti].GetComponent<Text>().text = playerAgent.GetFinanceCountArray()[fti].ToString();  // TODO
+			financeTextArray[ffi].GetComponent<Text>().text = playerAgent.GetFinanceQuantityArray()[ffi].ToString();  // TODO: floating point, etc.
 		}
 	}
 

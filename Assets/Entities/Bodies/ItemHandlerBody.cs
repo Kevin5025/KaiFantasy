@@ -16,7 +16,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 	protected int eeiHand0;
 	protected int eeiHand1;
 	public IEquipable[] equipmentEquipableItemArray;
-	public int[] bankFinancialCountArray;
+	public float[] bankFinancialQuantityArray;
 
 	protected virtual void Awake() {
 		activator = GetComponent<Activator>();
@@ -59,8 +59,8 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 		m9.eei = GetEquipableClassEei(m9.GetEquipableClass(), 0);
 		EquipItem(m9);
 
-		bankFinancialCountArray = new int[FinancialItem.numFinanceTypes];
-		bankFinancialCountArray[0] = 15;
+		bankFinancialQuantityArray = new float[FinancialItem.numFinanceTypes];
+		bankFinancialQuantityArray[0] = 15;
 	}
 
 	/*
@@ -126,7 +126,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 		}
 
 		equipmentEquipableItemArray[eei] = equipableItem;
-		equipableItem.BecomeObtained(this);
+		equipableItem.BecomeObtained();
 	}
 
 	/*
@@ -139,11 +139,10 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 	 * // Pocket of pocket will not exist
 	 */
 	public void UnequipItem(int eei) {
-		bool eeiInArrayBounds = eei > -1 && eei < equipmentEquipableItemArray.Length;
-		if (eeiInArrayBounds && equipmentEquipableItemArray[eei] != null) {
+		if (equipmentEquipableItemArray[eei] != null) {
 			EquipableItem unequipItem = (EquipableItem)equipmentEquipableItemArray[eei];  // TODO handle
 			equipmentEquipableItemArray[eei] = null;
-			unequipItem.BecomeUnobtained(this);  // TODO set eei to -1
+			unequipItem.BecomeUnobtained(transform);  // TODO set eei to -1
 
 			//int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
 			//if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] != null) {
@@ -184,13 +183,18 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 	}
 
 	public void CreditItem(FinancialItem financialItem) {
-		int fci = (int)financialItem.financialClass;
-		bankFinancialCountArray[fci] += financialItem.quantity;
-		financialItem.BecomeObtained(this);
+		int ffi = (int)financialItem.financialClass;
+		bankFinancialQuantityArray[ffi] += financialItem.quantity;
+		financialItem.BecomeObtained();
 	}
 
-	public void DebitItem(int fci) {
-		// TODO
+	public void DebitItem(int ffi) {
+		if (bankFinancialQuantityArray[ffi] >= 1) {
+			FinancialClass financialClass = (FinancialClass)ffi;
+			float quantity = Mathf.Ceil(bankFinancialQuantityArray[ffi] / 3f);
+			FinancialItem.InstantiateFinancialItemGameObject(financialClass, quantity, transform);
+			bankFinancialQuantityArray[ffi] -= quantity;
+		}
 	}
 
 
@@ -203,8 +207,8 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 		return equipmentEquipableItemArray;
 	}
 
-	public int[] GetFinanceCountArray() {
-		return bankFinancialCountArray;
+	public float[] GetFinanceQuantityArray() {
+		return bankFinancialQuantityArray;
 	}
 
 	public HealthState GetHealthState() {

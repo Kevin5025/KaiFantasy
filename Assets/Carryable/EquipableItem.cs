@@ -14,16 +14,13 @@ public class EquipableItem : Item, IEquipable {
 		
 	}
 
-	public override void BecomeObtained(ItemHandlerBody agent) {
+	public override void BecomeObtained() {
 		GetComponent<SpriteRenderer>().enabled = false;
 		GetComponent<Collider2D>().enabled = false;
 	}
 
-	public override void BecomeUnobtained(ItemHandlerBody agent) {
-		transform.position = agent.transform.position;
-		transform.rotation = agent.transform.rotation;
-		GetComponent<Rigidbody2D>().velocity = agent.GetComponent<Rigidbody2D>().velocity;
-
+	public override void BecomeUnobtained(Transform originTransform) {
+		base.BecomeUnobtained(originTransform);
 		GetComponent<SpriteRenderer>().enabled = true;
 		GetComponent<Collider2D>().enabled = true;
 	}

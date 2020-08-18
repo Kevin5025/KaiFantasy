@@ -29,10 +29,10 @@ public class Gun : EquipableItem, IActivatable {
 	}
 
 	public virtual void Reload(CompleteBody completeBodyActivator) {
-		if ((int)completeBodyActivator.GetHealthState() >= (int)HealthState.Capable && completeBodyActivator.GetFinanceCountArray()[ammunitionType] > 0) {
-			int reloadAmmunitionCount = Math.Min(completeBodyActivator.GetFinanceCountArray()[ammunitionType], magazineCapacity - magazineCount);
+		if ((int)completeBodyActivator.GetHealthState() >= (int)HealthState.Capable && completeBodyActivator.GetFinanceQuantityArray()[ammunitionType] > 0) {
+			int reloadAmmunitionCount = Math.Min((int)completeBodyActivator.GetFinanceQuantityArray()[ammunitionType], magazineCapacity - magazineCount);
 			magazineCount += reloadAmmunitionCount;
-			completeBodyActivator.GetFinanceCountArray()[ammunitionType] -= reloadAmmunitionCount;
+			completeBodyActivator.GetFinanceQuantityArray()[ammunitionType] -= reloadAmmunitionCount;
 		}
 	}
 

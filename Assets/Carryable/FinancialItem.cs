@@ -14,6 +14,7 @@ public class FinancialItem : Item {
 	public static int numManaTypes;
 	public static int numResourceTypes;
 	public static int numFinanceTypes;
+	// public static Dictionary<FinancialClass, Sprite> financialItemSpriteDictionary;  // see HudCanvasManager.hudCanvasManager.financeSpriteArray
 	public static Dictionary<FinancialClass, Color> financialItemColorDictionary;
 	static FinancialItem() {
 		numAmmunitionTypes = 6;
@@ -42,21 +43,37 @@ public class FinancialItem : Item {
 	}
 
 	public FinancialClass financialClass;  // set beforehand
-	public int quantity;  // set beforehand
+	public float quantity;  // set beforehand
 
 	protected virtual void Start() {
-		float scale = Mathf.Pow(2, (quantity/30) - 1);
+		while (quantity > 30) {
+			float newQuantity = Mathf.Ceil(quantity / 3f);
+			InstantiateFinancialItemGameObject(financialClass, newQuantity, transform);
+			quantity -= newQuantity;
+		}
+
+		float scale = 2f * Mathf.Sqrt(quantity / 30f);
 		transform.localScale = new Vector2(scale, scale);
 		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+		spriteRenderer.sprite = HudCanvasManager.hudCanvasManager.financeSpriteArray[(int)financialClass];
 		spriteRenderer.color = financialItemColorDictionary[financialClass];
 	}
 
-	public override void BecomeObtained(ItemHandlerBody agent) {
+	public static FinancialItem InstantiateFinancialItemGameObject(FinancialClass financialClass, float quantity, Transform originTransform) {
+		GameObject financialItemGameObject = Instantiate(PrefabReferences.prefabReferences.financialItemGameObject);
+		FinancialItem financialItem = financialItemGameObject.GetComponent<FinancialItem>();
+		financialItem.financialClass = financialClass;
+		financialItem.quantity = quantity;
+		financialItem.BecomeUnobtained(originTransform);
+		return financialItem;
+	}
+
+	public override void BecomeObtained() {
 		Destroy(gameObject);
 	}
 
-	public override void BecomeUnobtained(ItemHandlerBody agent) {
-		Debug.Log("testing");
-		throw new System.NotImplementedException();  // TODO
+	public override void BecomeUnobtained(Transform originTransform) {
+		base.BecomeUnobtained(originTransform);
+		gameObject.SetActive(true);
 	}
 }

@@ -4,11 +4,15 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour, IItem {
 
-	public void BecomeHandled(ItemHandlerBody agent) {
-		BecomeObtained(agent);
+	public void BecomeHandled() {
+		BecomeObtained();
 	}
 
-	public abstract void BecomeObtained(ItemHandlerBody agent);
+	public abstract void BecomeObtained();
 
-	public abstract void BecomeUnobtained(ItemHandlerBody agent);
+	public virtual void BecomeUnobtained(Transform originTransform) {
+		transform.position = originTransform.position;
+		transform.rotation = originTransform.rotation;
+		GetComponent<Rigidbody2D>().velocity = originTransform.GetComponent<Rigidbody2D>().velocity;
+	}
 }

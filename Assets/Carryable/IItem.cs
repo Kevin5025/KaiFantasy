@@ -3,6 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IItem : IHandleable {
-	void BecomeObtained(ItemHandlerBody agent);
-	void BecomeUnobtained(ItemHandlerBody agent);
+	void BecomeObtained();
+	void BecomeUnobtained(Transform originTransform);
 }

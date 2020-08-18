@@ -10,6 +10,6 @@ public interface IItemHandlerBody {
 	void DebitItem(int fci);
 	EquipableClass[] GetEquipmentEquipableClassArray();
 	IEquipable[] GetEquipmentEquipableArray();
-	int[] GetFinanceCountArray();
+	float[] GetFinanceQuantityArray();
 
 }
