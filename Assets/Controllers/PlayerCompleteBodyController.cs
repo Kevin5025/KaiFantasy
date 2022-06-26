@@ -122,10 +122,10 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 	}
 
 	protected override void HandleItem() {
-		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
+		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
 			HandleItem(0);
 		}
-		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
+		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
 			HandleItem(1);
 		}
 	}
@@ -141,17 +141,17 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 		if (minDistanceEquipableItem != null) {
 			HudCanvasManager.hudCanvasManager.UpdateHandPocketEquipmentImage(minDistanceEquipableItem.eei);
 		} else if (minDistanceFinancialItem != null) {
-			HudCanvasManager.hudCanvasManager.UpdateFinanceText((int)minDistanceFinancialItem.financialClass);  // TODO: test
+			HudCanvasManager.hudCanvasManager.UpdateFinanceText((int)minDistanceFinancialItem.financialClass);
 		}
 	}
 
 	protected override void PocketHandItem() {
-		int eeiHand0 = completeBody.GetEquipableClassEei(EquipableClass.HandItem, 0);
-		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
+		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
+			int eeiHand0 = completeBody.GetEquipableClassEei(EquipableClass.HandItem, 0);
 			completeBody.PocketItem(eeiHand0);
 			HudCanvasManager.hudCanvasManager.UpdateHandPocketEquipmentImage(eeiHand0);
 		}
-		if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
+		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
 			int eeiHand1 = completeBody.GetEquipableClassEei(EquipableClass.HandItem, 1);
 			completeBody.PocketItem(eeiHand1);
 			HudCanvasManager.hudCanvasManager.UpdateHandPocketEquipmentImage(eeiHand1);

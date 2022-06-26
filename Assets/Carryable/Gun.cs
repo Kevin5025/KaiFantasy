@@ -8,7 +8,7 @@ public enum FiringMode { Manual, Automatic, Burst };
 public class Gun : EquipableItem, IActivatable {
 
 	protected IActivatable activatable;  // set in inspector as GunActivatable
-
+	
 	public FiringMode firingMode;
 	
 	public int ammunitionType;  // {0...5}, one per color, for now
@@ -36,7 +36,7 @@ public class Gun : EquipableItem, IActivatable {
 		}
 	}
 
-	public bool BecomeActivated(IActivator activator, Dictionary<object, object> argumentDictionary = null) {
+	public virtual bool BecomeActivated(IActivator activator, Dictionary<object, object> argumentDictionary = null) {
 		bool clickActivate = (bool)argumentDictionary["MBD"] && firingMode == FiringMode.Manual;
 		bool holdActivate = (bool)argumentDictionary["MB"] && (firingMode == FiringMode.Automatic || firingMode == FiringMode.Burst);
 		bool controlActivate = clickActivate || holdActivate;

@@ -19,6 +19,17 @@ sysinfo.txt
 /*.user
 /*.unityproj
 /*.booproj
+
+# ===================================== #
+#  #
+# ===================================== #
+.vsconfig
+debug.log
+Assets/Resources*
+Logs/
+Packages/
+ProjectSettings/
+UserSettings/
  
 # ============ #
 # OS generated #

@@ -43,6 +43,11 @@ public abstract class CompleteBodyController : SpiritController {
 
 	protected virtual void Update() {
 		ManualDebug();
+
+		Fire();
+		Reload();
+		HandleItem();
+		PocketHandItem();
 	}
 
 	protected virtual void FixedUpdate() {
@@ -50,10 +55,6 @@ public abstract class CompleteBodyController : SpiritController {
 		Rotate();
 		Move();
 		Dash();
-		Fire();
-		Reload();
-		HandleItem();
-		PocketHandItem();
 	}
 
 	protected virtual void ManualDebug() { }
