@@ -8,8 +8,7 @@ public class Spirit : MonoBehaviour, ISpirit {
 
 	public static Dictionary<Affinity, Color> teamColorDictionary;
 
-	public Affinity affinity;
-	public Color color;
+	public Affinity affinity_;
 
 	static Spirit() {
 		teamColorDictionary = new Dictionary<Affinity, Color> {
@@ -31,7 +30,7 @@ public class Spirit : MonoBehaviour, ISpirit {
      * Assign sprite color based on team. 
      */
 	protected virtual void Start () {
-		color = teamColorDictionary[affinity];
+		
 	}
 	
 	protected virtual void Update () {
@@ -43,15 +42,11 @@ public class Spirit : MonoBehaviour, ISpirit {
 	}
 
 	public Affinity GetAffinity() {
-		return affinity;
+		return affinity_;
 	}
 
 	public void SetAffinity(Affinity affinity) {
-		this.affinity = affinity;
-	}
-
-	public Color GetColor() {
-		return color;
+		this.affinity_ = affinity;
 	}
 
 	public Transform GetTransform() {

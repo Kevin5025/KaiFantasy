@@ -5,56 +5,56 @@ using UnityEngine.UI;
 
 public class HudCanvasManager : MonoBehaviour {
 
-	public static HudCanvasManager hudCanvasManager;
+	public static HudCanvasManager hudCanvasManager_;
 
 	public CompleteBody playerAgent;
 
-	public GameObject equipmentPanel;  // set in Unity
+	public GameObject equipmentPanel_;
 	public GameObject[] equipmentSlotArray;  // filled in UpdateEquipmentMenu
 	public GameObject[] equipmentImageArray;
-	public GameObject equipmentSlotPrefab;  // set in Unity
+	public GameObject equipmentSlotPrefab_;
 
-	public GameObject financePanel;  // set in inspector
+	public GameObject financePanel_;
 	public GameObject[] financeSlotArray;
 	public GameObject[] financeImageArray;
 	public GameObject[] financeTextArray;
-	public GameObject financeSlotPrefab;  // set in inspector
+	public GameObject financeSlotPrefab_;
 	public Sprite[] financeSpriteArray;
 
 	public Color pocketColor;
 
 	void Awake() {
-		if (hudCanvasManager == null) {//like a singleton
+		if (hudCanvasManager_ == null) {//like a singleton
 			//DontDestroyOnLoad (gameObject);
-			hudCanvasManager = this;
+			hudCanvasManager_ = this;
 		} else {
 			Destroy(gameObject);
 		}
 
 		financeSpriteArray = new Sprite[] {
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
-			PrefabReferences.prefabReferences.squareMediumX,
+			PrefabReferences.prefabReferences_.squareMediumX_,
+			PrefabReferences.prefabReferences_.squareMediumX_,
+			PrefabReferences.prefabReferences_.squareMediumX_,
+			PrefabReferences.prefabReferences_.squareMediumX_,
+			PrefabReferences.prefabReferences_.squareMediumX_,
+			PrefabReferences.prefabReferences_.squareMediumX_,
 
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
-			PrefabReferences.prefabReferences.circleMediumY,
+			PrefabReferences.prefabReferences_.circleMediumY_,
+			PrefabReferences.prefabReferences_.circleMediumY_,
+			PrefabReferences.prefabReferences_.circleMediumY_,
+			PrefabReferences.prefabReferences_.circleMediumY_,
+			PrefabReferences.prefabReferences_.circleMediumY_,
+			PrefabReferences.prefabReferences_.circleMediumY_,
 
-			PrefabReferences.prefabReferences.squareMediumYL,  // square = discrete
-			PrefabReferences.prefabReferences.squareMediumYL,
-			PrefabReferences.prefabReferences.circleMediumYL,  // circle = continuous
+			PrefabReferences.prefabReferences_.squareMediumYL_,  // square = discrete
+			PrefabReferences.prefabReferences_.squareMediumYL_,
+			PrefabReferences.prefabReferences_.circleMediumYL_,  // circle = continuous
 		};
 	}
 
 	// Start is called before the first frame update
 	void Start() {
-		playerAgent = PlayerCompleteBodyController.playerCompleteBodyController.GetBody();
+		playerAgent = PlayerCompleteBodyController.playerCompleteBodyController_.GetBody();
 
 		InitializeEquipmentPanel();
 		InitializeFinancePanel();
@@ -78,8 +78,8 @@ public class HudCanvasManager : MonoBehaviour {
 			int fDiv3 = fi / 3;
 			int fDiv6 = fi / 6;
 
-			financeSlotArray[fi] = Instantiate(financeSlotPrefab);
-			financeSlotArray[fi].transform.SetParent(financePanel.transform);
+			financeSlotArray[fi] = Instantiate(financeSlotPrefab_);
+			financeSlotArray[fi].transform.SetParent(financePanel_.transform);
 			financeSlotArray[fi].transform.localScale = Vector3.one;
 			financeSlotArray[fi].GetComponent<RectTransform>().anchoredPosition = new Vector2(-32f + 32f * fMod3, 47 - 18f * fDiv3 - 2f * fDiv6);
 
@@ -114,8 +114,8 @@ public class HudCanvasManager : MonoBehaviour {
 			int eMod2 = eei % 2;
 			int eDiv2 = eei / 2;
 
-			equipmentSlotArray[eei] = Instantiate(equipmentSlotPrefab);
-			equipmentSlotArray[eei].transform.SetParent(equipmentPanel.transform);
+			equipmentSlotArray[eei] = Instantiate(equipmentSlotPrefab_);
+			equipmentSlotArray[eei].transform.SetParent(equipmentPanel_.transform);
 			equipmentSlotArray[eei].transform.localScale = Vector3.one;
 			equipmentSlotArray[eei].GetComponent<RectTransform>().anchoredPosition = new Vector2(-24f + 48f * eMod2, 216f - 48f * eDiv2);
 

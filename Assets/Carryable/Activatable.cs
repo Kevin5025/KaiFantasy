@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Activatable : MonoBehaviour, IActivatable {
 
-	public float cooldownTimeout; // set in inspector
+	public float cooldownTimeout_; // set in inspector
 	protected float nextReadyTime;
 
 	public virtual void Start() {
@@ -21,7 +21,7 @@ public abstract class Activatable : MonoBehaviour, IActivatable {
 		bool didActivate = false;
 		if (isCapable && isReady) {
 			Actuate(activator, argumentDictionary);
-			nextReadyTime = Time.time + cooldownTimeout;
+			nextReadyTime = Time.time + cooldownTimeout_;
 			didActivate = true;
 		}
 		return didActivate;

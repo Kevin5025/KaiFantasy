@@ -4,30 +4,30 @@ using UnityEngine;
 
 public class WorldCanvasManager : MonoBehaviour {
 
-	public static WorldCanvasManager worldCanvasManager;
+	public static WorldCanvasManager worldCanvasManager_;
 
-	public GameObject healthRingFillPrefab;  // set in Unity
-	public GameObject ringThinTickPrefab;  // set in Unity
+	public GameObject healthRingFillPrefab_;
+	public GameObject ringThinTickPrefab_;
 
-	public CompleteBody playerAgent;
-	public CompleteBody debugAgent;  // set in inspector
+	public CompleteBody playerAgent_;
+	public CompleteBody debugAgent_;
 	public IList<CompleteBody> bodyAgentList;
 	public IList<GameObject> healthRingFillList;
 
 	void Awake() {
-		if (worldCanvasManager == null) {//like a singleton
-			worldCanvasManager = this;
+		if (worldCanvasManager_ == null) {//like a singleton
+			worldCanvasManager_ = this;
 		} else {
 			Destroy(gameObject);
 		}
 	}
 
 	void Start() {
-		playerAgent = PlayerCompleteBodyController.playerCompleteBodyController.GetBody();
-		bodyAgentList = new List<CompleteBody>() { playerAgent, debugAgent };
+		playerAgent_ = PlayerCompleteBodyController.playerCompleteBodyController_.GetBody();
+		bodyAgentList = new List<CompleteBody>() { playerAgent_, debugAgent_ };
 		healthRingFillList = new List<GameObject>();
 		for (int b = 0; b < bodyAgentList.Count; b++) {
-			GameObject healthRingFill = Instantiate(healthRingFillPrefab);
+			GameObject healthRingFill = Instantiate(healthRingFillPrefab_);
 			healthRingFillList.Add(healthRingFill);
 			healthRingFill.transform.SetParent(transform, false);
 			healthRingFill.GetComponent<HealthRingMeter>().body = bodyAgentList[b];

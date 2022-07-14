@@ -17,12 +17,12 @@ public class RotateFireController : CompleteBodyController {
 	}
 
 	protected virtual void Spin() {
-		completeBody.RotateOffsetRotation(rotateFactor * 60f * Time.fixedDeltaTime);
+		completeBody_.RotateOffsetRotation(rotateFactor * 60f * Time.fixedDeltaTime);
 	}
 
 	protected override void Fire() {
 		base.Fire();
-		int eeiHand0 = completeBody.GetEquipableClassEei(EquipableClass.HandItem, 0);
+		int eeiHand0 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 0);
 		SafeFire(eeiHand0, true, true);
 	}
 }

@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class EnvironmentManager : MonoBehaviour {
 
-	public static EnvironmentManager environmentManager;
+	public static EnvironmentManager environmentManager_;
 
 	protected int wallEntityLayerMask;
 	protected int wallLayerMask;
 	protected int raycastLayerMask;
 
-	public GameObject boundaryNN;  // set in Inspector
-	public GameObject boundaryEE;
-	public GameObject boundarySS;
-	public GameObject boundaryWW;
+	public GameObject boundaryNN_;
+	public GameObject boundaryEE_;
+	public GameObject boundarySS_;
+	public GameObject boundaryWW_;
 
 	public static Vector2 unitVectorNorthEast;
 	public static Vector2 unitVectorSouthEast;
@@ -41,8 +41,8 @@ public class EnvironmentManager : MonoBehaviour {
 	}
 
 	void Awake() {
-		if (environmentManager == null) {
-			environmentManager = this;
+		if (environmentManager_ == null) {
+			environmentManager_ = this;
 		} else {
 			Destroy(gameObject);
 		}
@@ -53,10 +53,10 @@ public class EnvironmentManager : MonoBehaviour {
 		wallLayerMask = 1 << LayersManager.layersManager.wallLayer;
 		raycastLayerMask = wallEntityLayerMask | wallLayerMask;
 		
-		minPositionX = Mathf.RoundToInt(boundaryWW.transform.position.x);  // ASSUMPTION: will never round out of bounds
-		maxPositionX = Mathf.RoundToInt(boundaryEE.transform.position.x);
-		minPositionY = Mathf.RoundToInt(boundarySS.transform.position.y);
-		maxPositionY = Mathf.RoundToInt(boundaryNN.transform.position.y);
+		minPositionX = Mathf.RoundToInt(boundaryWW_.transform.position.x);  // ASSUMPTION: will never round out of bounds
+		maxPositionX = Mathf.RoundToInt(boundaryEE_.transform.position.x);
+		minPositionY = Mathf.RoundToInt(boundarySS_.transform.position.y);
+		maxPositionY = Mathf.RoundToInt(boundaryNN_.transform.position.y);
 		maxIndexX = maxPositionX - minPositionX;
 		maxIndexY = maxPositionY - minPositionY;
 
@@ -129,7 +129,7 @@ public class EnvironmentManager : MonoBehaviour {
 		for (int indexX = 0; indexX < environmentGraph.GetLength(0); indexX++) {
 			for (int indexY = 0; indexY < environmentGraph.GetLength(1); indexY++) {
 				Vector2 position = new Vector2(indexX + minPositionX, indexY + minPositionY);
-				circleSmallArray[indexX, indexY] = Instantiate(PrefabReferences.prefabReferences.circleSmall2, position, Quaternion.identity);
+				circleSmallArray[indexX, indexY] = Instantiate(PrefabReferences.prefabReferences_.circleSmall2_, position, Quaternion.identity);
 				if (!environmentGraph[indexX, indexY, 0]) {
 					circleSmallArray[indexX, indexY].GetComponent<SpriteRenderer>().color = new Color(0, 0, 0);
 				}

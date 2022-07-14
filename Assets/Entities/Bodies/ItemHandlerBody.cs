@@ -10,7 +10,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 
 	// TODO: repositorySkillArray;  // repository / library / studio
 	// public List<Item> inventoryItemArray;
-	public EquipableClass[] equipmentEquipableClassArray;  // TODO: different agent classes with different equipable class arrays
+	public EquipableClass[] equipmentEquipableClassArray;  // TODO: different agent classes with different equipable_ class arrays
 	protected int eeiHand0;
 	protected int eeiHand1;
 	public IEquipable[] equipmentEquipableItemArray;
@@ -52,7 +52,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 		eeiHand1 = GetEquipableClassEei(EquipableClass.HandItem, 1);
 
 		equipmentEquipableItemArray = new IEquipable[equipmentEquipableClassArray.Length];
-		GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences.m9GameObject);
+		GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences_.m9Prefab_);
 		EquipableItem m9 = m9GameObject.GetComponent<EquipableItem>();
 		m9.eei = GetEquipableClassEei(m9.GetEquipableClass(), 0);
 		EquipItem(m9);
@@ -162,8 +162,8 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 	}
 
 	/*
-	 * Gets the numNextEei-th index that matches the equipableClass
-	 * If numNextEei too big, then gets the last index that matches the equipableClass
+	 * Gets the numNextEei-th index that matches the equipableClass_
+	 * If numNextEei too big, then gets the last index that matches the equipableClass_
 	 */
 	public int GetEquipableClassEei(EquipableClass equipableClass, int numNextEei) {
 		int equipableClassEei = -1;
@@ -181,8 +181,8 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 	}
 
 	public void CreditItem(FinancialItem financialItem) {
-		int ffi = (int)financialItem.financialClass;
-		bankFinancialQuantityArray[ffi] += financialItem.quantity;
+		int ffi = (int)financialItem.financialClass_;
+		bankFinancialQuantityArray[ffi] += financialItem.quantity_;
 		financialItem.BecomeObtained();
 	}
 

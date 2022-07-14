@@ -9,7 +9,7 @@ using Priority_Queue;
  */
 public abstract class CompleteBodyController : SpiritController {
 
-	public CompleteBody completeBody;  // set in inspector
+	public CompleteBody completeBody_;
 
 	static float epsilon;
 	protected static GameObject[,] circleSmallGrid;  // for debugging purposes
@@ -26,16 +26,16 @@ public abstract class CompleteBodyController : SpiritController {
 
 	protected override void Awake() {
 		base.Awake();
-		completeBody = GetComponent<CompleteBody>();
+		completeBody_ = GetComponent<CompleteBody>();
 	}
 
 	protected override void Start() {
 		base.Start();
 		
-		circleSmallGrid = new GameObject[EnvironmentManager.environmentManager.XN, EnvironmentManager.environmentManager.YM];
+		circleSmallGrid = new GameObject[EnvironmentManager.environmentManager_.XN, EnvironmentManager.environmentManager_.YM];
 		path = new Stack<AStarPriorityQueueNode>();
 		nextNodePosition = transform.position;
-		nextNode = new AStarPriorityQueueNode(0f, EnvironmentManager.environmentManager.GetIndexX(this.nextNodePosition.x), EnvironmentManager.environmentManager.GetIndexY(this.nextNodePosition.y), -1, -1);
+		nextNode = new AStarPriorityQueueNode(0f, EnvironmentManager.environmentManager_.GetIndexX(this.nextNodePosition.x), EnvironmentManager.environmentManager_.GetIndexY(this.nextNodePosition.y), -1, -1);
 
 		personalityUniform = MyStaticLibrary.NextRandomUniformArray(5, -1f, 1f);
 		personalityGaussian = MyStaticLibrary.NextRandomGaussianArray(5);
@@ -68,12 +68,12 @@ public abstract class CompleteBodyController : SpiritController {
 	protected virtual void Fire() { }
 
 	protected virtual void SafeFire(int eeiHand, bool MB, bool MBD) {
-		if (completeBody.GetEquipmentEquipableArray()[eeiHand] != null) {
-			IActivatable activatable = completeBody.GetEquipmentEquipableArray()[eeiHand] as IActivatable;
+		if (completeBody_.GetEquipmentEquipableArray()[eeiHand] != null) {
+			IActivatable activatable = completeBody_.GetEquipmentEquipableArray()[eeiHand] as IActivatable;
 			Dictionary<object, object> argumentDictionary = new Dictionary<object, object>();
 			argumentDictionary["MB"] = MB;
 			argumentDictionary["MBD"] = MBD;
-			Activator.Activate(completeBody, activatable, argumentDictionary);
+			Activator.Activate(completeBody_, activatable, argumentDictionary);
 		}
 	}
 
@@ -89,8 +89,8 @@ public abstract class CompleteBodyController : SpiritController {
 	protected void UpdateNextNodePosition() {
 		while (IsAtNextNodePosition() && this.path.Count > 0) {
 			this.nextNode = this.path.Pop();
-			this.nextNodePosition.x = EnvironmentManager.environmentManager.GetPositionX(this.nextNode.indexX);
-			this.nextNodePosition.y = EnvironmentManager.environmentManager.GetPositionY(this.nextNode.indexY);
+			this.nextNodePosition.x = EnvironmentManager.environmentManager_.GetPositionX(this.nextNode.indexX);
+			this.nextNodePosition.y = EnvironmentManager.environmentManager_.GetPositionY(this.nextNode.indexY);
 		}
 	}
 
@@ -117,7 +117,7 @@ public abstract class CompleteBodyController : SpiritController {
 	//	primeAdversary = null;
 	//	float primeAdversaryTransformDistance = float.MaxValue;
 	//	for (int pa = 0; pa < presentAdversaryList.Count; pa++) {
-	//		if (presentAdversaryList[pa].affinity != agent.affinity && !presentAdversaryList[pa].defunct) {
+	//		if (presentAdversaryList[pa].affinity_ != agent.affinity_ && !presentAdversaryList[pa].defunct) {
 	//			float distance = MyStaticLibrary.GetDistance(gameObject, presentAdversaryList[pa].gameObject);
 	//			if (distance < primeAdversaryTransformDistance) {
 	//				primeAdversary = presentAdversaryList[pa];
@@ -128,20 +128,20 @@ public abstract class CompleteBodyController : SpiritController {
 	//}
 
 	protected virtual IEnumerator FindPathAStarSearch(Vector2 targetPosition) {
-		int frontierSize = EnvironmentManager.environmentManager.XN + EnvironmentManager.environmentManager.YM;  // ASSUMPTION: frontierSize > 0
+		int frontierSize = EnvironmentManager.environmentManager_.XN + EnvironmentManager.environmentManager_.YM;  // ASSUMPTION: frontierSize > 0
 		FastPriorityQueue<AStarPriorityQueueNode> frontier = new FastPriorityQueue<AStarPriorityQueueNode>(frontierSize);
-		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[EnvironmentManager.environmentManager.XN, EnvironmentManager.environmentManager.YM];  // element is null if never in frontier before
+		AStarPriorityQueueNode[,] nodeGrid = new AStarPriorityQueueNode[EnvironmentManager.environmentManager_.XN, EnvironmentManager.environmentManager_.YM];  // element is null if never in frontier before
 
 		/**
 		 * source node and target node
 		 */
 		// AStarPriorityQueueNode sourceNode = this.path.Skip(1).FirstOrDefault();  // HACK: assume AStarSearch will finish by the time agent reaches next next node
-		int sourceIndexX = EnvironmentManager.environmentManager.GetIndexX(transform.position.x);
-		int sourceIndexY = EnvironmentManager.environmentManager.GetIndexY(transform.position.y);
-		int targetIndexX = EnvironmentManager.environmentManager.GetIndexX(targetPosition.x);
-		int targetIndexY = EnvironmentManager.environmentManager.GetIndexY(targetPosition.y);
+		int sourceIndexX = EnvironmentManager.environmentManager_.GetIndexX(transform.position.x);
+		int sourceIndexY = EnvironmentManager.environmentManager_.GetIndexY(transform.position.y);
+		int targetIndexX = EnvironmentManager.environmentManager_.GetIndexX(targetPosition.x);
+		int targetIndexY = EnvironmentManager.environmentManager_.GetIndexY(targetPosition.y);
 
-		if (!EnvironmentManager.environmentManager.environmentGraph[sourceIndexX, sourceIndexY, 0] || !EnvironmentManager.environmentManager.environmentGraph[targetIndexX, targetIndexY, 0]) {
+		if (!EnvironmentManager.environmentManager_.environmentGraph[sourceIndexX, sourceIndexY, 0] || !EnvironmentManager.environmentManager_.environmentGraph[targetIndexX, targetIndexY, 0]) {
 			Debug.Log("astar source or target in entity wall");  // occurs if target corpse slides through wall
 			yield break;
 		}
@@ -166,7 +166,7 @@ public abstract class CompleteBodyController : SpiritController {
 			/**
 			 * Expand the node by adding its neighbors to the frontier
 			 */
-			int[][] validNeighborIndicesXY = EnvironmentManager.environmentManager.GetValidNeighborIndicesXY(node.indexX, node.indexY);
+			int[][] validNeighborIndicesXY = EnvironmentManager.environmentManager_.GetValidNeighborIndicesXY(node.indexX, node.indexY);
 			for (int vv = 0; vv < validNeighborIndicesXY.Length; vv++) {
 				if (validNeighborIndicesXY[vv] != null) {
 					int neighborNodeIndexX = validNeighborIndicesXY[vv][0];
@@ -220,8 +220,8 @@ public abstract class CompleteBodyController : SpiritController {
 	private IEnumerator InstantiateNodeAStarSearch(AStarPriorityQueueNode node, float waitTime, Color color) {
 		yield return new WaitForSeconds(waitTime);
 		// node.Print();
-		Vector2 position = new Vector2(EnvironmentManager.environmentManager.GetPositionX(node.indexX), EnvironmentManager.environmentManager.GetPositionY(node.indexY));  // TODO
-		GameObject nodeGameObject = Instantiate(PrefabReferences.prefabReferences.circleSmall2, position, Quaternion.identity);
+		Vector2 position = new Vector2(EnvironmentManager.environmentManager_.GetPositionX(node.indexX), EnvironmentManager.environmentManager_.GetPositionY(node.indexY));  // TODO
+		GameObject nodeGameObject = Instantiate(PrefabReferences.prefabReferences_.circleSmall2_, position, Quaternion.identity);
 		nodeGameObject.GetComponent<SpriteRenderer>().color = color;
 
 		if (circleSmallGrid[node.indexX, node.indexY] != null) {
@@ -231,8 +231,8 @@ public abstract class CompleteBodyController : SpiritController {
 	}
 
 	protected IEnumerator ErasePathNodes() {
-		for (int indexX = 0; indexX < EnvironmentManager.environmentManager.XN; indexX++) {
-			for (int indexY = 0; indexY < EnvironmentManager.environmentManager.YM; indexY++) {
+		for (int indexX = 0; indexX < EnvironmentManager.environmentManager_.XN; indexX++) {
+			for (int indexY = 0; indexY < EnvironmentManager.environmentManager_.YM; indexY++) {
 				if (circleSmallGrid[indexX, indexY] != null) {
 					Destroy(circleSmallGrid[indexX, indexY]);
 				}

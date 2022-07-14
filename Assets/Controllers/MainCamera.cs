@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class MainCamera : MonoBehaviour {
 
-	public static MainCamera mainCamera;
-	public Transform playerTransform;
+	public static MainCamera mainCamera_;
+	public Transform playerTransform_;
 
 	protected void Awake() {
-		if (mainCamera == null) {
+		if (mainCamera_ == null) {
 			//DontDestroyOnLoad (gameObject);
-			mainCamera = this;
+			mainCamera_ = this;
 		} else {
 			Destroy(gameObject);
 		}
 	}
 
 	protected void Update() {
-		transform.position = new Vector3(playerTransform.position.x, playerTransform.position.y, -10f);
+		transform.position = new Vector3(playerTransform_.position.x, playerTransform_.position.y, -10f);
 	}
 }

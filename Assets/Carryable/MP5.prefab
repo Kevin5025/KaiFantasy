@@ -149,12 +149,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eei: 0
-  firingMode: 1
-  ammunitionType: 0
-  magazineCapacity: 30
+  firingMode_: 1
+  ammunitionType_: 0
+  magazineCapacity_: 30
   magazineCount: 0
-  reloadTime: 2
-  bulletCount: 1
+  reloadTime_: 2
+  bulletCount_: 1
 --- !u!114 &7624455503137343360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f433d929fa3395749b6247f5273d54ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equipableClass: 0
+  equipableClass_: 0
 --- !u!114 &2884206439133371799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 887b863d304177a4587f863d1c7feb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownTimeout: 0.09
-  projectileTimeout: 1
-  initialSpeed: 20
-  baseDamage: 11
+  cooldownTimeout_: 0.09
+  projectileTimeout_: 1
+  initialSpeed_: 20
+  baseDamage_: 11

@@ -7,35 +7,35 @@ using UnityEngine;
  */
 public class PrefabReferences : MonoBehaviour {
 
-	public static PrefabReferences prefabReferences;
-	public GameObject block;
-	public GameObject circleSmall;
-	public GameObject circleMedium;
-	public GameObject circleLarge;
-	public GameObject circleSmall2;//mass = 0.037845 in inspector
-	public GameObject circleMedium2;
-	public GameObject circleLarge2;
+	public static PrefabReferences prefabReferences_;
+	public GameObject block_;
+	public GameObject circleSmall_;
+	public GameObject circleMedium_;
+	public GameObject circleLarge_;
+	public GameObject circleSmall2_;  //mass = 0.037845 in inspector
+	public GameObject circleMedium2_;
+	public GameObject circleLarge2_;
 
-	public Sprite circleMediumX;
-	public Sprite circleMediumY;
-	public Sprite circleMediumYL;
-	public Sprite circleMediumYT;
-	public Sprite squareMediumX;
-	public Sprite squareMediumY;
-	public Sprite squareMediumYL;
-	public Sprite squareMediumYT;
+	public Sprite circleMediumX_;
+	public Sprite circleMediumY_;
+	public Sprite circleMediumYL_;
+	public Sprite circleMediumYT_;
+	public Sprite squareMediumX_;
+	public Sprite squareMediumY_;
+	public Sprite squareMediumYL_;
+	public Sprite squareMediumYT_;
 
-	public GameObject bullet;
+	public GameObject bulletPrefab_;
 
-	public GameObject dashGameObject;
+	public GameObject dashPrefab_;
 
-	public GameObject m9GameObject;
-	public GameObject financialItemGameObject;
+	public GameObject m9Prefab_;
+	public GameObject financialItemPrefab_;
 
 	protected virtual void Awake() {
-		if (prefabReferences == null) {//like a singleton
+		if (prefabReferences_ == null) {//like a singleton
 			//DontDestroyOnLoad (gameObject);
-			prefabReferences = this;
+			prefabReferences_ = this;
 		} else { //if (menuColors != null)
 			Destroy(gameObject);
 		}

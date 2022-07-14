@@ -8,9 +8,9 @@ using System.Collections.Generic;
  */
 public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerBody, IActivator {
 
-	protected IHealthBody healthBody;
-	protected IPhysicsBody physicsBody;
-	protected IItemHandlerBody itemHandlerBody;
+	protected IHealthBody healthBody_;
+	protected IPhysicsBody physicsBody_;
+	protected IItemHandlerBody itemHandlerBody_;
 
 	public HealthState healthState;
 
@@ -26,9 +26,9 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 
 	protected override void Awake() {
 		base.Awake();
-		healthBody = GetComponent<HealthBody>();
-		physicsBody = GetComponent<CirclePhysicsBody>();
-		itemHandlerBody = GetComponent<ItemHandlerBody>();
+		healthBody_ = GetComponent<HealthBody>();
+		physicsBody_ = GetComponent<CirclePhysicsBody>();
+		itemHandlerBody_ = GetComponent<ItemHandlerBody>();
 	}
 
 	protected override void Start () {
@@ -40,9 +40,9 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 		brickedColorAlpha = 0.25f;
 		fibrillatingColorAlpha = 0.5f;
 		capableColorAlpha = 1f;
-		brickedColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, brickedColorAlpha);
-		fibrillatingColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, fibrillatingColorAlpha);
-		capableColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, capableColorAlpha);
+		brickedColor = new Color(spriteRenderer_.color.r, spriteRenderer_.color.g, spriteRenderer_.color.b, brickedColorAlpha);
+		fibrillatingColor = new Color(spriteRenderer_.color.r, spriteRenderer_.color.g, spriteRenderer_.color.b, fibrillatingColorAlpha);
+		capableColor = new Color(spriteRenderer_.color.r, spriteRenderer_.color.g, spriteRenderer_.color.b, capableColorAlpha);
 	}
 
 	protected override void Update() {
@@ -62,12 +62,12 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 		if (healthState == HealthState.Disintegrated) {
 			Disintegrate();
 		} else if (healthState == HealthState.Bricked) {
-			// float fadeBrickedColorAlpha = LinearRangeAnalogy(health, healthStateUpperThresholdList[(int)HealthState.Disintegrated], healthStateUpperThresholdList[(int)HealthState.Bricked], fadeDisintegratedUpperColorAlpha, fadeBrickedUpperColorAlpha);
-			spriteRenderer.color = brickedColor;
+			// float fadeBrickedColorAlpha = LinearRangeAnalogy(health_, healthStateUpperThresholdList_[(int)HealthState.Disintegrated], healthStateUpperThresholdList_[(int)HealthState.Bricked], fadeDisintegratedUpperColorAlpha, fadeBrickedUpperColorAlpha);
+			spriteRenderer_.color = brickedColor;
 		} else if (healthState == HealthState.Fibrillating) {
-			spriteRenderer.color = fibrillatingColor;
+			spriteRenderer_.color = fibrillatingColor;
 		} else if ((int)healthState >= (int)HealthState.Capable) {
-			spriteRenderer.color = capableColor;
+			spriteRenderer_.color = capableColor;
 		}
 	}
 
@@ -76,82 +76,82 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 	}
 
     public float TakeDamage(CompleteBody casterAgent, float damage) {
-        return healthBody.TakeDamage(casterAgent, damage);
+        return healthBody_.TakeDamage(casterAgent, damage);
     }
 
     public float[] GetHealthStateUpperThresholdList() {
-        return healthBody.GetHealthStateUpperThresholdList();
+        return healthBody_.GetHealthStateUpperThresholdList();
     }
 
     public float GetHealth() {
-        return healthBody.GetHealth();
+        return healthBody_.GetHealth();
     }
 
     public HealthState GetHealthState() {
-        return healthBody.GetHealthState();
+        return healthBody_.GetHealthState();
     }
 
     public void RotateTargetPosition(Vector2 targetPosition) {
-        physicsBody.RotateTargetPosition(targetPosition);
+        physicsBody_.RotateTargetPosition(targetPosition);
     }
 
     public void RotateOffsetRotation(float offsetRotation) {
-        physicsBody.RotateOffsetRotation(offsetRotation);
+        physicsBody_.RotateOffsetRotation(offsetRotation);
     }
 
     public void MoveTargetPosition(Vector2 targetPosition, bool crawl = false) {
-        physicsBody.MoveTargetPosition(targetPosition, crawl);
+        physicsBody_.MoveTargetPosition(targetPosition, crawl);
     }
 
     public void MoveWASD(bool D, bool A, bool W, bool S, bool crawl = false) {
-        physicsBody.MoveWASD(D, A, W, S, crawl);
+        physicsBody_.MoveWASD(D, A, W, S, crawl);
     }
 
     public void DashWASD(bool D, bool A, bool W, bool S) {
-        physicsBody.DashWASD(D, A, W, S);
+        physicsBody_.DashWASD(D, A, W, S);
     }
 
     public float GetRadius() {
-        return physicsBody.GetRadius();
+        return physicsBody_.GetRadius();
     }
 
     public Item HandleItem(int numNextEei) {
-        return itemHandlerBody.HandleItem(numNextEei);
+        return itemHandlerBody_.HandleItem(numNextEei);
     }
 
     public void EquipItem(EquipableItem equipableItem, int numNextEei = 0) {
-        itemHandlerBody.EquipItem(equipableItem, numNextEei);
+        itemHandlerBody_.EquipItem(equipableItem, numNextEei);
     }
 
     public void UnequipItem(int eei) {
-        itemHandlerBody.UnequipItem(eei);
+        itemHandlerBody_.UnequipItem(eei);
     }
 
     public void PocketItem(int eeiHand) {
-        itemHandlerBody.PocketItem(eeiHand);
+        itemHandlerBody_.PocketItem(eeiHand);
     }
 
     public int GetEquipableClassEei(EquipableClass equipableClass, int numNextEei) {
-        return itemHandlerBody.GetEquipableClassEei(equipableClass, numNextEei);
+        return itemHandlerBody_.GetEquipableClassEei(equipableClass, numNextEei);
     }
 
     public void CreditItem(FinancialItem financialItem) {
-        itemHandlerBody.CreditItem(financialItem);
+        itemHandlerBody_.CreditItem(financialItem);
     }
 
     public void DebitItem(int fci) {
-        itemHandlerBody.DebitItem(fci);
+        itemHandlerBody_.DebitItem(fci);
     }
 
     public EquipableClass[] GetEquipmentEquipableClassArray() {
-        return itemHandlerBody.GetEquipmentEquipableClassArray();
+        return itemHandlerBody_.GetEquipmentEquipableClassArray();
     }
 
     public IEquipable[] GetEquipmentEquipableArray() {
-        return itemHandlerBody.GetEquipmentEquipableArray();
+        return itemHandlerBody_.GetEquipmentEquipableArray();
     }
 
     public float[] GetFinanceQuantityArray() {
-        return itemHandlerBody.GetFinanceQuantityArray();
+        return itemHandlerBody_.GetFinanceQuantityArray();
     }
 }

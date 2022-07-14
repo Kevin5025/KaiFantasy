@@ -4,19 +4,19 @@ using UnityEngine;
 
 public abstract class SpriteBody : MonoBehaviour, ISpirit {
 
-	protected ISpirit spirit;
+	protected ISpirit spirit_;
 	
-	protected SpriteRenderer spriteRenderer;
+	protected SpriteRenderer spriteRenderer_;
 	protected float disintegratedColorAlpha;
 	protected float fadeDuration;
 
 	protected virtual void Awake() {
-		spirit = GetComponent<Spirit>();
+		spirit_ = GetComponent<Spirit>();
 	}
 
 	protected virtual void Start() {
-		spriteRenderer = GetComponent<SpriteRenderer>();
-		spriteRenderer.color = spirit.GetColor();
+		spriteRenderer_ = GetComponent<SpriteRenderer>();
+		spriteRenderer_.color = Spirit.teamColorDictionary[spirit_.GetAffinity()];
 
 		disintegratedColorAlpha = 0.125f;  // disintegration start alpha
 		fadeDuration = 4f;  // time it takes for alpha to disintegrate to 0
@@ -52,7 +52,7 @@ public abstract class SpriteBody : MonoBehaviour, ISpirit {
 	protected virtual IEnumerator FadeDisintegrated() {
 		float fadeTimeConstant = disintegratedColorAlpha / fadeDuration;
 		for (float f = disintegratedColorAlpha; f > 0; f -= Time.deltaTime * fadeTimeConstant) {
-			spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, f);
+			spriteRenderer_.color = new Color(spriteRenderer_.color.r, spriteRenderer_.color.g, spriteRenderer_.color.b, f);
 			//yield return new WaitForSeconds(1f);//3f? //is this consistent? 
 			yield return null;  // https://answers.unity.com/questions/755196/yield-return-null-vs-yield-return-waitforendoffram.html
 		}
@@ -64,18 +64,14 @@ public abstract class SpriteBody : MonoBehaviour, ISpirit {
 	}
 
 	public Affinity GetAffinity() {
-		return spirit.GetAffinity();
+		return spirit_.GetAffinity();
 	}
 
 	public void SetAffinity(Affinity affinity) {
-		spirit.SetAffinity(affinity);
-	}
-
-	public Color GetColor() {
-		return spirit.GetColor();
+		spirit_.SetAffinity(affinity);
 	}
 
 	public Transform GetTransform() {
-		return spirit.GetTransform();
+		return spirit_.GetTransform();
 	}
 }

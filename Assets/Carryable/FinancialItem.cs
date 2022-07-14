@@ -14,7 +14,7 @@ public class FinancialItem : Item {
 	public static int numManaTypes;
 	public static int numResourceTypes;
 	public static int numFinanceTypes;
-	// public static Dictionary<FinancialClass, Sprite> financialItemSpriteDictionary;  // see HudCanvasManager.hudCanvasManager.financeSpriteArray
+	// public static Dictionary<FinancialClass, Sprite> financialItemSpriteDictionary;  // see HudCanvasManager.hudCanvasManager_.financeSpriteArray
 	public static Dictionary<FinancialClass, Color> financialItemColorDictionary;
 	static FinancialItem() {
 		numAmmunitionTypes = 6;
@@ -42,28 +42,28 @@ public class FinancialItem : Item {
 		};
 	}
 
-	public FinancialClass financialClass;  // set beforehand
-	public float quantity;  // set beforehand
+	public FinancialClass financialClass_;
+	public float quantity_;
 
 	protected virtual void Start() {
-		while (quantity > 30) {
-			float newQuantity = Mathf.Ceil(quantity / 3f);
-			InstantiateFinancialItemGameObject(financialClass, newQuantity, transform);
-			quantity -= newQuantity;
+		while (quantity_ > 30) {
+			float newQuantity = Mathf.Ceil(quantity_ / 3f);
+			InstantiateFinancialItemGameObject(financialClass_, newQuantity, transform);
+			quantity_ -= newQuantity;
 		}
 
-		float scale = 2f * Mathf.Sqrt(quantity / 30f);
+		float scale = 2f * Mathf.Sqrt(quantity_ / 30f);
 		transform.localScale = new Vector2(scale, scale);
 		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-		spriteRenderer.sprite = HudCanvasManager.hudCanvasManager.financeSpriteArray[(int)financialClass];
-		spriteRenderer.color = financialItemColorDictionary[financialClass];
+		spriteRenderer.sprite = HudCanvasManager.hudCanvasManager_.financeSpriteArray[(int)financialClass_];
+		spriteRenderer.color = financialItemColorDictionary[financialClass_];
 	}
 
 	public static FinancialItem InstantiateFinancialItemGameObject(FinancialClass financialClass, float quantity, Transform originTransform) {
-		GameObject financialItemGameObject = Instantiate(PrefabReferences.prefabReferences.financialItemGameObject);
+		GameObject financialItemGameObject = Instantiate(PrefabReferences.prefabReferences_.financialItemPrefab_);
 		FinancialItem financialItem = financialItemGameObject.GetComponent<FinancialItem>();
-		financialItem.financialClass = financialClass;
-		financialItem.quantity = quantity;
+		financialItem.financialClass_ = financialClass;
+		financialItem.quantity_ = quantity;
 		financialItem.BecomeUnobtained(originTransform);
 		return financialItem;
 	}

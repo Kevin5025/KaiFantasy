@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Dash : MonoBehaviour, IActivatable {
 
-	IActivatable activatable;  // set in inspector as DashActivatable
+	IActivatable activatable_;
 
 	protected virtual void Awake() {
-		activatable = GetComponent<DashActivatable>();
-		// activatable.cooldownTimeout = 4f;
+		activatable_ = GetComponent<DashActivatable>();
+		// activatable_.cooldownTimeout_ = 4f;
 	}
 
 	protected virtual void Start() {
@@ -16,7 +16,7 @@ public class Dash : MonoBehaviour, IActivatable {
 	}
 
 	public bool BecomeActivated(IActivator activator, Dictionary<object, object> argumentDictionary = null) {
-		return activatable.BecomeActivated(activator, argumentDictionary);
+		return activatable_.BecomeActivated(activator, argumentDictionary);
 	}
 
 }

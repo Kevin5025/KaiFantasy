@@ -7,7 +7,7 @@ public class AimFireController : RotateFireController {
 	protected override void Rotate() {
 		base.Rotate();
 		if (primeAdversary != null) {
-			completeBody.RotateTargetPosition(primeAdversary.GetTransform().position);
+			completeBody_.RotateTargetPosition(primeAdversary.GetTransform().position);
 		} else {
 			Spin();
 		}

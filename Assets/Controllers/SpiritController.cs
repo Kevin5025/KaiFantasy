@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class SpiritController : MonoBehaviour {
 
-	protected ISpirit spirit;
+	protected ISpirit spirit_;
 
 	// TODO: nest into map that takes "ally" and "adversary" as keys
 	protected IList<ISpirit> presentAllyList;
@@ -13,7 +13,7 @@ public abstract class SpiritController : MonoBehaviour {
 	public ISpirit primeAdversary;
 
 	protected virtual void Awake() {
-		spirit = GetComponent<Spirit>();
+		spirit_ = GetComponent<Spirit>();
 	}
 
 	protected virtual void Start() {
@@ -30,7 +30,7 @@ public abstract class SpiritController : MonoBehaviour {
 	protected virtual void OnTriggerEnter2D(Collider2D collider) {
 		ISpirit colliderAgent = collider.GetComponent<Spirit>();
 		if (colliderAgent != null) {
-			if (colliderAgent.GetAffinity() == spirit.GetAffinity()) {
+			if (colliderAgent.GetAffinity() == spirit_.GetAffinity()) {
 				presentAllyList.Add(colliderAgent);
 				// Debug.Log(presentAllyList.Count);
 				if (primeAlly == null) {
@@ -52,7 +52,7 @@ public abstract class SpiritController : MonoBehaviour {
 	protected virtual void OnTriggerExit2D(Collider2D collider) {
 		ISpirit colliderAgent = collider.GetComponent<Spirit>();
 		if (colliderAgent != null) {
-			if (colliderAgent.GetAffinity() == spirit.GetAffinity()) {
+			if (colliderAgent.GetAffinity() == spirit_.GetAffinity()) {
 				presentAllyList.Remove(colliderAgent);
 				// Debug.Log(presentAllyList.Count);
 				if (colliderAgent == primeAlly) {

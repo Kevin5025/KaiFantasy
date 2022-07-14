@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipableItem : Item, IEquipable {
-	public IEquipable equipable;  // set in inspector
+	public IEquipable equipable_;
 	public int eei;  // set elsewhere
 	
 	protected virtual void Awake() {
-		equipable = GetComponent<Equipable>();
+		equipable_ = GetComponent<Equipable>();
 	}
 
 	protected virtual void Start() {
@@ -26,14 +26,14 @@ public class EquipableItem : Item, IEquipable {
 	}
 
 	public SpriteRenderer GetComponentSpriteRenderer() {
-		return equipable.GetComponentSpriteRenderer();
+		return equipable_.GetComponentSpriteRenderer();
 	}
 
 	public EquipableClass GetEquipableClass() {
-		return equipable.GetEquipableClass();
+		return equipable_.GetEquipableClass();
 	}
 
 	public void SetEquipableClass(EquipableClass equipableClass) {
-		equipable.SetEquipableClass(equipableClass);
+		equipable_.SetEquipableClass(equipableClass);
 	}
 }

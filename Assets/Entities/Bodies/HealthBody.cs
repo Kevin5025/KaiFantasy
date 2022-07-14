@@ -6,23 +6,24 @@ public class HealthBody : HealthStateBody, IHealthBody {
 
 	protected bool respawns;  // TODO
 
-	public float[] healthStateUpperThresholdList;  // set beforehand
-	public float healthRateBase;  // set beforehand
-	public float health;  // set starting value beforehand
+	public float[] healthStateUpperThresholdList_;
+	public float healthRateBase_;
+	public float health_;
 
 	public bool ever_ascended;  // temporary coding variable
 
-	void Awake()
+	protected virtual void Awake()
 	{
-		healthStateUpperThresholdList[(int)HealthState.Ascended] = float.MaxValue;
+		healthStateUpperThresholdList_[(int)HealthState.Ascended] = float.MaxValue;
 	}
 
-	void Start() {
+	protected virtual void Start() {
 		ever_ascended = false;
+		HealthStatusUpdate();
 	}
 
 	// Update is called once per frame
-	void Update()
+	protected virtual void Update()
 	{
 		if (healthState == HealthState.Disintegrated)
 		{
@@ -35,7 +36,7 @@ public class HealthBody : HealthStateBody, IHealthBody {
 
 	protected virtual void HealthStatusUpdate() {
 		foreach (HealthState healthState in System.Enum.GetValues(typeof(HealthState))) {
-			if (health < healthStateUpperThresholdList[(int)healthState]) {
+			if (health_ < healthStateUpperThresholdList_[(int)healthState]) {
 				this.healthState = healthState;
 				break;
 			}
@@ -46,24 +47,24 @@ public class HealthBody : HealthStateBody, IHealthBody {
 	}
 
 	protected virtual void HealthUpdate() {
-		float healthRateCurrent = healthRateBase;
+		float healthRateCurrent = healthRateBase_;
 		if ((int)healthState >= (int)HealthState.Overflowing) {
 			healthRateCurrent = 0f;
         }
-		health += healthRateCurrent * Time.deltaTime;
+		health_ += healthRateCurrent * Time.deltaTime;
 	}
 
 	public virtual float TakeDamage(CompleteBody casterAgent, float damage) {
 		float trueDamage = damage;
-		health -= trueDamage;
+		health_ -= trueDamage;
 		return trueDamage;
 	}
 
 	public float[] GetHealthStateUpperThresholdList() {
-		return healthStateUpperThresholdList;
+		return healthStateUpperThresholdList_;
 	}
 
 	public float GetHealth() {
-		return health;
+		return health_;
 	}
 }

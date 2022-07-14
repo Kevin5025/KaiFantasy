@@ -361,8 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de2c95ef48e7894d8c6fa9cb1e93e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  affinity: 0
-  color: {r: 0, g: 0, b: 0, a: 0}
+  affinity_: 0
 --- !u!114 &2410889011607648770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,15 +375,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthState: 3
-  healthStateUpperThresholdList:
+  healthStateUpperThresholdList_:
   - 0
   - 100
   - 200
   - 400
   - 600
   - 0
-  healthRateBase: 0
-  health: 300
+  healthRateBase_: 1
+  health_: 300
   ever_ascended: 0
 --- !u!114 &4501218954530227132
 MonoBehaviour:

@@ -6,6 +6,5 @@ public enum Affinity { RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN, BROWN };//TODO: 
 public interface ISpirit {
 	Affinity GetAffinity();
 	void SetAffinity(Affinity affinity);
-	Color GetColor();
 	Transform GetTransform();
 }

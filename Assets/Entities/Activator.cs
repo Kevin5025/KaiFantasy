@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Activator : MonoBehaviour, IActivator {
 
-	protected IHealthStateBody healthStateBody;
+	protected IHealthStateBody healthStateBody_;
 
 	protected virtual void Awake() {
-		healthStateBody = GetComponent<HealthStateBody>();
+		healthStateBody_ = GetComponent<HealthStateBody>();
 	}
 
 	protected virtual void Start() {
@@ -24,6 +24,6 @@ public class Activator : MonoBehaviour, IActivator {
 	}
 
     public HealthState GetHealthState() {
-        return healthStateBody.GetHealthState();
+        return healthStateBody_.GetHealthState();
     }
 }

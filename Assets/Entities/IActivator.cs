@@ -2,5 +2,5 @@
 using UnityEngine;
 
 public interface IActivator : IHealthStateBody {
-	// bool Activate(IActivatable activatable, Dictionary<object, object> argumentDictionary = null);
+	// bool Activate(IActivatable activatable_, Dictionary<object, object> argumentDictionary = null);
 }

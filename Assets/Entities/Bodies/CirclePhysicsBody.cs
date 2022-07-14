@@ -9,9 +9,9 @@ using UnityEngine;
  */
 public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 
-	protected IHealthStateBody healthStateBody;  // set in inspector
+	protected IHealthStateBody healthStateBody_;
 
-	protected Rigidbody2D rb2D;
+	protected Rigidbody2D rb2D_;
 	public float radius;
 	public float area;
 	public float torque;
@@ -23,12 +23,12 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 	protected Dash dash;
 
 	protected virtual void Awake() {
-		healthStateBody = GetComponent<HealthStateBody>();
+		healthStateBody_ = GetComponent<HealthStateBody>();
 	}
 
 	protected virtual void Start() {
-		rb2D = GetComponent<Rigidbody2D>();
-		radius = Mathf.Sqrt(2 * rb2D.inertia / rb2D.mass);
+		rb2D_ = GetComponent<Rigidbody2D>();
+		radius = Mathf.Sqrt(2 * rb2D_.inertia / rb2D_.mass);
 		area = (float)Math.PI * radius * radius;
 		GetComponent<Rigidbody2D>().mass = area;
 		torque = GetComponent<Rigidbody2D>().inertia * 50f;
@@ -36,7 +36,7 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 		crawlForce = moveForce * 0.2f;
 		dashImpulse = moveForce * 0.5f;
 
-		dashGameObject = Instantiate(PrefabReferences.prefabReferences.dashGameObject);
+		dashGameObject = Instantiate(PrefabReferences.prefabReferences_.dashPrefab_);
 		dash = dashGameObject.GetComponent<Dash>();
 	}
 
@@ -51,7 +51,7 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 	}
 
 	public virtual void RotateOffsetRotation(float offsetRotation) {
-		bool is_at_least_fibrillating = (int)healthStateBody.GetHealthState() >= (int)HealthState.Fibrillating;
+		bool is_at_least_fibrillating = (int)healthStateBody_.GetHealthState() >= (int)HealthState.Fibrillating;
 		if (is_at_least_fibrillating) {
 			transform.Rotate(0, 0, offsetRotation);
 		}
@@ -76,9 +76,9 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
      * Diagonal movement for orthogonal combinations of WASD. 
      */
 	public virtual void MoveWASD(bool D, bool A, bool W, bool S, bool crawl = false) {
-		bool is_at_least_fibrillating = (int)healthStateBody.GetHealthState() >= (int)HealthState.Fibrillating;
+		bool is_at_least_fibrillating = (int)healthStateBody_.GetHealthState() >= (int)HealthState.Fibrillating;
 		if (is_at_least_fibrillating) {
-			bool is_fibrillating = (int)healthStateBody.GetHealthState() == (int)HealthState.Fibrillating;
+			bool is_fibrillating = (int)healthStateBody_.GetHealthState() == (int)HealthState.Fibrillating;
 			crawl = crawl || is_fibrillating;
 
 			Vector2 unitVector = PlayerCompleteBodyController.GetUnitVector(D, A, W, S);
@@ -86,9 +86,9 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 			Vector2 forceVector = force * unitVector;
 
 			//if (relative) {  // different control scheme
-			//    rb2D.AddRelativeForce(forceVector);
+			//    rb2D_.AddRelativeForce(forceVector);
 			//} else {
-			rb2D.AddForce(forceVector);
+			rb2D_.AddForce(forceVector);
 			//}
 		}
 	}
@@ -111,6 +111,6 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 	}
 
 	public HealthState GetHealthState() {
-		return healthStateBody.GetHealthState();
+		return healthStateBody_.GetHealthState();
 	}
 }

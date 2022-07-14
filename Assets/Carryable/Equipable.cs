@@ -8,8 +8,8 @@ using System;
  */
 public class Equipable : MonoBehaviour, IEquipable {
 	
-	public EquipableClass equipableClass;  // set in inspector
-	public static Dictionary<EquipableClass, Color> equipableColorDictionary;  // returns the correct background color for the given equipable class
+	public EquipableClass equipableClass_;  // set in inspector
+	public static Dictionary<EquipableClass, Color> equipableColorDictionary;  // returns the correct background color for the given equipable_ class
 
 	static Equipable() {
 		equipableColorDictionary = new Dictionary<EquipableClass, Color>() {
@@ -26,11 +26,11 @@ public class Equipable : MonoBehaviour, IEquipable {
 	}
 
 	public EquipableClass GetEquipableClass() {
-		return equipableClass;
+		return equipableClass_;
 	}
 
 	public void SetEquipableClass(EquipableClass equipableClass) {
-		this.equipableClass = equipableClass;
+		this.equipableClass_ = equipableClass;
 	}
 
 	public SpriteRenderer GetComponentSpriteRenderer() {

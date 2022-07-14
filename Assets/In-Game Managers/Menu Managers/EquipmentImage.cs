@@ -8,7 +8,7 @@ public class EquipmentImage : MonoBehaviour, IPointerClickHandler {
 	public int eei;
 
 	public void OnPointerClick(PointerEventData eventData) {
-		PlayerCompleteBodyController.playerCompleteBodyController.OnEquipmentImageClick(this, eventData);
+		PlayerCompleteBodyController.playerCompleteBodyController_.OnEquipmentImageClick(this, eventData);
 	}
 
 }
