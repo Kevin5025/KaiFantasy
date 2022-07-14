@@ -4,9 +4,7 @@ using UnityEngine;
 /**
  * This is anything that can use items. 
  */
-public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
-
-	protected IActivator activator;  // set in inspector
+public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 
 	protected float itemHandleRadius;
 
@@ -19,7 +17,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 	public float[] bankFinancialQuantityArray;
 
 	protected virtual void Awake() {
-		activator = GetComponent<Activator>();
+		
 	}
 
 	protected virtual void Start() {
@@ -209,14 +207,6 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody, IActivator {
 
 	public float[] GetFinanceQuantityArray() {
 		return bankFinancialQuantityArray;
-	}
-
-	public HealthState GetHealthState() {
-		return activator.GetHealthState();
-	}
-
-	public void SetHealthState(HealthState healthState) {
-		activator.SetHealthState(healthState);
 	}
 
 	//public virtual void AcquireItem() {

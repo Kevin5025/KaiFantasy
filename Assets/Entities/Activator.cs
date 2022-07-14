@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Activator : MonoBehaviour, IActivator {
 
-	protected HealthStateBody healthStateBody;
+	protected IHealthStateBody healthStateBody;
 
 	protected virtual void Awake() {
 		healthStateBody = GetComponent<HealthStateBody>();
@@ -15,18 +15,15 @@ public class Activator : MonoBehaviour, IActivator {
 	}
 
 	public static bool Activate(IActivator activator, IActivatable activatable, Dictionary<object, object> argumentDictionary = null) {
-		bool capable = (int)activator.GetHealthState() >= (int)HealthState.Capable;
-		if (capable && activatable != null) {
+		bool is_at_least_capable = (int)activator.GetHealthState() >= (int)HealthState.Capable;
+		bool does_activate = is_at_least_capable && activatable != null;
+		if (does_activate) {
 			activatable.BecomeActivated(activator, argumentDictionary);
 		}
-		return capable;
+		return does_activate;
 	}
 
-	public HealthState GetHealthState() {
-		return healthStateBody.healthState;
-	}
-
-	public void SetHealthState(HealthState healthState) {
-		healthStateBody.healthState = healthState;
-	}
+    public HealthState GetHealthState() {
+        return healthStateBody.GetHealthState();
+    }
 }

@@ -4,9 +4,8 @@ using UnityEngine;
 
 public enum HealthState { Disintegrated, Bricked, Fibrillating, Capable, Overflowing, Ascended, };
 
-public interface IHealthBody {
+public interface IHealthBody : IHealthStateBody {
 	float TakeDamage(CompleteBody casterAgent, float damage);
-	HealthState GetHealthState();
 	float[] GetHealthStateUpperThresholdList();
 	float GetHealth();
 }

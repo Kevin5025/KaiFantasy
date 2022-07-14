@@ -5,7 +5,7 @@ using UnityEngine;
 public class GunActivatable : Activatable {
 
 	public float projectileTimeout;  // set in inspector
-	public float initialVelocity;  // set in inspector
+	public float initialSpeed;  // set in inspector
 	public float baseDamage;  // set in inspector
 
 	public override void Actuate(IActivator activator, Dictionary<object, object> argumentDictionary = null) {
@@ -21,11 +21,11 @@ public class GunActivatable : Activatable {
 		Projectile projectile = projectileGameObject.GetComponent<Projectile>();
 		projectile.completeBodyActivator = completeBodyActivator;
 		projectile.timeout = projectileTimeout;
-		projectile.initialVelocity = initialVelocity;
+		projectile.initialSpeed = initialSpeed;
 		projectile.baseDamage = baseDamage;
 
 		projectileGameObject.SetActive(true);
-		projectileGameObject.GetComponent<Rigidbody2D>().velocity = projectileGameObject.transform.TransformDirection(new Vector2(0, projectile.initialVelocity));
+		projectileGameObject.GetComponent<Rigidbody2D>().velocity = projectileGameObject.transform.TransformDirection(new Vector2(0, projectile.initialSpeed));
 		projectileGameObject.GetComponent<Collider2D>().enabled = true;
 	}
 }

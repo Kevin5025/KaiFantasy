@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
-public interface IActivator {
+public interface IActivator : IHealthStateBody {
 	// bool Activate(IActivatable activatable, Dictionary<object, object> argumentDictionary = null);
-	HealthState GetHealthState();
-	void SetHealthState(HealthState healthState);
 }

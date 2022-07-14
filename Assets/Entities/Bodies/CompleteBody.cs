@@ -8,10 +8,9 @@ using System.Collections.Generic;
  */
 public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerBody, IActivator {
 
-	protected IPhysicsBody physicsBody;
 	protected IHealthBody healthBody;
+	protected IPhysicsBody physicsBody;
 	protected IItemHandlerBody itemHandlerBody;
-	protected IActivator activator;
 
 	public HealthState healthState;
 
@@ -30,7 +29,6 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 		healthBody = GetComponent<HealthBody>();
 		physicsBody = GetComponent<CirclePhysicsBody>();
 		itemHandlerBody = GetComponent<ItemHandlerBody>();
-		activator = GetComponent<Activator>();
 	}
 
 	protected override void Start () {
@@ -77,91 +75,83 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 		return LayersManager.layersManager.GetTeamEntityLayer(GetAffinity());
 	}
 
+    public float TakeDamage(CompleteBody casterAgent, float damage) {
+        return healthBody.TakeDamage(casterAgent, damage);
+    }
 
+    public float[] GetHealthStateUpperThresholdList() {
+        return healthBody.GetHealthStateUpperThresholdList();
+    }
 
+    public float GetHealth() {
+        return healthBody.GetHealth();
+    }
 
+    public HealthState GetHealthState() {
+        return healthBody.GetHealthState();
+    }
 
-	public void RotateTargetPosition(Vector2 targetPosition) {
-		physicsBody.RotateTargetPosition(targetPosition);
-	}
+    public void RotateTargetPosition(Vector2 targetPosition) {
+        physicsBody.RotateTargetPosition(targetPosition);
+    }
 
-	public void RotateOffsetRotation(float offsetRotation) {
-		physicsBody.RotateOffsetRotation(offsetRotation);
-	}
+    public void RotateOffsetRotation(float offsetRotation) {
+        physicsBody.RotateOffsetRotation(offsetRotation);
+    }
 
-	public void MoveTargetPosition(Vector2 targetPosition, bool crawl = false) {
-		physicsBody.MoveTargetPosition(targetPosition, crawl);
-	}
+    public void MoveTargetPosition(Vector2 targetPosition, bool crawl = false) {
+        physicsBody.MoveTargetPosition(targetPosition, crawl);
+    }
 
-	public void MoveWASD(bool D, bool A, bool W, bool S, bool crawl = false) {
-		physicsBody.MoveWASD(D, A, W, S, crawl);
-	}
+    public void MoveWASD(bool D, bool A, bool W, bool S, bool crawl = false) {
+        physicsBody.MoveWASD(D, A, W, S, crawl);
+    }
 
-	public void DashWASD(bool D, bool A, bool W, bool S) {
-		physicsBody.DashWASD(D, A, W, S);
-	}
+    public void DashWASD(bool D, bool A, bool W, bool S) {
+        physicsBody.DashWASD(D, A, W, S);
+    }
 
-	public float GetRadius() {
-		return physicsBody.GetRadius();
-	}
+    public float GetRadius() {
+        return physicsBody.GetRadius();
+    }
 
-	public float TakeDamage(CompleteBody casterAgent, float damage) {
-		return healthBody.TakeDamage(casterAgent, damage);
-	}
+    public Item HandleItem(int numNextEei) {
+        return itemHandlerBody.HandleItem(numNextEei);
+    }
 
-	public HealthState GetHealthState() {
-		return healthBody.GetHealthState();
-	}
+    public void EquipItem(EquipableItem equipableItem, int numNextEei = 0) {
+        itemHandlerBody.EquipItem(equipableItem, numNextEei);
+    }
 
-	public Item HandleItem(int numNextEei) {
-		return itemHandlerBody.HandleItem(numNextEei);
-	}
+    public void UnequipItem(int eei) {
+        itemHandlerBody.UnequipItem(eei);
+    }
 
-	public void EquipItem(EquipableItem equipableItem, int numNextEei = 0) {
-		itemHandlerBody.EquipItem(equipableItem, numNextEei);
-	}
+    public void PocketItem(int eeiHand) {
+        itemHandlerBody.PocketItem(eeiHand);
+    }
 
-	public void UnequipItem(int eei) {
-		itemHandlerBody.UnequipItem(eei);
-	}
+    public int GetEquipableClassEei(EquipableClass equipableClass, int numNextEei) {
+        return itemHandlerBody.GetEquipableClassEei(equipableClass, numNextEei);
+    }
 
-	public void PocketItem(int eeiHand) {
-		itemHandlerBody.PocketItem(eeiHand);
-	}
+    public void CreditItem(FinancialItem financialItem) {
+        itemHandlerBody.CreditItem(financialItem);
+    }
 
-	public int GetEquipableClassEei(EquipableClass equipableClass, int numNextEei) {
-		return itemHandlerBody.GetEquipableClassEei(equipableClass, numNextEei);
-	}
+    public void DebitItem(int fci) {
+        itemHandlerBody.DebitItem(fci);
+    }
 
-	public void CreditItem(FinancialItem financialItem) {
-		itemHandlerBody.CreditItem(financialItem);
-	}
+    public EquipableClass[] GetEquipmentEquipableClassArray() {
+        return itemHandlerBody.GetEquipmentEquipableClassArray();
+    }
 
-	public void DebitItem(int fci) {
-		itemHandlerBody.DebitItem(fci);
-	}
+    public IEquipable[] GetEquipmentEquipableArray() {
+        return itemHandlerBody.GetEquipmentEquipableArray();
+    }
 
-	public EquipableClass[] GetEquipmentEquipableClassArray() {
-		return itemHandlerBody.GetEquipmentEquipableClassArray();
-	}
-
-	public IEquipable[] GetEquipmentEquipableArray() {
-		return itemHandlerBody.GetEquipmentEquipableArray();
-	}
-
-	public float[] GetFinanceQuantityArray() {
-		return itemHandlerBody.GetFinanceQuantityArray();
-	}
-
-	public void SetHealthState(HealthState healthState) {
-		activator.SetHealthState(healthState);
-	}
-
-	public float[] GetHealthStateUpperThresholdList() {
-		return healthBody.GetHealthStateUpperThresholdList();
-	}
-
-	public float GetHealth() {
-		return healthBody.GetHealth();
-	}
+    public float[] GetFinanceQuantityArray() {
+        return itemHandlerBody.GetFinanceQuantityArray();
+    }
 }

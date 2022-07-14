@@ -15,7 +15,7 @@ public class Projectile : SpriteBody {
 
 	public CompleteBody completeBodyActivator;  //set beforehand by casterAgent
 	public float timeout;
-	public float initialVelocity;
+	public float initialSpeed;
 	public float baseDamage;
 	public bool defunct;
 	
@@ -77,9 +77,11 @@ public class Projectile : SpriteBody {
 			CompleteBody collisionGameObjectCompleteBody = collider.GetComponentInParent<CompleteBody>();
 			// Debug.Log("trigger stay " + collisionGameObjectEntity + " " + collider.name + " velocity ");
 			if (collisionGameObjectCompleteBody.GetAffinity() != completeBodyActivator.GetAffinity()) {
-				float speedFactor = Mathf.Pow((GetComponent<Rigidbody2D>().velocity - collisionGameObjectCompleteBody.GetComponent<Rigidbody2D>().velocity).magnitude / initialVelocity, 2);
+				float netSpeed = (GetComponent<Rigidbody2D>().velocity - collisionGameObjectCompleteBody.GetComponent<Rigidbody2D>().velocity).magnitude;
+				float speedFactor = Mathf.Pow(netSpeed / initialSpeed, 2);
 				float damage = baseDamage * speedFactor;
 				collisionGameObjectCompleteBody.TakeDamage(completeBodyActivator, damage);
+				// TODO: display accumulated damage
 				// Debug.Log(speedFactor);
 				// Debug.Log(damage);
 			}

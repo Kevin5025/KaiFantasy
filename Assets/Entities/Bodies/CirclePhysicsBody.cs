@@ -9,7 +9,7 @@ using UnityEngine;
  */
 public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 
-	protected IActivator activator;  // set in inspector
+	protected IHealthStateBody healthStateBody;  // set in inspector
 
 	protected Rigidbody2D rb2D;
 	public float radius;
@@ -23,7 +23,7 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 	protected Dash dash;
 
 	protected virtual void Awake() {
-		activator = GetComponent<Activator>();
+		healthStateBody = GetComponent<HealthStateBody>();
 	}
 
 	protected virtual void Start() {
@@ -51,7 +51,8 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 	}
 
 	public virtual void RotateOffsetRotation(float offsetRotation) {
-		if ((int)activator.GetHealthState() >= (int)HealthState.Fibrillating) {
+		bool is_at_least_fibrillating = (int)healthStateBody.GetHealthState() >= (int)HealthState.Fibrillating;
+		if (is_at_least_fibrillating) {
 			transform.Rotate(0, 0, offsetRotation);
 		}
 	}
@@ -75,8 +76,10 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
      * Diagonal movement for orthogonal combinations of WASD. 
      */
 	public virtual void MoveWASD(bool D, bool A, bool W, bool S, bool crawl = false) {
-		if ((int)activator.GetHealthState() >= (int)HealthState.Fibrillating) {
-			crawl = crawl || (int)activator.GetHealthState() == (int)HealthState.Fibrillating;
+		bool is_at_least_fibrillating = (int)healthStateBody.GetHealthState() >= (int)HealthState.Fibrillating;
+		if (is_at_least_fibrillating) {
+			bool is_fibrillating = (int)healthStateBody.GetHealthState() == (int)HealthState.Fibrillating;
+			crawl = crawl || is_fibrillating;
 
 			Vector2 unitVector = PlayerCompleteBodyController.GetUnitVector(D, A, W, S);
 			float force = crawl ? crawlForce : moveForce;
@@ -108,10 +111,6 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 	}
 
 	public HealthState GetHealthState() {
-		return activator.GetHealthState();
-	}
-
-	public void SetHealthState(HealthState healthState) {
-		activator.SetHealthState(healthState);
+		return healthStateBody.GetHealthState();
 	}
 }
