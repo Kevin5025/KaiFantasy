@@ -31,7 +31,7 @@ public class Spirit : MonoBehaviour, ISpirit {
      * Assign sprite color based on team. 
      */
 	protected virtual void Start () {
-		color = GetTeamColor(affinity);
+		color = teamColorDictionary[affinity];
 	}
 	
 	protected virtual void Update () {
@@ -40,10 +40,6 @@ public class Spirit : MonoBehaviour, ISpirit {
 
 	protected virtual void FixedUpdate () {
 
-	}
-
-	public static Color GetTeamColor(Affinity affinity) {
-		return teamColorDictionary[affinity];
 	}
 
 	public Affinity GetAffinity() {

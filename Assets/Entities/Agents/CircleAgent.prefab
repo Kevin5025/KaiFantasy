@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1309500139883949780}
   m_RootOrder: 2
@@ -74,6 +75,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1309500139883949780}
   m_RootOrder: 0
@@ -122,6 +124,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1309500139883949780}
   m_RootOrder: 1
@@ -137,9 +140,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -151,6 +157,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -225,6 +232,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8120134834532354119}
   - {fileID: 9028778405978295724}
@@ -248,9 +256,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -262,6 +273,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -334,7 +346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a38d140721b8e64cb94f754b2199729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteHealthState: 3
+  healthState: 0
   headPosition: {x: 0, y: 0}
   viscosity: 0
 --- !u!114 &7315162891492590613
@@ -369,21 +381,11 @@ MonoBehaviour:
   - 100
   - 200
   - 400
-  - 1000
+  - 600
   - 0
-  healthStateRateList:
-  - 0
-  - -2
-  - 0.1
-  - 0.01
-  - -0.1
-  - 0
-  capableCapacityRate: 0.005
-  capableCapacityComplexity: 2
-  healthRateGeneralBonus: 0
+  healthRateBase: 0
   health: 300
-  ascended: 0
-  defunct: 0
+  ever_ascended: 0
 --- !u!114 &4501218954530227132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,7 +417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentEquipableClassArray: 
-  bankFinancialCountArray: 
+  bankFinancialQuantityArray: []
 --- !u!114 &7447942241357683245
 MonoBehaviour:
   m_ObjectHideFlags: 0

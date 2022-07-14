@@ -4,4 +4,9 @@ using UnityEngine;
 
 public class HealthStateBody : MonoBehaviour {
 	public HealthState healthState;
+
+	public HealthState GetHealthState()
+	{
+		return healthState;
+	}
 }

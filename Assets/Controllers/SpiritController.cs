@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class SpiritController : MonoBehaviour {
 
-	protected ISpirit spirit;  // set in inspector?
+	protected ISpirit spirit;
 
 	// TODO: nest into map that takes "ally" and "adversary" as keys
 	protected IList<ISpirit> presentAllyList;

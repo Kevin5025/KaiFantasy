@@ -27,10 +27,10 @@ public class WorldCanvasManager : MonoBehaviour {
 		bodyAgentList = new List<CompleteBody>() { playerAgent, debugAgent };
 		healthRingFillList = new List<GameObject>();
 		for (int b = 0; b < bodyAgentList.Count; b++) {
-			GameObject healthPieFill = Instantiate(healthRingFillPrefab);
-			healthRingFillList.Add(healthPieFill);
-			healthPieFill.transform.SetParent(transform, false);
-			healthPieFill.GetComponent<HealthRingMeter>().body = bodyAgentList[b];
+			GameObject healthRingFill = Instantiate(healthRingFillPrefab);
+			healthRingFillList.Add(healthRingFill);
+			healthRingFill.transform.SetParent(transform, false);
+			healthRingFill.GetComponent<HealthRingMeter>().body = bodyAgentList[b];
 		}
 	}
 	

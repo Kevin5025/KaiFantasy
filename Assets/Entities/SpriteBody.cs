@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class SpriteBody : MonoBehaviour, ISpirit {
 
-	protected ISpirit spirit; // set in inspector
+	protected ISpirit spirit;
 	
 	protected SpriteRenderer spriteRenderer;
 	protected float disintegratedColorAlpha;
@@ -18,8 +18,8 @@ public abstract class SpriteBody : MonoBehaviour, ISpirit {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		spriteRenderer.color = spirit.GetColor();
 
-		disintegratedColorAlpha = 0.125f;
-		fadeDuration = 4f;
+		disintegratedColorAlpha = 0.125f;  // disintegration start alpha
+		fadeDuration = 4f;  // time it takes for alpha to disintegrate to 0
 
 		gameObject.layer = GetTeamLayer();
 	}

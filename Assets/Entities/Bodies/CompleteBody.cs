@@ -8,12 +8,12 @@ using System.Collections.Generic;
  */
 public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerBody, IActivator {
 
-	protected IPhysicsBody physicsBody;  // set in inspector
-	protected IHealthBody healthBody;  // set in inspector
-	protected IItemHandlerBody itemHandlerBody;  // set in inspector
-	protected IActivator activator;  // set in inspector
+	protected IPhysicsBody physicsBody;
+	protected IHealthBody healthBody;
+	protected IItemHandlerBody itemHandlerBody;
+	protected IActivator activator;
 
-	public HealthState spriteHealthState;
+	public HealthState healthState;
 
 	public Vector2 headPosition;
 	public float viscosity;
@@ -50,9 +50,9 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 	protected override void Update() {
 		base.Update();
 
-		if (GetHealthState() != spriteHealthState) {
+		if (GetHealthState() != healthState) {
 			HealthEffectUpdate(GetHealthState());
-			spriteHealthState = GetHealthState();
+			healthState = GetHealthState();
 		}
 	}
 	

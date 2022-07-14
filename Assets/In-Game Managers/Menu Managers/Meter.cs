@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class Meter : MonoBehaviour {
+public abstract class Meter : MonoBehaviour {  // TODO: extend with bar and not just ring
 
-	public float capacity;
-	public Image[] maskArray;  // set in inspector
-	public float[] capacityArray;  // set in child class
-	public float[] sizeArray;  // set in child class
+	public Image[] maskArray;  // set in inspector  // currently: red: 0-100 bricked, yellow: 100-200 fibrillating, green: 200-400 capable, blue: 400-1000 overflowing
 
 	protected virtual void Start() {
 		

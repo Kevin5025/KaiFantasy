@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Activator : MonoBehaviour, IActivator {
 
-	protected HealthStateBody healthStateBody;  // set in inspector
+	protected HealthStateBody healthStateBody;
 
 	protected virtual void Awake() {
 		healthStateBody = GetComponent<HealthStateBody>();
