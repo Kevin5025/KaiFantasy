@@ -30,13 +30,12 @@ public class PrefabReferences : MonoBehaviour {
 	public GameObject dashPrefab_;
 
 	public GameObject m9Prefab_;
-	public GameObject financialItemPrefab_;
+	public GameObject accountablePrefab_;
 
 	protected virtual void Awake() {
-		if (prefabReferences_ == null) {//like a singleton
-			//DontDestroyOnLoad (gameObject);
+		if (prefabReferences_ == null) {  //like a singleton
 			prefabReferences_ = this;
-		} else { //if (menuColors != null)
+		} else {
 			Destroy(gameObject);
 		}
 	}

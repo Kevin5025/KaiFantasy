@@ -36,7 +36,7 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 		crawlForce = moveForce * 0.2f;
 		dashImpulse = moveForce * 0.5f;
 
-		dashGameObject = Instantiate(PrefabReferences.prefabReferences_.dashPrefab_);
+		dashGameObject = Instantiate(PrefabReferences.prefabReferences_.dashPrefab_, transform);
 		dash = dashGameObject.GetComponent<Dash>();
 	}
 

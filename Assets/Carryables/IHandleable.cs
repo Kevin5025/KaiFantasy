@@ -1,6 +1,8 @@
 ﻿
+using UnityEngine;
 
 public interface IHandleable
 {
-	void BecomeHandled();
+	void BecomeHandled(Transform originTransform);
+	void BecomeUnhandled(Transform originTransform);
 }

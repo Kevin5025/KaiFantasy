@@ -14,7 +14,7 @@ public class GunActivatable : Activatable {
 		Vector2 headPosition = completeBodyActivator.transform.TransformPoint(completeBodyActivator.headPosition);
 
 		// PrefabReferences.prefabReferences_.bulletPrefab_.SetActive(false);  // done in inspector/editor now  // https://answers.unity.com/questions/636079/assign-exposed-vars-before-instantianting-prefab.html
-		GameObject projectileGameObject = Instantiate(PrefabReferences.prefabReferences_.bulletPrefab_, headPosition, completeBodyActivator.transform.rotation);
+		GameObject projectileGameObject = Instantiate(PrefabReferences.prefabReferences_.bulletPrefab_, headPosition, completeBodyActivator.transform.rotation, SceneReferences.sceneReferences_.projectilesGameObject_.transform);
 
 		ISpirit spirit = projectileGameObject.GetComponent<Spirit>();
 		spirit.SetAffinity(completeBodyActivator.GetAffinity());

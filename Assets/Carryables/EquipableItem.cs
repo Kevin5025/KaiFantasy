@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipableItem : Item, IEquipable {
+public class EquipableItem : Handleable, IEquipable {
 	public IEquipable equipable_;
 	public int eei;  // set elsewhere
 	
@@ -14,13 +14,14 @@ public class EquipableItem : Item, IEquipable {
 		
 	}
 
-	public override void BecomeObtained() {
+	public override void BecomeHandled(Transform originTransform) {
+		base.BecomeHandled(originTransform);
 		GetComponent<SpriteRenderer>().enabled = false;
 		GetComponent<Collider2D>().enabled = false;
 	}
 
-	public override void BecomeUnobtained(Transform originTransform) {
-		base.BecomeUnobtained(originTransform);
+	public override void BecomeUnhandled(Transform originTransform) {
+		base.BecomeUnhandled(originTransform);
 		GetComponent<SpriteRenderer>().enabled = true;
 		GetComponent<Collider2D>().enabled = true;
 	}

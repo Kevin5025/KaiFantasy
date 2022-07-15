@@ -52,42 +52,42 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 		eeiHand1 = GetEquipableClassEei(EquipableClass.HandItem, 1);
 
 		equipmentEquipableItemArray = new IEquipable[equipmentEquipableClassArray.Length];
-		GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences_.m9Prefab_);
+		GameObject m9GameObject = Instantiate(PrefabReferences.prefabReferences_.m9Prefab_, transform);
 		EquipableItem m9 = m9GameObject.GetComponent<EquipableItem>();
 		m9.eei = GetEquipableClassEei(m9.GetEquipableClass(), 0);
 		EquipItem(m9);
 
-		bankFinancialQuantityArray = new float[FinancialItem.numFinanceTypes];
+		bankFinancialQuantityArray = new float[Accountable.numFinanceTypes];
 		bankFinancialQuantityArray[0] = 15;
 	}
 
 	/*
 	 * Hand
 	 */
-	public Item HandleItem(int numNextIi) {
-		Item minDistanceItem = GetMinDistanceItem();
+	public Handleable HandleItem(int numNextIi) {
+		Handleable minDistanceItem = GetMinDistanceItem();
 		if (minDistanceItem != null) {
 			ObtainItem(minDistanceItem, numNextIi);
 		}
 		return minDistanceItem;
 	}
 
-	public void ObtainItem(Item item, int numNextIi=0) {
+	public void ObtainItem(Handleable item, int numNextIi=0) {
 		EquipableItem equipableItem = item.GetComponent<EquipableItem>();
-		FinancialItem financialItem = item.GetComponent<FinancialItem>();
+		Accountable accountable = item.GetComponent<Accountable>();
 
 		if (equipableItem != null) {
 			EquipItem(equipableItem, numNextIi);
-		} else if (financialItem != null) {
-			CreditItem(financialItem);
+		} else if (accountable != null) {
+			CreditAccountable(accountable);
 		}
 	}
 
-	public Item GetMinDistanceItem() {
-		Item minDistanceItem = null;
+	public Handleable GetMinDistanceItem() {
+		Handleable minDistanceItem = null;
 		Collider2D minDistanceItemCollider = GetMinDistanceItemCollider();
 		if (minDistanceItemCollider != null) {
-			minDistanceItem = minDistanceItemCollider.GetComponent<Item>();
+			minDistanceItem = minDistanceItemCollider.GetComponent<Handleable>();
 		}
 		return minDistanceItem;
 	}
@@ -124,7 +124,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 		}
 
 		equipmentEquipableItemArray[eei] = equipableItem;
-		equipableItem.BecomeObtained();
+		equipableItem.BecomeHandled(transform);
 	}
 
 	/*
@@ -140,7 +140,7 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 		if (equipmentEquipableItemArray[eei] != null) {
 			EquipableItem unequipItem = (EquipableItem)equipmentEquipableItemArray[eei];  // TODO handle
 			equipmentEquipableItemArray[eei] = null;
-			unequipItem.BecomeUnobtained(transform);  // TODO set eei to -1
+			unequipItem.BecomeUnhandled(transform);  // TODO set eei to -1
 
 			//int eeiPocketHypothetical = eei + 1;  // hypothetical because pocket may or may not exist
 			//if (equipmentEquipableClassArray[eeiPocketHypothetical] == Equipable.EquipableClass.PocketItem && equipmentEquipableArray[eeiPocketHypothetical] != null) {
@@ -180,18 +180,19 @@ public class ItemHandlerBody : MonoBehaviour, IItemHandlerBody {
 		return equipableClassEei;
 	}
 
-	public void CreditItem(FinancialItem financialItem) {
-		int ffi = (int)financialItem.financialClass_;
-		bankFinancialQuantityArray[ffi] += financialItem.quantity_;
-		financialItem.BecomeObtained();
+	public void CreditAccountable(Accountable accountable) {
+		int ffi = (int)accountable.accountableClass_;
+		bankFinancialQuantityArray[ffi] += accountable.quantity_;
+		accountable.BecomeHandled(transform);
 	}
 
-	public void DebitItem(int ffi) {
+	public void DebitAccountable(int ffi) {
 		if (bankFinancialQuantityArray[ffi] >= 1) {
-			FinancialClass financialClass = (FinancialClass)ffi;
 			float quantity = Mathf.Ceil(bankFinancialQuantityArray[ffi] / 3f);
-			FinancialItem.InstantiateFinancialItemGameObject(financialClass, quantity, transform);
 			bankFinancialQuantityArray[ffi] -= quantity;
+
+			AccountableClass accountableClass = (AccountableClass)ffi;
+			Accountable.InstantiateAccountableGameObject(accountableClass, quantity, transform);
 		}
 	}
 

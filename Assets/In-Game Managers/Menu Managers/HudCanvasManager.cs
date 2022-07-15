@@ -70,10 +70,10 @@ public class HudCanvasManager : MonoBehaviour {
 	}
 
 	protected void InitializeFinancePanel() {
-		financeSlotArray = new GameObject[FinancialItem.numFinanceTypes];
-		financeImageArray = new GameObject[FinancialItem.numFinanceTypes];
-		financeTextArray = new GameObject[FinancialItem.numFinanceTypes];
-		for (int fi = 0; fi < FinancialItem.numFinanceTypes; fi++) {
+		financeSlotArray = new GameObject[Accountable.numFinanceTypes];
+		financeImageArray = new GameObject[Accountable.numFinanceTypes];
+		financeTextArray = new GameObject[Accountable.numFinanceTypes];
+		for (int fi = 0; fi < Accountable.numFinanceTypes; fi++) {
 			int fMod3 = fi % 3;
 			int fDiv3 = fi / 3;
 			int fDiv6 = fi / 6;
@@ -85,7 +85,7 @@ public class HudCanvasManager : MonoBehaviour {
 
 			financeImageArray[fi] = financeSlotArray[fi].transform.GetChild(0).gameObject;
 			financeImageArray[fi].GetComponent<Image>().sprite = financeSpriteArray[fi];
-			financeImageArray[fi].GetComponent<Image>().color = FinancialItem.financialItemColorDictionary[(FinancialClass)fi];
+			financeImageArray[fi].GetComponent<Image>().color = Accountable.accountableClassColorDictionary[(AccountableClass)fi];
 			financeImageArray[fi].GetComponent<FinanceImage>().ffi = fi;
 
 			financeTextArray[fi] = financeSlotArray[fi].transform.GetChild(1).gameObject;

@@ -6,6 +6,7 @@ using System;
 /**
  * Abilities, Items, Vassals, and Ideas
  */
+// TODO: equipables that aren't handleable: e.g. learnables
 public class Equipable : MonoBehaviour, IEquipable {
 	
 	public EquipableClass equipableClass_;  // set in inspector

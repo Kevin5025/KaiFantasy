@@ -131,17 +131,17 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 	}
 
 	private void HandleItem(int eeiHand) {
-		Item minDistanceItem = completeBody_.HandleItem(eeiHand);
+		Handleable minDistanceItem = completeBody_.HandleItem(eeiHand);
 		if (minDistanceItem == null) {
 			return;
 		}
 
 		EquipableItem minDistanceEquipableItem = minDistanceItem.GetComponent<EquipableItem>();
-		FinancialItem minDistanceFinancialItem = minDistanceItem.GetComponent<FinancialItem>();
+		Accountable minDistanceAccountable = minDistanceItem.GetComponent<Accountable>();
 		if (minDistanceEquipableItem != null) {
 			HudCanvasManager.hudCanvasManager_.UpdateHandPocketEquipmentImage(minDistanceEquipableItem.eei);
-		} else if (minDistanceFinancialItem != null) {
-			HudCanvasManager.hudCanvasManager_.UpdateFinanceText((int)minDistanceFinancialItem.financialClass_);
+		} else if (minDistanceAccountable != null) {
+			HudCanvasManager.hudCanvasManager_.UpdateFinanceText((int)minDistanceAccountable.accountableClass_);
 		}
 	}
 
@@ -167,7 +167,7 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 
 	public void OnFinanceImageClick(FinanceImage financeImage, PointerEventData eventData) {
 		if (eventData.button == PointerEventData.InputButton.Middle) {
-			completeBody_.DebitItem(financeImage.ffi);
+			completeBody_.DebitAccountable(financeImage.ffi);
 			HudCanvasManager.hudCanvasManager_.UpdateFinanceText(financeImage.ffi);
 		}
 	}

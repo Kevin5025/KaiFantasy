@@ -115,7 +115,7 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
         return physicsBody_.GetRadius();
     }
 
-    public Item HandleItem(int numNextEei) {
+    public Handleable HandleItem(int numNextEei) {
         return itemHandlerBody_.HandleItem(numNextEei);
     }
 
@@ -135,12 +135,12 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
         return itemHandlerBody_.GetEquipableClassEei(equipableClass, numNextEei);
     }
 
-    public void CreditItem(FinancialItem financialItem) {
-        itemHandlerBody_.CreditItem(financialItem);
+    public void CreditAccountable(Accountable accountable) {
+        itemHandlerBody_.CreditAccountable(accountable);
     }
 
-    public void DebitItem(int fci) {
-        itemHandlerBody_.DebitItem(fci);
+    public void DebitAccountable(int fci) {
+        itemHandlerBody_.DebitAccountable(fci);
     }
 
     public EquipableClass[] GetEquipmentEquipableClassArray() {
