@@ -9,7 +9,7 @@ public class DashActivatable : Activatable {
 		bool A = (bool)argumentDictionary['A'];
 		bool W = (bool)argumentDictionary['W'];
 		bool S = (bool)argumentDictionary['S'];
-		Vector2 impulseVector = circlePhysicsBody.dashImpulse * PlayerCompleteBodyController.GetUnitVector(D, A, W, S);
+		Vector2 impulseVector = circlePhysicsBody.dashImpulse * PlayerCompositeBodyController.GetUnitVector(D, A, W, S);
 		circlePhysicsBody.GetComponent<Rigidbody2D>().AddForce(impulseVector, ForceMode2D.Impulse);
 	}
 }

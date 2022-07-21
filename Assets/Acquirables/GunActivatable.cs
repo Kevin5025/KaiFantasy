@@ -9,17 +9,17 @@ public class GunActivatable : Activatable {
 	public float baseDamage_;
 
 	public override void Actuate(IActivator activator, Dictionary<object, object> argumentDictionary = null) {
-		CompleteBody completeBodyActivator = (CompleteBody)activator;
+		CompositeBody compositeBody = activator.GetComponent<CompositeBody>();
 
-		Vector2 headPosition = completeBodyActivator.transform.TransformPoint(completeBodyActivator.headPosition);
+		Vector2 headPosition = compositeBody.transform.TransformPoint(compositeBody.headPosition);
 
 		// PrefabReferences.prefabReferences_.bulletPrefab_.SetActive(false);  // done in inspector/editor now  // https://answers.unity.com/questions/636079/assign-exposed-vars-before-instantianting-prefab.html
-		GameObject projectileGameObject = Instantiate(PrefabReferences.prefabReferences_.bulletPrefab_, headPosition, completeBodyActivator.transform.rotation, SceneReferences.sceneReferences_.projectilesGameObject_.transform);
+		GameObject projectileGameObject = Instantiate(PrefabReferences.prefabReferences_.bulletPrefab_, headPosition, compositeBody.transform.rotation, SceneReferences.sceneReferences_.projectilesGameObject_.transform);
 
 		ISpirit spirit = projectileGameObject.GetComponent<Spirit>();
-		spirit.SetAffinity(completeBodyActivator.GetAffinity());
+		spirit.SetAffinity(compositeBody.GetAffinity());
 		Projectile projectile = projectileGameObject.GetComponent<Projectile>();
-		projectile.completeBodyActivator = completeBodyActivator;
+		projectile.compositeBody = compositeBody;
 		projectile.timeout = projectileTimeout_;
 		projectile.initialSpeed = initialSpeed_;
 		projectile.baseDamage = baseDamage_;

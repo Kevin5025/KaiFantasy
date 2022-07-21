@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /**
  * This is anything that can be destroyed or killed by taking damage, unless invincible. 
  */
-public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IActivator, ICollector, IEquipper {
+public class CompositeBody : SpriteBody, IHealthBody, IPhysicsBody, IActivator, ICollector, IEquipper {
 
 	protected IHealthBody healthBody_;
 	protected IPhysicsBody physicsBody_;
@@ -79,7 +79,7 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IActivator, I
 		return LayersManager.layersManager.GetTeamEntityLayer(GetAffinity());
 	}
 
-    public float TakeDamage(CompleteBody casterAgent, float damage) {
+    public float TakeDamage(CompositeBody casterAgent, float damage) {
         return healthBody_.TakeDamage(casterAgent, damage);
     }
 

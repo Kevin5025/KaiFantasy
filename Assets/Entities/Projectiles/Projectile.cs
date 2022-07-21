@@ -13,7 +13,7 @@ using UnityEngine;
  */
 public class Projectile : SpriteBody {
 
-	public CompleteBody completeBodyActivator;  //set beforehand by casterAgent
+	public CompositeBody compositeBody;  //set beforehand by casterAgent
 	public float timeout;
 	public float initialSpeed;
 	public float baseDamage;
@@ -63,24 +63,24 @@ public class Projectile : SpriteBody {
 
 	protected virtual void OnTriggerEnter2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			CompleteBody collisionGameObjectCompleteBody = collider.GetComponentInParent<CompleteBody>();
+			CompositeBody collisionCompositeBody = collider.GetComponentInParent<CompositeBody>();
 			//Debug.Log("trigger enter " + collisionGameObjectEntity + " " + collider.name + " velocity ");
-			if (collisionGameObjectCompleteBody != completeBodyActivator && collider.name == "Body") {
-				GetComponent<Rigidbody2D>().drag += collisionGameObjectCompleteBody.viscosity;
-				GetComponent<Rigidbody2D>().angularDrag += collisionGameObjectCompleteBody.viscosity;
+			if (collisionCompositeBody != compositeBody && collider.name == "Body") {
+				GetComponent<Rigidbody2D>().drag += collisionCompositeBody.viscosity;
+				GetComponent<Rigidbody2D>().angularDrag += collisionCompositeBody.viscosity;
 			}
 		}
 	}
 
 	protected virtual void OnTriggerStay2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			CompleteBody collisionGameObjectCompleteBody = collider.GetComponentInParent<CompleteBody>();
+			CompositeBody collisionCompositeBody = collider.GetComponentInParent<CompositeBody>();
 			// Debug.Log("trigger stay " + collisionGameObjectEntity + " " + collider.name + " velocity ");
-			if (collisionGameObjectCompleteBody.GetAffinity() != completeBodyActivator.GetAffinity()) {
-				float netSpeed = (GetComponent<Rigidbody2D>().velocity - collisionGameObjectCompleteBody.GetComponent<Rigidbody2D>().velocity).magnitude;
+			if (collisionCompositeBody.GetAffinity() != compositeBody.GetAffinity()) {
+				float netSpeed = (GetComponent<Rigidbody2D>().velocity - collisionCompositeBody.GetComponent<Rigidbody2D>().velocity).magnitude;
 				float speedFactor = Mathf.Pow(netSpeed / initialSpeed, 2);
 				float damage = baseDamage * speedFactor;
-				collisionGameObjectCompleteBody.TakeDamage(completeBodyActivator, damage);
+				collisionCompositeBody.TakeDamage(compositeBody, damage);
 				// TODO: display accumulated damage
 				// Debug.Log(speedFactor);
 				// Debug.Log(damage);
@@ -90,11 +90,11 @@ public class Projectile : SpriteBody {
 
 	protected virtual void OnTriggerExit2D(Collider2D collider) {
 		if (collider.name == "Body" || collider.name == "Head") {
-			CompleteBody collisionGameObjectCompleteBody = collider.GetComponentInParent<CompleteBody>();
+			CompositeBody collisionCompositeBody = collider.GetComponentInParent<CompositeBody>();
 			//Debug.Log("trigger exit " + collisionGameObjectEntity + " " + collider.name);
-			if (collisionGameObjectCompleteBody != completeBodyActivator && collider.name == "Body") {
-				GetComponent<Rigidbody2D>().drag -= collisionGameObjectCompleteBody.viscosity;
-				GetComponent<Rigidbody2D>().angularDrag -= collisionGameObjectCompleteBody.viscosity;
+			if (collisionCompositeBody != compositeBody && collider.name == "Body") {
+				GetComponent<Rigidbody2D>().drag -= collisionCompositeBody.viscosity;
+				GetComponent<Rigidbody2D>().angularDrag -= collisionCompositeBody.viscosity;
 			}
 		}
 	}

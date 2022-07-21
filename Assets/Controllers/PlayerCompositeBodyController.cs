@@ -8,14 +8,14 @@ using UnityEngine.EventSystems;
  * Allows humans to interface their character. 
  * TODO: extend into Keyboard Controller and XBox Controller
  */
-public class PlayerCompleteBodyController : CompleteBodyController {
+public class PlayerCompositeBodyController : CompositeBodyController {
 
-	public static PlayerCompleteBodyController playerCompleteBodyController_;  // singleton
+	public static PlayerCompositeBodyController playerCompositeBodyController_;  // singleton
 
 	protected override void Awake() {
 		base.Awake();
-		if (playerCompleteBodyController_ == null) {
-			playerCompleteBodyController_ = this;
+		if (playerCompositeBodyController_ == null) {
+			playerCompositeBodyController_ = this;
 		} else {
 			Destroy(gameObject);
 		}
@@ -47,7 +47,7 @@ public class PlayerCompleteBodyController : CompleteBodyController {
      * Character rotates to face wherever the mouse is. 
      */
 	protected override void Rotate() {
-		completeBody_.RotateTargetPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+		compositeBody_.RotateTargetPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 		bool W = Input.GetKey(KeyCode.W);
 		bool S = Input.GetKey(KeyCode.S);
 
-		completeBody_.MoveWASD(D, A, W, S);
+		compositeBody_.MoveWASD(D, A, W, S);
 	}
 
 	protected override void Dash() {
@@ -70,7 +70,7 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 			bool W = Input.GetKey(KeyCode.W);
 			bool S = Input.GetKey(KeyCode.S);
 
-			completeBody_.DashWASD(D, A, W, S);
+			compositeBody_.DashWASD(D, A, W, S);
 		}
 
 	}
@@ -99,20 +99,20 @@ public class PlayerCompleteBodyController : CompleteBodyController {
      * Activation of abilities. 
      */
 	protected override void Fire() {
-		int eeiHand0 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 0);
+		int eeiHand0 = compositeBody_.GetEquipableClassEei(EquipableClass.HandItem, 0);
 		SafeFire(eeiHand0, Input.GetMouseButton(0), Input.GetMouseButtonDown(0));
 
-		int eeiHand1 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 1);
+		int eeiHand1 = compositeBody_.GetEquipableClassEei(EquipableClass.HandItem, 1);
 		SafeFire(eeiHand1, Input.GetMouseButton(1), Input.GetMouseButtonDown(1));
 	}
 
 	protected override void Reload() {
 		for (int numNextEei=0; numNextEei<2; numNextEei++) {
-			int eeiHand = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, numNextEei);
-			if (Input.GetKey(KeyCode.R) && completeBody_.GetEquipmentEquipableArray()[eeiHand] != null) {
-				Gun gun = completeBody_.GetEquipmentEquipableArray()[eeiHand].GetComponent<Gun>();
+			int eeiHand = compositeBody_.GetEquipableClassEei(EquipableClass.HandItem, numNextEei);
+			if (Input.GetKey(KeyCode.R) && compositeBody_.GetEquipmentEquipableArray()[eeiHand] != null) {
+				Gun gun = compositeBody_.GetEquipmentEquipableArray()[eeiHand].GetComponent<Gun>();
 				if (gun != null) {
-					gun.Reload(completeBody_);
+					gun.Reload(compositeBody_);
 					HudCanvasManager.hudCanvasManager_.UpdateFinanceText(gun.ammunitionType_);
 				}
 			}
@@ -129,7 +129,7 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 	}
 
 	private void HandleItem(int eeiHand) {
-		ICollectable minDistanceItem = completeBody_.CollectCollectable(eeiHand);
+		ICollectable minDistanceItem = compositeBody_.CollectCollectable(eeiHand);
 		if (minDistanceItem == null) {
 			return;
 		}
@@ -145,32 +145,32 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 
 	protected override void PocketHandItem() {
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
-			int eeiHand0 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 0);
-			completeBody_.PocketEquipable(eeiHand0);
+			int eeiHand0 = compositeBody_.GetEquipableClassEei(EquipableClass.HandItem, 0);
+			compositeBody_.PocketEquipable(eeiHand0);
 			HudCanvasManager.hudCanvasManager_.UpdateHandPocketEquipmentImage(eeiHand0);
 		}
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
-			int eeiHand1 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 1);
-			completeBody_.PocketEquipable(eeiHand1);
+			int eeiHand1 = compositeBody_.GetEquipableClassEei(EquipableClass.HandItem, 1);
+			compositeBody_.PocketEquipable(eeiHand1);
 			HudCanvasManager.hudCanvasManager_.UpdateHandPocketEquipmentImage(eeiHand1);
 		}
 	}
 
 	public void OnEquipmentImageClick(EquipmentImage equipmentImage, PointerEventData eventData) {
 		if (eventData.button == PointerEventData.InputButton.Middle) {
-			completeBody_.UnequipEquipable(equipmentImage.eei);
+			compositeBody_.UnequipEquipable(equipmentImage.eei);
 			HudCanvasManager.hudCanvasManager_.UpdateEquipmentImage(equipmentImage.eei);
 		}
 	}
 
 	public void OnFinanceImageClick(FinanceImage financeImage, PointerEventData eventData) {
 		if (eventData.button == PointerEventData.InputButton.Middle) {
-			completeBody_.DebitAccountable(financeImage.ffi);
+			compositeBody_.DebitAccountable(financeImage.ffi);
 			HudCanvasManager.hudCanvasManager_.UpdateFinanceText(financeImage.ffi);
 		}
 	}
 
-	public CompleteBody GetBody() {
-		return completeBody_;
+	public CompositeBody GetBody() {
+		return compositeBody_;
 	}
 }

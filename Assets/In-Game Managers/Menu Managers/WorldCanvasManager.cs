@@ -9,9 +9,9 @@ public class WorldCanvasManager : MonoBehaviour {
 	public GameObject healthRingFillPrefab_;
 	public GameObject ringThinTickPrefab_;
 
-	public CompleteBody playerAgent_;
-	public CompleteBody debugAgent_;
-	public IList<CompleteBody> bodyAgentList;
+	public CompositeBody playerAgent_;
+	public CompositeBody debugAgent_;
+	public IList<CompositeBody> bodyAgentList;
 	public IList<GameObject> healthRingFillList;
 
 	void Awake() {
@@ -23,8 +23,8 @@ public class WorldCanvasManager : MonoBehaviour {
 	}
 
 	void Start() {
-		playerAgent_ = PlayerCompleteBodyController.playerCompleteBodyController_.GetBody();
-		bodyAgentList = new List<CompleteBody>() { playerAgent_, debugAgent_ };
+		playerAgent_ = PlayerCompositeBodyController.playerCompositeBodyController_.GetBody();
+		bodyAgentList = new List<CompositeBody>() { playerAgent_, debugAgent_ };
 		healthRingFillList = new List<GameObject>();
 		for (int b = 0; b < bodyAgentList.Count; b++) {
 			GameObject healthRingFill = Instantiate(healthRingFillPrefab_);

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HealthRingMeter : Meter {
 
-	public CompleteBody body;
+	public CompositeBody body;
 	public IList<GameObject> healthRingTickList;
 
 	protected override void Start() {

@@ -81,7 +81,7 @@ public class CirclePhysicsBody : MonoBehaviour, IPhysicsBody, IActivator {
 			bool is_fibrillating = (int)healthStateBody_.GetHealthState() == (int)HealthState.Fibrillating;
 			crawl = crawl || is_fibrillating;
 
-			Vector2 unitVector = PlayerCompleteBodyController.GetUnitVector(D, A, W, S);
+			Vector2 unitVector = PlayerCompositeBodyController.GetUnitVector(D, A, W, S);
 			float force = crawl ? crawlForce : moveForce;
 			Vector2 forceVector = force * unitVector;
 

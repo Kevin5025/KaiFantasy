@@ -7,7 +7,7 @@ public class HudCanvasManager : MonoBehaviour {
 
 	public static HudCanvasManager hudCanvasManager_;
 
-	public CompleteBody playerAgent;
+	public CompositeBody playerAgent;
 
 	public GameObject equipmentPanel_;
 	public GameObject[] equipmentSlotArray;  // filled in UpdateEquipmentMenu
@@ -54,7 +54,7 @@ public class HudCanvasManager : MonoBehaviour {
 
 	// Start is called before the first frame update
 	void Start() {
-		playerAgent = PlayerCompleteBodyController.playerCompleteBodyController_.GetBody();
+		playerAgent = PlayerCompositeBodyController.playerCompositeBodyController_.GetBody();
 
 		InitializeEquipmentPanel();
 		InitializeFinancePanel();

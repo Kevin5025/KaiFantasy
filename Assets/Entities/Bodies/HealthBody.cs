@@ -54,7 +54,7 @@ public class HealthBody : HealthStateBody, IHealthBody {
 		health_ += healthRateCurrent * Time.deltaTime;
 	}
 
-	public virtual float TakeDamage(CompleteBody casterAgent, float damage) {
+	public virtual float TakeDamage(CompositeBody casterAgent, float damage) {
 		float trueDamage = damage;
 		health_ -= trueDamage;
 		return trueDamage;

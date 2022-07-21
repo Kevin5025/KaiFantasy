@@ -28,11 +28,11 @@ public class Gun : MonoBehaviour, IActivatable, ICollectable, IEquipable {
 		magazineCount = 0;
 	}
 
-	public virtual void Reload(CompleteBody completeBodyActivator) {
-		if ((int)completeBodyActivator.GetHealthState() >= (int)HealthState.Capable && completeBodyActivator.GetAccountQuantityArray()[ammunitionType_] > 0) {
-			int reloadAmmunitionCount = Math.Min((int)completeBodyActivator.GetAccountQuantityArray()[ammunitionType_], magazineCapacity_ - magazineCount);
+	public virtual void Reload(CompositeBody compositeBody) {
+		if ((int)compositeBody.GetHealthState() >= (int)HealthState.Capable && compositeBody.GetAccountQuantityArray()[ammunitionType_] > 0) {
+			int reloadAmmunitionCount = Math.Min((int)compositeBody.GetAccountQuantityArray()[ammunitionType_], magazineCapacity_ - magazineCount);
 			magazineCount += reloadAmmunitionCount;
-			completeBodyActivator.GetAccountQuantityArray()[ammunitionType_] -= reloadAmmunitionCount;
+			compositeBody.GetAccountQuantityArray()[ammunitionType_] -= reloadAmmunitionCount;
 		}
 	}
 

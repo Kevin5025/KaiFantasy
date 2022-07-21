@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEquipper {
+public interface IEquipper : IComponent {
 	void EquipEquipable(IEquipable equipable, int numNextEei = 0);
 	IEquipable UnequipEquipable(int eei);
 	void PocketEquipable(int eeiHand);
