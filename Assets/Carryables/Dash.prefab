@@ -110,4 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9667898a4b6c99f4298451a94270762d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownTimeout_: 2
+  cooldownTimeout_: 3

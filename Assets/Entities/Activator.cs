@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Activator : MonoBehaviour, IActivator {
-
-	protected IHealthStateBody healthStateBody_;
+public class Activator : HealthStateBody, IActivator {
 
 	protected virtual void Awake() {
-		healthStateBody_ = GetComponent<HealthStateBody>();
+		
 	}
 
 	protected virtual void Start() {
-		
+
 	}
+
+	//public bool Activate(IActivatable activatable, Dictionary<object, object> argumentDictionary = null) {
+	//	return Activator.Activate(this, activatable, argumentDictionary);
+	//}
 
 	public static bool Activate(IActivator activator, IActivatable activatable, Dictionary<object, object> argumentDictionary = null) {
 		bool is_at_least_capable = (int)activator.GetHealthState() >= (int)HealthState.Capable;
@@ -22,8 +24,4 @@ public class Activator : MonoBehaviour, IActivator {
 		}
 		return does_activate;
 	}
-
-    public HealthState GetHealthState() {
-        return healthStateBody_.GetHealthState();
-    }
 }

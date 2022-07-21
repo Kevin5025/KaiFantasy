@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2621914810538568550}
   - component: {fileID: 2621914810538568473}
   - component: {fileID: 2621914810538568472}
-  - component: {fileID: 7154407509841571779}
   - component: {fileID: 3318123692500747067}
+  - component: {fileID: 6940229030537709976}
   m_Layer: 20
   m_Name: Helmet
   m_TagString: Untagged
@@ -135,19 +135,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7154407509841571779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2621914810538568474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84e3cad7e71fbd3498800bae8c7dbafa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eei: 0
 --- !u!114 &3318123692500747067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,3 +148,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipableClass_: 2
+  eei: 0
+--- !u!114 &6940229030537709976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2621914810538568474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95ae0e2ac8a6c42479474f670b12b7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

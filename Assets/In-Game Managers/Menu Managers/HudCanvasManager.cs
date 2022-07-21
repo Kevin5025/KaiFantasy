@@ -102,7 +102,7 @@ public class HudCanvasManager : MonoBehaviour {
 	public void UpdateFinanceText(int ffi) {
 		bool ftInArrayBounds = ffi > -1 && ffi < playerAgent.GetEquipmentEquipableArray().Length;
 		if (ftInArrayBounds) {
-			financeTextArray[ffi].GetComponent<Text>().text = playerAgent.GetFinanceQuantityArray()[ffi].ToString();  // TODO: floating point, etc.
+			financeTextArray[ffi].GetComponent<Text>().text = playerAgent.GetAccountQuantityArray()[ffi].ToString();  // TODO: floating point, etc.
 		}
 	}
 

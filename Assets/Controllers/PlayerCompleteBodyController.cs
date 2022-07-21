@@ -107,17 +107,15 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 	}
 
 	protected override void Reload() {
-		int eeiHand0 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 0);
-		if (Input.GetKey(KeyCode.R) && completeBody_.GetEquipmentEquipableArray()[eeiHand0] is Gun) {
-			Gun gun = (Gun)completeBody_.GetEquipmentEquipableArray()[eeiHand0];
-			gun.Reload(completeBody_);
-			HudCanvasManager.hudCanvasManager_.UpdateFinanceText(gun.ammunitionType_);
-		}
-		int eeiHand1 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 1);
-		if (Input.GetKey(KeyCode.R) && completeBody_.GetEquipmentEquipableArray()[eeiHand1] is Gun) {
-			Gun gun = (Gun)completeBody_.GetEquipmentEquipableArray()[eeiHand1];
-			gun.Reload(completeBody_);
-			HudCanvasManager.hudCanvasManager_.UpdateFinanceText(gun.ammunitionType_);
+		for (int numNextEei=0; numNextEei<2; numNextEei++) {
+			int eeiHand = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, numNextEei);
+			if (Input.GetKey(KeyCode.R) && completeBody_.GetEquipmentEquipableArray()[eeiHand] != null) {
+				Gun gun = completeBody_.GetEquipmentEquipableArray()[eeiHand].GetComponent<Gun>();
+				if (gun != null) {
+					gun.Reload(completeBody_);
+					HudCanvasManager.hudCanvasManager_.UpdateFinanceText(gun.ammunitionType_);
+				}
+			}
 		}
 	}
 
@@ -131,12 +129,12 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 	}
 
 	private void HandleItem(int eeiHand) {
-		Handleable minDistanceItem = completeBody_.HandleItem(eeiHand);
+		ICollectable minDistanceItem = completeBody_.CollectCollectable(eeiHand);
 		if (minDistanceItem == null) {
 			return;
 		}
 
-		EquipableItem minDistanceEquipableItem = minDistanceItem.GetComponent<EquipableItem>();
+		Equipable minDistanceEquipableItem = minDistanceItem.GetComponent<Equipable>();
 		Accountable minDistanceAccountable = minDistanceItem.GetComponent<Accountable>();
 		if (minDistanceEquipableItem != null) {
 			HudCanvasManager.hudCanvasManager_.UpdateHandPocketEquipmentImage(minDistanceEquipableItem.eei);
@@ -148,19 +146,19 @@ public class PlayerCompleteBodyController : CompleteBodyController {
 	protected override void PocketHandItem() {
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q)) {
 			int eeiHand0 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 0);
-			completeBody_.PocketItem(eeiHand0);
+			completeBody_.PocketEquipable(eeiHand0);
 			HudCanvasManager.hudCanvasManager_.UpdateHandPocketEquipmentImage(eeiHand0);
 		}
 		if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) {
 			int eeiHand1 = completeBody_.GetEquipableClassEei(EquipableClass.HandItem, 1);
-			completeBody_.PocketItem(eeiHand1);
+			completeBody_.PocketEquipable(eeiHand1);
 			HudCanvasManager.hudCanvasManager_.UpdateHandPocketEquipmentImage(eeiHand1);
 		}
 	}
 
 	public void OnEquipmentImageClick(EquipmentImage equipmentImage, PointerEventData eventData) {
 		if (eventData.button == PointerEventData.InputButton.Middle) {
-			completeBody_.UnequipItem(equipmentImage.eei);
+			completeBody_.UnequipEquipable(equipmentImage.eei);
 			HudCanvasManager.hudCanvasManager_.UpdateEquipmentImage(equipmentImage.eei);
 		}
 	}

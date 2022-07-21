@@ -69,7 +69,7 @@ public abstract class CompleteBodyController : SpiritController {
 
 	protected virtual void SafeFire(int eeiHand, bool MB, bool MBD) {
 		if (completeBody_.GetEquipmentEquipableArray()[eeiHand] != null) {
-			IActivatable activatable = completeBody_.GetEquipmentEquipableArray()[eeiHand] as IActivatable;
+			IActivatable activatable = completeBody_.GetEquipmentEquipableArray()[eeiHand].GetComponent<Gun>();  // TODO: consider possibility not overridden
 			Dictionary<object, object> argumentDictionary = new Dictionary<object, object>();
 			argumentDictionary["MB"] = MB;
 			argumentDictionary["MBD"] = MBD;

@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 7543658793199895108}
   - component: {fileID: 7543658793199895109}
   - component: {fileID: 7543658793199895105}
-  - component: {fileID: 7624455503137343360}
   - component: {fileID: 2884206439133371799}
+  - component: {fileID: 2470076410267840346}
+  - component: {fileID: 7624455503137343360}
   m_Layer: 20
   m_Name: MP5
   m_TagString: Untagged
@@ -155,19 +156,6 @@ MonoBehaviour:
   magazineCount: 0
   reloadTime_: 2
   bulletCount_: 1
---- !u!114 &7624455503137343360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7543658793199895131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f433d929fa3395749b6247f5273d54ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipableClass_: 0
 --- !u!114 &2884206439133371799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,3 +172,29 @@ MonoBehaviour:
   projectileTimeout_: 1
   initialSpeed_: 20
   baseDamage_: 11
+--- !u!114 &2470076410267840346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543658793199895131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95ae0e2ac8a6c42479474f670b12b7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7624455503137343360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543658793199895131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f433d929fa3395749b6247f5273d54ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipableClass_: 0
+  eei: 0

@@ -8,7 +8,7 @@ public enum AccountableClass {
 	Wood, Ore, Water, 
 };
 
-public class Accountable : Handleable {
+public class Accountable : Collectable {
 
 	public static int numAmmunitionTypes;
 	public static int numManaTypes;
@@ -63,17 +63,17 @@ public class Accountable : Handleable {
 		Accountable accountable = accountableGameObject.GetComponent<Accountable>();
 		accountable.accountableClass_ = accountableClass;
 		accountable.quantity_ = quantity;
-		accountable.BecomeUnhandled(originTransform);
+		accountable.BecomeUncollected(originTransform);
 		return accountable;
 	}
 
-	public override void BecomeHandled(Transform originTransform) {
-		base.BecomeHandled(originTransform);
+	public override void BecomeCollected(Transform originTransform) {
+		base.BecomeCollected(originTransform);
 		Destroy(gameObject);
 	}
 
-	public override void BecomeUnhandled(Transform originTransform) {
-		base.BecomeUnhandled(originTransform);
+	public override void BecomeUncollected(Transform originTransform) {
+		base.BecomeUncollected(originTransform);
 		gameObject.SetActive(true);
 	}
 }

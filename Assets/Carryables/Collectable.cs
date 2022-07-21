@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: handleables that aren't equipable: e.g. draggables
-public abstract class Handleable : MonoBehaviour, IHandleable {
+public class Collectable : MonoBehaviour, ICollectable {
 
-	public virtual void BecomeHandled(Transform originTransform) {
+	public virtual void BecomeCollected(Transform originTransform) {
 		transform.SetParent(originTransform);
+		GetComponent<SpriteRenderer>().enabled = false;
+		GetComponent<Collider2D>().enabled = false;
 	}
 
-	public virtual void BecomeUnhandled(Transform originTransform) {
+	public virtual void BecomeUncollected(Transform originTransform) {
 		transform.position = originTransform.position;
 		transform.rotation = originTransform.rotation;
 
@@ -19,5 +20,7 @@ public abstract class Handleable : MonoBehaviour, IHandleable {
 		rb2d.angularVelocity = originRb2d.angularVelocity;
 
 		transform.SetParent(SceneReferences.sceneReferences_.itemsGameObject_.transform);
+		GetComponent<SpriteRenderer>().enabled = true;
+		GetComponent<Collider2D>().enabled = true;
 	}
 }

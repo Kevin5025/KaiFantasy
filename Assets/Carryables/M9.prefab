@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 1364650183859750883}
   - component: {fileID: 1364650183859750886}
   - component: {fileID: 1364650183859750884}
-  - component: {fileID: 3328687541498779205}
   - component: {fileID: 2022746450858676089}
+  - component: {fileID: -2113137191249370965}
+  - component: {fileID: 3328687541498779205}
   m_Layer: 20
   m_Name: M9
   m_TagString: Untagged
@@ -149,25 +150,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eei: 0
-  firingMode: 0
+  firingMode_: 0
   ammunitionType_: 0
   magazineCapacity_: 15
   magazineCount: 0
   reloadTime_: 1.6
   bulletCount_: 1
---- !u!114 &3328687541498779205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1364650183859750882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f433d929fa3395749b6247f5273d54ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipableClass_: 0
 --- !u!114 &2022746450858676089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,3 +172,29 @@ MonoBehaviour:
   projectileTimeout_: 1
   initialSpeed_: 20
   baseDamage_: 12
+--- !u!114 &-2113137191249370965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364650183859750882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95ae0e2ac8a6c42479474f670b12b7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3328687541498779205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364650183859750882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f433d929fa3395749b6247f5273d54ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipableClass_: 0
+  eei: 0

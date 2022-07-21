@@ -6,11 +6,13 @@ using System.Collections.Generic;
 /**
  * This is anything that can be destroyed or killed by taking damage, unless invincible. 
  */
-public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerBody, IActivator {
+public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IActivator, ICollector, IEquipper {
 
 	protected IHealthBody healthBody_;
 	protected IPhysicsBody physicsBody_;
-	protected IItemHandlerBody itemHandlerBody_;
+	protected IActivator activator_;
+	protected ICollector collector_;
+	protected IEquipper equipper_;
 
 	public HealthState healthState;
 
@@ -28,7 +30,9 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
 		base.Awake();
 		healthBody_ = GetComponent<HealthBody>();
 		physicsBody_ = GetComponent<CirclePhysicsBody>();
-		itemHandlerBody_ = GetComponent<ItemHandlerBody>();
+		activator_ = GetComponent<Activator>();
+		collector_ = GetComponent<Collector>();
+		equipper_ = GetComponent<Equipper>();
 	}
 
 	protected override void Start () {
@@ -115,43 +119,43 @@ public class CompleteBody : SpriteBody, IHealthBody, IPhysicsBody, IItemHandlerB
         return physicsBody_.GetRadius();
     }
 
-    public Handleable HandleItem(int numNextEei) {
-        return itemHandlerBody_.HandleItem(numNextEei);
-    }
+	public ICollectable CollectCollectable(int numNextEei) {
+		return collector_.CollectCollectable(numNextEei);
+	}
 
-    public void EquipItem(EquipableItem equipableItem, int numNextEei = 0) {
-        itemHandlerBody_.EquipItem(equipableItem, numNextEei);
-    }
+	public void CreditAccountable(Accountable accountable) {
+		collector_.CreditAccountable(accountable);
+	}
 
-    public void UnequipItem(int eei) {
-        itemHandlerBody_.UnequipItem(eei);
-    }
+	public Accountable DebitAccountable(int fci) {
+		return collector_.DebitAccountable(fci);
+	}
 
-    public void PocketItem(int eeiHand) {
-        itemHandlerBody_.PocketItem(eeiHand);
-    }
+	public float[] GetAccountQuantityArray() {
+		return collector_.GetAccountQuantityArray();
+	}
 
-    public int GetEquipableClassEei(EquipableClass equipableClass, int numNextEei) {
-        return itemHandlerBody_.GetEquipableClassEei(equipableClass, numNextEei);
-    }
+	public void EquipEquipable(IEquipable equipable, int numNextEei = 0) {
+		equipper_.EquipEquipable(equipable, numNextEei);
+	}
 
-    public void CreditAccountable(Accountable accountable) {
-        itemHandlerBody_.CreditAccountable(accountable);
-    }
+	public IEquipable UnequipEquipable(int eei) {
+		return equipper_.UnequipEquipable(eei);
+	}
 
-    public void DebitAccountable(int fci) {
-        itemHandlerBody_.DebitAccountable(fci);
-    }
+	public void PocketEquipable(int eeiHand) {
+		equipper_.PocketEquipable(eeiHand);
+	}
 
-    public EquipableClass[] GetEquipmentEquipableClassArray() {
-        return itemHandlerBody_.GetEquipmentEquipableClassArray();
-    }
+	public int GetEquipableClassEei(EquipableClass equipableClass, int numNextEei) {
+		return equipper_.GetEquipableClassEei(equipableClass, numNextEei);
+	}
 
-    public IEquipable[] GetEquipmentEquipableArray() {
-        return itemHandlerBody_.GetEquipmentEquipableArray();
-    }
+	public EquipableClass[] GetEquipmentEquipableClassArray() {
+		return equipper_.GetEquipmentEquipableClassArray();
+	}
 
-    public float[] GetFinanceQuantityArray() {
-        return itemHandlerBody_.GetFinanceQuantityArray();
-    }
+	public IEquipable[] GetEquipmentEquipableArray() {
+		return equipper_.GetEquipmentEquipableArray();
+	}
 }
